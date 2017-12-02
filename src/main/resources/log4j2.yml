@@ -4,6 +4,7 @@ Configuration:
             -
                 name: APP
                 PatternLayout:
+                    charset: UTF-8
                     pattern: "%d - %m%n"                
     Loggers:
         Root:

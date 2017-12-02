@@ -1,5 +1,8 @@
 package org.salamansar.oder.module.payments;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.salamansar.oder.utils.JsonMarshaller;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +33,19 @@ public class PaymentsWebAppConfig {
         viewResolver.setContentType("text/html; charset=utf-8");
         viewResolver.setSuffix(".ftl");
         return viewResolver;
+    }
+    
+    @Bean
+    public ObjectMapper jsonMapper() {
+        ObjectMapper mapper = new ObjectMapper();        
+        mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+        mapper.configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
+        return mapper;
+    }
+
+    @Bean
+    public JsonMarshaller utilsJsonMarshaller() {
+        return new JsonMarshaller(jsonMapper());
     }
     
 }

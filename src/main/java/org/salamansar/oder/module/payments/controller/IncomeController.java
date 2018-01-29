@@ -34,8 +34,8 @@ public class IncomeController {
     @PostMapping("add")
     public String addIncome(@ModelAttribute Income income) {
         String json = jsonMarshaller.toJsonString(income);
-        log.info("Income adding received: \n" + json);
-        return "listIncomes";
+        log.info("Income adding received: " + json);
+        return "redirect:list";
     }   
     
     @GetMapping("list")

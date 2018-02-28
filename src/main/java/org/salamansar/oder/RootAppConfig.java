@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author Salamansar
  */
 @Configuration
-@EnableJpaRepositories("org.salamansar.oder.core.dao")
+@EnableJpaRepositories(value = "org.salamansar.oder.core.dao", 
+        entityManagerFactoryRef = "emFactory")
 @EnableTransactionManagement
 public class RootAppConfig {
     
@@ -35,7 +36,7 @@ public class RootAppConfig {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(embeddedDB());
         factory.setJpaVendorAdapter(adapter);
-        factory.setPackagesToScan("org.salamansar.oder.domain");
+        factory.setPackagesToScan("org.salamansar.oder.core.domain");        
         return factory;
     }
     

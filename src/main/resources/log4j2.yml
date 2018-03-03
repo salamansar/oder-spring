@@ -7,6 +7,13 @@ Configuration:
                     charset: UTF-8
                     pattern: "%d - %m%n"                
     Loggers:
+        logger:
+            -
+                name: org.hibernate.SQL
+                level: debug
+                additivity: false
+                AppenderRef:
+                    ref: APP
         Root:
             level: info
             AppenderRef:

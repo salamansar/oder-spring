@@ -36,6 +36,7 @@ public class RootAppConfig {
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(embeddedDB());
         factory.setJpaVendorAdapter(adapter);
+        factory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create");
         factory.setPackagesToScan("org.salamansar.oder.core.domain");        
         return factory;
     }

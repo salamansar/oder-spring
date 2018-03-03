@@ -3,6 +3,7 @@ package org.salamansar.oder;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableJpaRepositories(value = "org.salamansar.oder.core.dao", 
         entityManagerFactoryRef = "emFactory")
 @EnableTransactionManagement
+@ComponentScan("org.salamansar.oder.core")
 public class RootAppConfig {
     
     @Bean

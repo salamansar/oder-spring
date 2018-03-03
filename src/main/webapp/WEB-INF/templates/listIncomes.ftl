@@ -22,7 +22,13 @@
                     <td>${income.documentNumber}</td>
                     <td>${income.incomeDate?date}</td>
                     <td>${income.amount}</td>
-                    <td>${income.description}</td>
+                    <td>
+                        <#if income.description??>
+                            ${income.description}
+                        <#else>
+                            &nbsp;
+                        </#if>
+                    </td>
                 </tr>
             </#list>
         </table>        

@@ -22,5 +22,11 @@ public class IncomeServiceImpl implements IncomeService {
     public List<Income> getAllIncomes(User user) {
         return incomeDao.findIncomeByUserOrderByIncomeDateDesc(user);
     }
+
+    @Override
+    public Long addIncome(Income income) {
+        Income savedIncome = incomeDao.save(income);
+        return savedIncome.getId();
+    }
     
 }

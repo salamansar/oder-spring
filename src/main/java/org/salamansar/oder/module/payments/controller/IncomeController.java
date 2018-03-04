@@ -1,6 +1,5 @@
 package org.salamansar.oder.module.payments.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.Income;
@@ -37,6 +36,11 @@ public class IncomeController {
     public String addIncome(@ModelAttribute Income income) {
         String json = jsonMarshaller.toJsonString(income);
         log.info("Income adding received: " + json);
+        User user = new User(); //todo: receive user from auth context
+        user.setId(1L);
+        income.setUser(user);
+        //todo: check data before saving
+        incomeService.addIncome(income);
         return "redirect:list";
     }   
     

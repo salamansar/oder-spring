@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>4.3.9.RELEASE</version>
+            <version>5.0.4.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -81,6 +81,25 @@
             <artifactId>hsqldb</artifactId>
             <version>2.4.0</version>
         </dependency>
+        
+        <!--Testing-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.salamansar.envbuild</groupId>
+            <artifactId>environment-builder-hibernate4</artifactId>
+            <version>0.7-SNAPSHOT</version>
+        </dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>4.3.13.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
     <build>
@@ -104,5 +123,28 @@
             </plugin>
         </plugins>
     </build>
+	
+	<profiles>
+		<profile>
+			<id>enable-ITs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.22.0</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

@@ -24,7 +24,9 @@ public class IncomeServiceImpl implements IncomeService {
     }
 
     @Override
+	@Transactional
     public Long addIncome(Income income) {
+		income.setId(null);
         Income savedIncome = incomeDao.save(income);
         return savedIncome.getId();
     }

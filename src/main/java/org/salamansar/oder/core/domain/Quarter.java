@@ -1,5 +1,7 @@
 package org.salamansar.oder.core.domain;
 
+import java.util.EnumSet;
+
 /**
  *
  * @author Salamansar
@@ -17,5 +19,11 @@ public enum Quarter {
         this.value = value;
     }
     
-    
+	public static Quarter fromNumber(int num) {
+		return EnumSet.allOf(Quarter.class).stream()
+				.filter(q -> q.value == num)
+				.findFirst()
+				.orElse(null);
+	}
+	
 }

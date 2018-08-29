@@ -2,6 +2,7 @@ package org.salamansar.oder.core.service;
 
 import java.util.List;
 import org.salamansar.oder.core.domain.Income;
+import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.User;
 
 /**
@@ -12,4 +13,6 @@ public interface IncomeService {
     List<Income> getAllIncomes(User user);
     
     Long addIncome(Income income);
+	
+	List<Income> findIncomes(User user, PaymentPeriod period);
 }

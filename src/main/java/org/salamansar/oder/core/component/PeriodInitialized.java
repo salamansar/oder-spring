@@ -6,6 +6,6 @@ import org.salamansar.oder.core.domain.PaymentPeriod;
  *
  * @author Salamansar
  */
-public interface FixedPaymentMapStrategyFactory {
-	FixedPaymentMapStrategy getStartegy(PaymentPeriod period);
+public interface PeriodInitialized {
+	void init(PaymentPeriod period);
 }

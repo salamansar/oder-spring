@@ -17,7 +17,7 @@ public class TaxController {
 
 	@GetMapping
 	public String taxes() {
-		return "listTaxes";
+		return "listTaxes"; //todo: implement
 	}
-	
+
 }

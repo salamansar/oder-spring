@@ -2,7 +2,7 @@ package org.salamansar.oder.core.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,18 +19,19 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Data
 @Entity
 public class Income implements HasId, Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false, name = "income_date")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private Date incomeDate;
-    @Column(nullable = false)
-    private BigDecimal amount;
-    private String description;
-    @Column(name = "document_number")
-    private Integer documentNumber;
-    @ManyToOne    
-    private User user;
-    
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	@Column(nullable = false, name = "income_date")
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate incomeDate;
+	@Column(nullable = false)
+	private BigDecimal amount;
+	private String description;
+	@Column(name = "document_number")
+	private Integer documentNumber;
+	@ManyToOne
+	private User user;
+
 }

@@ -13,6 +13,8 @@ public interface PaymentPeriodCalculator {
 	
 	PaymentPeriod calculatePeriod(Date date);
 	
+	PaymentPeriod calculatePeriod(LocalDate date);
+	
 	PaymentPeriod calculatePeriod(LocalDateTime date);
 	
 }

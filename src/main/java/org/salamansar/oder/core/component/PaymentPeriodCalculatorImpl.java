@@ -1,5 +1,6 @@
 package org.salamansar.oder.core.component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -21,11 +22,16 @@ public class PaymentPeriodCalculatorImpl implements PaymentPeriodCalculator {
 	}
 
 	@Override
-	public PaymentPeriod calculatePeriod(LocalDateTime date) {
+	public PaymentPeriod calculatePeriod(LocalDate date) {
 		return new PaymentPeriod(date.getYear(), getQuarter(date));
 	}
+
+	@Override
+	public PaymentPeriod calculatePeriod(LocalDateTime date) {
+		return calculatePeriod(date.toLocalDate());
+	}
 	
-	private Quarter getQuarter(LocalDateTime date) {
+	private Quarter getQuarter(LocalDate date) {
 		int quarterNum = (date.getMonth().getValue() - 1) / 3 + 1;
 		return Quarter.fromNumber(quarterNum);
 	}

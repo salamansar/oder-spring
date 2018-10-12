@@ -2,6 +2,8 @@ package org.salamansar.oder.core.service;
 
 import org.salamansar.oder.core.service.TaxCalculatorImpl;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -32,6 +34,7 @@ import org.salamansar.oder.core.domain.TaxCategory;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class TaxCalculatorImplTest {
+
 	@Mock
 	private PaymentPeriodCalculator periodCalcualtor;
 	@Mock
@@ -43,12 +46,12 @@ public class TaxCalculatorImplTest {
 	@InjectMocks
 	private TaxCalculatorImpl calculator = new TaxCalculatorImpl();
 	private RandomGenerator generator = new RandomGenerator();
-	
-	private Date firstQuarter = new Date(1);
-	private Date secondQuarter = new Date(2);
-	private Date nextYearFirstQuarter = new Date(3);
-	private Date nextYearSecondQuarter = new Date(4);
-	
+
+	private LocalDate firstQuarter = LocalDate.of(2018, Month.FEBRUARY, 5);
+	private LocalDate secondQuarter = LocalDate.of(2018, Month.MAY, 5);
+	private LocalDate nextYearFirstQuarter = LocalDate.of(2019, Month.JANUARY, 5);
+	private LocalDate nextYearSecondQuarter = LocalDate.of(2019, Month.APRIL, 5);
+
 	@Before
 	public void setUp() {
 		when(periodCalcualtor.calculatePeriod(eq(firstQuarter)))
@@ -76,9 +79,9 @@ public class TaxCalculatorImplTest {
 		Income income3 = new Income();
 		income3.setIncomeDate(firstQuarter);
 		income3.setAmount(BigDecimal.valueOf(25.25));
-		
+
 		List<Tax> result = calculator.calculateIncomeTaxes(Arrays.asList(income1, income2, income3));
-		
+
 		assertNotNull(result);
 		assertEquals(2, result.size());
 		Optional<Tax> tax = result.stream()
@@ -94,7 +97,7 @@ public class TaxCalculatorImplTest {
 		assertEquals(TaxCategory.INCOME_TAX, tax.get().getCatgory());
 		assertTrue(BigDecimal.valueOf(3.03).compareTo(tax.get().getPayment()) == 0);
 	}
-	
+
 	@Test
 	public void claculatePercent() {
 		Income income1 = new Income();
@@ -109,16 +112,16 @@ public class TaxCalculatorImplTest {
 		Income income4 = new Income();
 		income4.setIncomeDate(nextYearSecondQuarter);
 		income4.setAmount(BigDecimal.valueOf(230000));
-		
+
 		List<Tax> result = calculator.calculateOnePercent(Arrays.asList(income1, income2, income3, income4));
-		
+
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertEquals(new PaymentPeriod(2018, Quarter.YEAR), result.get(0).getPeriod());
 		assertEquals(TaxCategory.PENSION_PERCENT, result.get(0).getCatgory());
 		assertTrue(result.get(0).getPayment().toString(), BigDecimal.valueOf(100).compareTo(result.get(0).getPayment()) == 0);
 	}
-	
+
 	@Test
 	public void calculateFixedPayments() {
 		FixedPayment payment = generator.generate(FixedPayment.class);
@@ -126,21 +129,20 @@ public class TaxCalculatorImplTest {
 		when(fixedPaymentService.findFixedPaymentsByYear(eq(2018)))
 				.thenReturn(Arrays.asList(payment));
 		when(mapStrategy.map(same(payment))).thenReturn(tax);
-		
+
 		List<Tax> result = calculator.calculateFixedPayments(new PaymentPeriod(2018, Quarter.YEAR));
-		
+
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertSame(tax, result.get(0));
 	}
-	
+
 	@Test
 	public void calculateEmptyListFixedPayments() {
 		List<Tax> result = calculator.calculateFixedPayments(new PaymentPeriod(2018, Quarter.YEAR));
-		
+
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 	}
-	
-	
+
 }

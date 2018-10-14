@@ -26,8 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 
 	@Autowired
-	private EntityManager entityManager;
-	@Autowired
 	private IncomeService incomeService;
 
 	private RandomGenerator generator = new RandomGenerator();

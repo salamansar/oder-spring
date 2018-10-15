@@ -44,7 +44,7 @@ public class TaxServiceImplTest {
 	
 
 	@Test
-	public void calculateTaxes() {
+	public void calculateTaxesForYear() {
 		when(incomeService.findIncomes(same(user), any(PaymentPeriod.class)))
 				.thenReturn(Arrays.asList(income));
 		Tax tax1 = generator.generate(Tax.class);
@@ -64,6 +64,27 @@ public class TaxServiceImplTest {
 		assertTrue(result.contains(tax1));
 		assertTrue(result.contains(tax2));
 		assertTrue(result.contains(tax3));
+	}
+	
+	@Test
+	public void calculateTaxesForQuarter() {
+		when(incomeService.findIncomes(same(user), any(PaymentPeriod.class)))
+				.thenReturn(Arrays.asList(income));
+		Tax tax1 = generator.generate(Tax.class);
+		Tax tax2 = generator.generate(Tax.class);
+		Tax tax3 = generator.generate(Tax.class);
+		when(taxCalculator.calculateFixedPayments(any(PaymentPeriod.class)))
+				.thenReturn(Collections.emptyList());
+		when(taxCalculator.calculateIncomeTaxes(any(List.class)))
+				.thenReturn(Arrays.asList(tax1));
+		when(taxCalculator.calculateOnePercent(any(List.class)))
+				.thenReturn(Arrays.asList(tax2, tax3));
+		
+		List<Tax> result = taxService.calculateTaxes(user, new PaymentPeriod(2018, Quarter.III));
+		
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertTrue(result.contains(tax1));
 	}
 	
 }

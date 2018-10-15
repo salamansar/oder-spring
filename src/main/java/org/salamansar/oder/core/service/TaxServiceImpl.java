@@ -1,12 +1,10 @@
 package org.salamansar.oder.core.service;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
-import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
+import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.core.utils.ListBuilder;
@@ -30,7 +28,12 @@ public class TaxServiceImpl implements TaxService {
 		List<Income> incomes = incomeService.findIncomes(user, period);
 		List<Tax> incomeTaxes = taxCalculator.calculateIncomeTaxes(incomes);
 		List<Tax> fixedPayments = taxCalculator.calculateFixedPayments(period);
-		List<Tax> onePersentPayments = taxCalculator.calculateOnePercent(incomes);
+		List<Tax> onePersentPayments;
+		if(period.getQuarter() == Quarter.YEAR) {
+			onePersentPayments = taxCalculator.calculateOnePercent(incomes);
+		} else {
+			onePersentPayments = Collections.emptyList();
+		}
 		return ListBuilder.of(incomeTaxes)
 				.and(fixedPayments)
 				.and(onePersentPayments)

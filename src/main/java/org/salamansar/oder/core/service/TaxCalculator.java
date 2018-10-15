@@ -10,7 +10,7 @@ import org.salamansar.oder.core.domain.Tax;
  *
  * @author Salamansar
  */
-public interface TaxCalculator {
+public interface TaxCalculator { //todo: split to separate calculators
 	
 	List<Tax> calculateIncomeTaxes(List<Income> incomes);
 	

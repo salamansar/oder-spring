@@ -16,6 +16,9 @@ public class PaymentPeriod {
 	private Quarter quarter;
 
 	public Month getStartMonth() {
+		if(quarter == null) {
+			return null;
+		}
 		switch (quarter) {
 			case I:
 				return Month.JANUARY;
@@ -31,6 +34,9 @@ public class PaymentPeriod {
 	}
 
 	public Month getEndMonth() {
+		if (quarter == null) {
+			return null;
+		}
 		switch (quarter) {
 			case I:
 				return Month.MARCH;

@@ -14,7 +14,7 @@ public class TaxCategoryConverter implements AttributeConverter<TaxCategory, Lon
 
 	@Override
 	public Long convertToDatabaseColumn(TaxCategory x) {
-		return x.getId();
+		return x == null ? null : x.getId();
 	}
 
 	@Override

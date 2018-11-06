@@ -1,15 +1,11 @@
 package org.salamansar.oder.core.service;
 
-import org.salamansar.oder.core.service.TaxCalculatorImpl;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import org.envbuild.generator.RandomGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -18,10 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.salamansar.oder.core.component.FixedPaymentMapStrategy;
-import org.salamansar.oder.core.component.FixedPaymentMapStrategyFactory;
 import org.salamansar.oder.core.component.PaymentPeriodCalculator;
-import org.salamansar.oder.core.domain.FixedPayment;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
@@ -39,7 +32,6 @@ public class TaxCalculatorImplTest {
 	private PaymentPeriodCalculator periodCalcualtor;
 	@InjectMocks
 	private TaxCalculatorImpl calculator = new TaxCalculatorImpl();
-	private RandomGenerator generator = new RandomGenerator();
 
 	private LocalDate firstQuarter = LocalDate.of(2018, Month.FEBRUARY, 5);
 	private LocalDate secondQuarter = LocalDate.of(2018, Month.MAY, 5);

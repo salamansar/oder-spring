@@ -1,5 +1,6 @@
 package org.salamansar.oder.core.component;
 
+import java.util.List;
 import org.salamansar.oder.core.domain.FixedPayment;
 import org.salamansar.oder.core.domain.Tax;
 
@@ -8,5 +9,5 @@ import org.salamansar.oder.core.domain.Tax;
  * @author Salamansar
  */
 public interface FixedPaymentMapStrategy {
-	Tax map(FixedPayment payment); 
+	List<Tax> map(FixedPayment payment); 
 }

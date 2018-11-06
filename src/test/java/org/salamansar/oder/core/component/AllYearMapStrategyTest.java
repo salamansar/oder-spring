@@ -1,6 +1,7 @@
 package org.salamansar.oder.core.component;
 
 import java.math.BigDecimal;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.salamansar.oder.core.domain.FixedPayment;
@@ -23,9 +24,11 @@ public class AllYearMapStrategyTest {
         payment.setValue(BigDecimal.valueOf(1000L));
         payment.setYear(2018);
         
-        Tax tax = strategy.map(payment);
+        List<Tax> taxes = strategy.map(payment);
         
-        assertNotNull(tax);
+        assertNotNull(taxes);
+		assertEquals(1, taxes.size());
+		Tax tax = taxes.get(0);
         assertEquals(payment.getCategory(), tax.getCatgory());
         assertTrue(payment.getValue().compareTo(tax.getPayment()) == 0);
         assertNotNull(tax.getPeriod());

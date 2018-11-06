@@ -14,7 +14,5 @@ public interface TaxCalculator { //todo: split to separate calculators
 	
 	List<Tax> calculateIncomeTaxes(List<Income> incomes);
 	
-	List<Tax> calculateFixedPayments(PaymentPeriod period);
-	
 	List<Tax> calculateOnePercent(List<Income> incomes);
 }

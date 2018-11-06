@@ -37,12 +37,6 @@ public class TaxCalculatorImplTest {
 
 	@Mock
 	private PaymentPeriodCalculator periodCalcualtor;
-	@Mock
-	private FixedPaymentService fixedPaymentService;
-	@Mock
-	private FixedPaymentMapStrategyFactory fixedPaymentMapFactory;
-	@Mock
-	private FixedPaymentMapStrategy mapStrategy;
 	@InjectMocks
 	private TaxCalculatorImpl calculator = new TaxCalculatorImpl();
 	private RandomGenerator generator = new RandomGenerator();
@@ -62,10 +56,6 @@ public class TaxCalculatorImplTest {
 				.thenReturn(new PaymentPeriod(2019, Quarter.I));
 		when(periodCalcualtor.calculatePeriod(eq(nextYearSecondQuarter)))
 				.thenReturn(new PaymentPeriod(2019, Quarter.II));
-		when(fixedPaymentService.findFixedPaymentsByYear(anyInt()))
-				.thenReturn(Collections.emptyList());
-		when(fixedPaymentMapFactory.getStartegy(any(PaymentPeriod.class)))
-				.thenReturn(mapStrategy);
 	}
 
 	@Test
@@ -120,29 +110,6 @@ public class TaxCalculatorImplTest {
 		assertEquals(new PaymentPeriod(2018, Quarter.YEAR), result.get(0).getPeriod());
 		assertEquals(TaxCategory.PENSION_PERCENT, result.get(0).getCatgory());
 		assertTrue(result.get(0).getPayment().toString(), BigDecimal.valueOf(100).compareTo(result.get(0).getPayment()) == 0);
-	}
-
-	@Test
-	public void calculateFixedPayments() {
-		FixedPayment payment = generator.generate(FixedPayment.class);
-		Tax tax = generator.generate(Tax.class);
-		when(fixedPaymentService.findFixedPaymentsByYear(eq(2018)))
-				.thenReturn(Arrays.asList(payment));
-		when(mapStrategy.map(same(payment))).thenReturn(tax);
-
-		List<Tax> result = calculator.calculateFixedPayments(new PaymentPeriod(2018, Quarter.YEAR));
-
-		assertNotNull(result);
-		assertEquals(1, result.size());
-		assertSame(tax, result.get(0));
-	}
-
-	@Test
-	public void calculateEmptyListFixedPayments() {
-		List<Tax> result = calculator.calculateFixedPayments(new PaymentPeriod(2018, Quarter.YEAR));
-
-		assertNotNull(result);
-		assertTrue(result.isEmpty());
 	}
 
 }

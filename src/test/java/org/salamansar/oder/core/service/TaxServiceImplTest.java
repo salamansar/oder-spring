@@ -16,6 +16,7 @@ import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.Tax;
+import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.User;
 
 /**
@@ -28,6 +29,8 @@ public class TaxServiceImplTest {
 	private IncomeService incomeService;
 	@Mock
 	private TaxCalculator taxCalculator;
+	@Mock
+	private FixedPaymentTaxCalculator fixedPaymentCalculator;
 	@InjectMocks
 	private TaxServiceImpl taxService = new TaxServiceImpl();
 	
@@ -40,6 +43,8 @@ public class TaxServiceImplTest {
 	public void setUp() {
 		income = generator.generate(Income.class);
 		user = generator.generate(User.class);
+		when(fixedPaymentCalculator.calculateFixedPayments(any(PaymentPeriod.class), any(TaxCalculationSettings.class)))
+				.thenReturn(Collections.emptyList());
 	}
 	
 
@@ -50,8 +55,6 @@ public class TaxServiceImplTest {
 		Tax tax1 = generator.generate(Tax.class);
 		Tax tax2 = generator.generate(Tax.class);
 		Tax tax3 = generator.generate(Tax.class);
-		when(taxCalculator.calculateFixedPayments(any(PaymentPeriod.class)))
-				.thenReturn(Collections.emptyList());
 		when(taxCalculator.calculateIncomeTaxes(any(List.class)))
 				.thenReturn(Arrays.asList(tax1));
 		when(taxCalculator.calculateOnePercent(any(List.class)))
@@ -73,8 +76,6 @@ public class TaxServiceImplTest {
 		Tax tax1 = generator.generate(Tax.class);
 		Tax tax2 = generator.generate(Tax.class);
 		Tax tax3 = generator.generate(Tax.class);
-		when(taxCalculator.calculateFixedPayments(any(PaymentPeriod.class)))
-				.thenReturn(Collections.emptyList());
 		when(taxCalculator.calculateIncomeTaxes(any(List.class)))
 				.thenReturn(Arrays.asList(tax1));
 		when(taxCalculator.calculateOnePercent(any(List.class)))

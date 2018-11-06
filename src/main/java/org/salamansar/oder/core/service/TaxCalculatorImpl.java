@@ -3,10 +3,7 @@ package org.salamansar.oder.core.service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
-import org.salamansar.oder.core.component.FixedPaymentMapStrategy;
-import org.salamansar.oder.core.component.FixedPaymentMapStrategyFactory;
 import org.salamansar.oder.core.component.PaymentPeriodCalculator;
-import org.salamansar.oder.core.domain.FixedPayment;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
@@ -26,10 +23,6 @@ public class TaxCalculatorImpl implements TaxCalculator {
 	private static final BigDecimal PERCENT_THRESHOLD = BigDecimal.valueOf(300000L);
 	@Autowired
 	private PaymentPeriodCalculator periodCalcualtor;
-	@Autowired
-	private FixedPaymentService fixedPaymentService;
-	@Autowired
-	private FixedPaymentMapStrategyFactory fixedPaymentMapFactory;
 
 	@Override
 	public List<Tax> calculateIncomeTaxes(List<Income> incomes) {
@@ -45,15 +38,6 @@ public class TaxCalculatorImpl implements TaxCalculator {
 				})
 				.collect(Collectors.toList());
         }
-
-	@Override
-	public List<Tax> calculateFixedPayments(PaymentPeriod period) {
-		List<FixedPayment> payments = fixedPaymentService.findFixedPaymentsByYear(period.getYear());
-		FixedPaymentMapStrategy strategy = fixedPaymentMapFactory.getStartegy(period);
-		return payments.stream()
-				.map(strategy::map)
-				.collect(Collectors.toList());
-	}
 
 	@Override
 	public List<Tax> calculateOnePercent(List<Income> incomes) {

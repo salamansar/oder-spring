@@ -3,9 +3,8 @@ package org.salamansar.oder.core.service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
+import org.envbuild.environment.DbEnvironmentBuilder;
 import org.envbuild.generator.RandomGenerator;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,15 +26,17 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 
 	@Autowired
 	private IncomeService incomeService;
-
-	private RandomGenerator generator = new RandomGenerator();
+	@Autowired
+	private DbEnvironmentBuilder envBuilder;
+	
 	private User user;
 
 	@Before
 	public void setUp() {
-		user = generator.generate(User.class);
-		user.setId(null);
-		entityManager.persist(user);
+		envBuilder.newBuild()
+				.createObject(User.class).asParent().alias("user");
+				
+		user = envBuilder.getEnvironment().getByAlias("user");
 	}
 
 	@Test
@@ -54,12 +55,11 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 
 	@Test
 	public void getAllIncomes() {
-		Income income1 = generator.generate(Income.class, user, LocalDate.now());
-		income1.setId(null);
-		entityManager.persist(income1);
-		Income income2 = generator.generate(Income.class, user, LocalDate.now());
-		income2.setId(null);
-		entityManager.persist(income2);
+		envBuilder.setParent(LocalDate.now())
+				.createObject(Income.class).alias("income1")
+				.createObject(Income.class).alias("income2");
+		Income income1 = envBuilder.getEnvironment().getByAlias("income1");
+		Income income2 = envBuilder.getEnvironment().getByAlias("income2");
 
 		List<Income> incomes = incomeService.getAllIncomes(user);
 
@@ -72,22 +72,14 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 
 	@Test
 	public void getIncomesForQuarter() {
-		LocalDate date1 = LocalDate.of(2018, Month.MAY, 5);
-		Income income1 = generator.generate(Income.class, user, date1);
-		income1.setId(null);
-		entityManager.persist(income1);
-		LocalDate date2 = LocalDate.of(2018, Month.JULY, 1);
-		Income income2 = generator.generate(Income.class, user, date2);
-		income2.setId(null);
-		entityManager.persist(income2);
-		LocalDate date3 = LocalDate.of(2018, Month.APRIL, 1);
-		Income income3 = generator.generate(Income.class, user, date3);
-		income3.setId(null);
-		entityManager.persist(income3);
-		LocalDate date4 = LocalDate.of(2018, Month.JUNE, 30);
-		Income income4 = generator.generate(Income.class, user, date4);
-		income4.setId(null);
-		entityManager.persist(income4);
+		envBuilder.setParent(LocalDate.of(2018, Month.MAY, 5))
+					.createObject(Income.class).alias("income1")
+				.setParent(LocalDate.of(2018, Month.JULY, 1))
+					.createObject(Income.class).alias("income2")
+				.setParent(LocalDate.of(2018, Month.APRIL, 1))
+					.createObject(Income.class).alias("income3")
+				.setParent(LocalDate.of(2018, Month.JUNE, 30))
+					.createObject(Income.class).alias("income4");
 
 		List<Income> result = incomeService.findIncomes(user, new PaymentPeriod(2018, Quarter.II));
 

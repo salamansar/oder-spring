@@ -1,7 +1,7 @@
 package org.salamansar.oder.core.service;
 
 import java.util.List;
-import org.envbuild.generator.RandomGenerator;
+import org.envbuild.generator.GenerationService;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.salamansar.oder.core.AbstractCoreIntegrationTest;
@@ -18,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class FixedPaymentServiceImplIT extends AbstractCoreIntegrationTest {
 	@Autowired
 	private FixedPaymentService service;
-	private RandomGenerator generator = new RandomGenerator();
+	@Autowired
+	private GenerationService generator;
 
 	@Test
 	public void findByYear() {

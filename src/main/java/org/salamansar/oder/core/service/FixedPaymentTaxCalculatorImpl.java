@@ -10,11 +10,13 @@ import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Salamansar
  */
+@Service
 public class FixedPaymentTaxCalculatorImpl implements FixedPaymentTaxCalculator {
 	@Autowired
 	private FixedPaymentService fixedPaymentService;

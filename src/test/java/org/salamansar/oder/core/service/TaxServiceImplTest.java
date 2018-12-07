@@ -28,7 +28,7 @@ public class TaxServiceImplTest {
 	@Mock
 	private IncomeService incomeService;
 	@Mock
-	private TaxCalculator taxCalculator;
+	private OnePercentTaxCalculator onePercentTaxCalculator;
 	@Mock
 	private FixedPaymentTaxCalculator fixedPaymentCalculator;
 	@Mock
@@ -51,15 +51,16 @@ public class TaxServiceImplTest {
 	
 
 	@Test
-	public void calculateTaxesForYear() {
+	public void calculateTaxes() {
 		when(incomeService.findIncomes(same(user), any(PaymentPeriod.class)))
 				.thenReturn(Arrays.asList(income));
 		Tax tax1 = generator.generate(Tax.class);
 		Tax tax2 = generator.generate(Tax.class);
 		Tax tax3 = generator.generate(Tax.class);
-		when(incomesTaxCalculator.calculateIncomeTaxes(eq(user), any(PaymentPeriod.class), any(TaxCalculationSettings.class)))
+		TaxCalculationSettings defualtSettings = new TaxCalculationSettings();
+		when(incomesTaxCalculator.calculateIncomeTaxes(eq(user), any(PaymentPeriod.class), eq(defualtSettings)))
 				.thenReturn(Arrays.asList(tax1));
-		when(taxCalculator.calculateOnePercent(any(List.class)))
+		when(onePercentTaxCalculator.calculateOneTaxesPercent(eq(user), any(PaymentPeriod.class), eq(defualtSettings)))
 				.thenReturn(Arrays.asList(tax2, tax3));
 		
 		List<Tax> result = taxService.calculateTaxes(user, new PaymentPeriod(2018, Quarter.YEAR));
@@ -69,25 +70,6 @@ public class TaxServiceImplTest {
 		assertTrue(result.contains(tax1));
 		assertTrue(result.contains(tax2));
 		assertTrue(result.contains(tax3));
-	}
-	
-	@Test
-	public void calculateTaxesForQuarter() {
-		when(incomeService.findIncomes(same(user), any(PaymentPeriod.class)))
-				.thenReturn(Arrays.asList(income));
-		Tax tax1 = generator.generate(Tax.class);
-		Tax tax2 = generator.generate(Tax.class);
-		Tax tax3 = generator.generate(Tax.class);
-		when(incomesTaxCalculator.calculateIncomeTaxes(eq(user), any(PaymentPeriod.class), any(TaxCalculationSettings.class)))
-				.thenReturn(Arrays.asList(tax1));
-		when(taxCalculator.calculateOnePercent(any(List.class)))
-				.thenReturn(Arrays.asList(tax2, tax3));
-		
-		List<Tax> result = taxService.calculateTaxes(user, new PaymentPeriod(2018, Quarter.III));
-		
-		assertNotNull(result);
-		assertEquals(1, result.size());
-		assertTrue(result.contains(tax1));
 	}
 	
 }

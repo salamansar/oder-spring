@@ -1,10 +1,7 @@
 package org.salamansar.oder.core.service;
 
-import java.util.Collections;
 import java.util.List;
-import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
-import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.User;
@@ -19,9 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TaxServiceImpl implements TaxService {
 	@Autowired
-	private IncomeService incomeService;
-	@Autowired
-	private TaxCalculator taxCalculator;
+	private OnePercentTaxCalculator onePercentCalculator;
 	@Autowired
 	private FixedPaymentTaxCalculator fixedPaymentCalculator;
 	@Autowired
@@ -34,15 +29,9 @@ public class TaxServiceImpl implements TaxService {
 
 	@Override
 	public List<Tax> calculateTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
-		List<Income> incomes = incomeService.findIncomes(user, period);
 		List<Tax> incomeTaxes = incomesTaxCalculator.calculateIncomeTaxes(user, period, settings);
 		List<Tax> fixedPayments = fixedPaymentCalculator.calculateFixedPayments(period, settings);
-		List<Tax> onePersentPayments;
-		if(period.getQuarter() == Quarter.YEAR) {
-			onePersentPayments = taxCalculator.calculateOnePercent(incomes);
-		} else {
-			onePersentPayments = Collections.emptyList();
-		}
+		List<Tax> onePersentPayments = onePercentCalculator.calculateOneTaxesPercent(user, period, settings);
 		return ListBuilder.of(incomeTaxes)
 				.and(fixedPayments)
 				.and(onePersentPayments)

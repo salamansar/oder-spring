@@ -51,36 +51,6 @@ public class TaxCalculatorImplTest {
 	}
 
 	@Test
-	public void calculateIncomes() {
-		Income income1 = new Income();
-		income1.setIncomeDate(firstQuarter);
-		income1.setAmount(BigDecimal.valueOf(100.50));
-		Income income2 = new Income();
-		income2.setIncomeDate(secondQuarter);
-		income2.setAmount(BigDecimal.valueOf(50.50));
-		Income income3 = new Income();
-		income3.setIncomeDate(firstQuarter);
-		income3.setAmount(BigDecimal.valueOf(25.25));
-
-		List<Tax> result = calculator.calculateIncomeTaxes(Arrays.asList(income1, income2, income3));
-
-		assertNotNull(result);
-		assertEquals(2, result.size());
-		Optional<Tax> tax = result.stream()
-				.filter(t -> new PaymentPeriod(2018, Quarter.I).equals(t.getPeriod()))
-				.findFirst();
-		assertTrue(tax.isPresent());
-		assertEquals(TaxCategory.INCOME_TAX, tax.get().getCatgory());
-		assertTrue(BigDecimal.valueOf(7.545).compareTo(tax.get().getPayment()) == 0);
-		tax = result.stream()
-				.filter(t -> new PaymentPeriod(2018, Quarter.II).equals(t.getPeriod()))
-				.findFirst();
-		assertTrue(tax.isPresent());
-		assertEquals(TaxCategory.INCOME_TAX, tax.get().getCatgory());
-		assertTrue(BigDecimal.valueOf(3.03).compareTo(tax.get().getPayment()) == 0);
-	}
-
-	@Test
 	public void claculatePercent() {
 		Income income1 = new Income();
 		income1.setIncomeDate(firstQuarter);

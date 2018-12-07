@@ -18,26 +18,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TaxCalculatorImpl implements TaxCalculator {
-	private static final BigDecimal TAX_RATE = BigDecimal.valueOf(0.06); //todo: must be replaced for calculation, since rate may be different
 	private static final BigDecimal PERCENT_RATE = BigDecimal.valueOf(0.01);
 	private static final BigDecimal PERCENT_THRESHOLD = BigDecimal.valueOf(300000L);
 	@Autowired
 	private PaymentPeriodCalculator periodCalcualtor;
-
-	@Override
-	public List<Tax> calculateIncomeTaxes(List<Income> incomes) {
-		return incomes.stream()
-				.collect(Collectors.groupingBy(income -> periodCalcualtor.calculatePeriod(income.getIncomeDate())))
-				.entrySet().stream()
-				.map(e -> {
-					BigDecimal sum = incomesSum(e.getValue()).multiply(TAX_RATE);
-					Tax tax = new Tax(TaxCategory.INCOME_TAX);
-					tax.setPayment(sum);
-					tax.setPeriod(e.getKey());
-					return tax;
-				})
-				.collect(Collectors.toList());
-        }
 
 	@Override
 	public List<Tax> calculateOnePercent(List<Income> incomes) {

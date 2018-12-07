@@ -31,6 +31,8 @@ public class TaxServiceImplTest {
 	private TaxCalculator taxCalculator;
 	@Mock
 	private FixedPaymentTaxCalculator fixedPaymentCalculator;
+	@Mock
+	private IncomeTaxCalculator incomesTaxCalculator;
 	@InjectMocks
 	private TaxServiceImpl taxService = new TaxServiceImpl();
 	
@@ -55,7 +57,7 @@ public class TaxServiceImplTest {
 		Tax tax1 = generator.generate(Tax.class);
 		Tax tax2 = generator.generate(Tax.class);
 		Tax tax3 = generator.generate(Tax.class);
-		when(taxCalculator.calculateIncomeTaxes(any(List.class)))
+		when(incomesTaxCalculator.calculateIncomeTaxes(eq(user), any(PaymentPeriod.class), any(TaxCalculationSettings.class)))
 				.thenReturn(Arrays.asList(tax1));
 		when(taxCalculator.calculateOnePercent(any(List.class)))
 				.thenReturn(Arrays.asList(tax2, tax3));
@@ -76,7 +78,7 @@ public class TaxServiceImplTest {
 		Tax tax1 = generator.generate(Tax.class);
 		Tax tax2 = generator.generate(Tax.class);
 		Tax tax3 = generator.generate(Tax.class);
-		when(taxCalculator.calculateIncomeTaxes(any(List.class)))
+		when(incomesTaxCalculator.calculateIncomeTaxes(eq(user), any(PaymentPeriod.class), any(TaxCalculationSettings.class)))
 				.thenReturn(Arrays.asList(tax1));
 		when(taxCalculator.calculateOnePercent(any(List.class)))
 				.thenReturn(Arrays.asList(tax2, tax3));

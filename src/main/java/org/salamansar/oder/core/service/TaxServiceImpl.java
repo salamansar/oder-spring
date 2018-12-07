@@ -24,6 +24,8 @@ public class TaxServiceImpl implements TaxService {
 	private TaxCalculator taxCalculator;
 	@Autowired
 	private FixedPaymentTaxCalculator fixedPaymentCalculator;
+	@Autowired
+	private IncomeTaxCalculator incomesTaxCalculator;
 
 	@Override
 	public List<Tax> calculateTaxes(User user, PaymentPeriod period) {
@@ -33,7 +35,7 @@ public class TaxServiceImpl implements TaxService {
 	@Override
 	public List<Tax> calculateTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
 		List<Income> incomes = incomeService.findIncomes(user, period);
-		List<Tax> incomeTaxes = taxCalculator.calculateIncomeTaxes(incomes);
+		List<Tax> incomeTaxes = incomesTaxCalculator.calculateIncomeTaxes(user, period, settings);
 		List<Tax> fixedPayments = fixedPaymentCalculator.calculateFixedPayments(period, settings);
 		List<Tax> onePersentPayments;
 		if(period.getQuarter() == Quarter.YEAR) {

@@ -14,6 +14,7 @@ import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.Tax;
+import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.TaxCategory;
 import org.salamansar.oder.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,17 +132,51 @@ public class TaxServiceImplIT extends AbstractCoreIntegrationTest {
 	@Test
 	public void calculateTaxesForYear() {
 		PaymentPeriod period2016 = new PaymentPeriod(2016, Quarter.YEAR);
+		List<Tax> taxes = service.calculateTaxes(user, period2016, new TaxCalculationSettings().splitByQuants(true));
+
+		assertNotNull(taxes);
+		assertEquals(10, taxes.size());
+		assertTrue(taxes.stream().allMatch(t
+				-> t.getCatgory() != null
+				&& t.getPayment() != null
+				&& t.getPeriod()  != null && t.getPeriod().getYear().equals(2016)));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.I));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.II));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.III));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.IV));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.I));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.II));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.III));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.II));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.INCOME_TAX == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.II));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.INCOME_TAX == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.III));
+
+		PaymentPeriod period2015 = new PaymentPeriod(2015, Quarter.YEAR);
+		taxes = service.calculateTaxes(user, period2015);
+
+		assertNotNull(taxes);
+		assertEquals(1, taxes.size());
+		assertNotNull(taxes.get(0).getCatgory());
+		assertNotNull(taxes.get(0).getPayment());
+		assertNotNull(taxes.get(0).getPeriod());
+		assertEquals(period2015, taxes.get(0).getPeriod());
+		assertEquals(TaxCategory.INCOME_TAX, taxes.get(0).getCatgory());
+	}
+	
+	@Test
+	public void calculateTaxesForYearSummarized() {
+		PaymentPeriod period2016 = new PaymentPeriod(2016, Quarter.YEAR);
 		List<Tax> taxes = service.calculateTaxes(user, period2016);
 
 		assertNotNull(taxes);
-		assertEquals(11, taxes.size());
+		assertEquals(4, taxes.size());
 		assertTrue(taxes.stream().allMatch(t
 				-> t.getCatgory() != null
 				&& t.getPayment() != null
 				&& t.getPeriod()  != null && t.getPeriod().equals(period2016)));
-		assertEquals(4, taxes.stream().filter(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory()).count());
-		assertEquals(4, taxes.stream().filter(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory()).count());
-		assertEquals(2, taxes.stream().filter(t -> TaxCategory.INCOME_TAX == t.getCatgory()).count());
+		assertEquals(1, taxes.stream().filter(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory()).count());
+		assertEquals(1, taxes.stream().filter(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory()).count());
+		assertEquals(1, taxes.stream().filter(t -> TaxCategory.INCOME_TAX == t.getCatgory()).count());
 		assertEquals(1, taxes.stream().filter(t -> TaxCategory.PENSION_PERCENT == t.getCatgory()).count());
 
 		PaymentPeriod period2015 = new PaymentPeriod(2015, Quarter.YEAR);

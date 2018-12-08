@@ -16,4 +16,19 @@ public class TaxCalculationSettings {
 		return new TaxCalculationSettings();
 	}
 	
+	public TaxCalculationSettings splitByQuants(Boolean byQuants) {
+		this.byQuants = byQuants;
+		return this;
+	}
+	
+	public TaxCalculationSettings withRoundUp(Boolean roundUp) {
+		this.roundUp = roundUp;
+		return this;
+	}
+	
+	public TaxCalculationSettings withDeducts(Boolean includeDeducts) {
+		this.includeDeducts = includeDeducts;
+		return this;
+	}
+	
 }

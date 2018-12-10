@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.core.service.IncomeService;
+import org.salamansar.oder.module.payments.adapter.IncomeAdapter;
+import org.salamansar.oder.module.payments.dto.IncomeDto;
+import org.salamansar.oder.module.payments.mapper.IncomeMapper;
 import org.salamansar.oder.utils.JsonMarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,6 +29,8 @@ public class IncomeController {
     private JsonMarshaller jsonMarshaller;
     @Autowired
     private IncomeService incomeService;
+	@Autowired
+	private IncomeAdapter incomeAdapter;
     
     @GetMapping("add")
     public String addIncomeForm() {
@@ -48,7 +53,7 @@ public class IncomeController {
     public String getIncomes(Model model) {
         User user = new User(); //todo: replace with getting from auth context
         user.setId(1L);
-        List<Income> incomes = incomeService.getAllIncomes(user);
+		List<IncomeDto> incomes = incomeAdapter.getAllIncomes(user);
         model.addAttribute("incomes", incomes);
         return "listIncomes";
     }

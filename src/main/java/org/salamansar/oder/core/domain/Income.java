@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -24,7 +23,6 @@ public class Income implements HasId, Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false, name = "income_date")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate incomeDate;
 	@Column(nullable = false)
 	private BigDecimal amount;

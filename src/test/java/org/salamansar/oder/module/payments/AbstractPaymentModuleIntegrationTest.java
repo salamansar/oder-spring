@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  *
@@ -35,8 +37,16 @@ public abstract class AbstractPaymentModuleIntegrationTest {
 			};
 		}
 		
+		@Bean
+		public TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
+			return new TransactionTemplate(transactionManager);
+		}
+		
+		
 	}
 	
 	@Autowired
 	protected EntityManager entityManager;
+	@Autowired
+	protected TransactionTemplate transactionTemplate;
 }

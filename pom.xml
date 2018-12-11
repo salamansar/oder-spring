@@ -103,7 +103,7 @@
 		<dependency>
 			<groupId>com.github.salamansar.envbuild</groupId>
 			<artifactId>environment-builder-spring</artifactId>
-			<version>0.8</version>
+			<version>0.8.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

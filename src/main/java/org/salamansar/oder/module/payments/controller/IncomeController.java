@@ -2,12 +2,9 @@ package org.salamansar.oder.module.payments.controller;
 
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.User;
-import org.salamansar.oder.core.service.IncomeService;
 import org.salamansar.oder.module.payments.adapter.IncomeAdapter;
 import org.salamansar.oder.module.payments.dto.IncomeDto;
-import org.salamansar.oder.module.payments.mapper.IncomeMapper;
 import org.salamansar.oder.utils.JsonMarshaller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,11 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("incomes")
 @Slf4j
-public class IncomeController {
+public class IncomeController {//todo: unit test
     @Autowired
     private JsonMarshaller jsonMarshaller;
-    @Autowired
-    private IncomeService incomeService;
 	@Autowired
 	private IncomeAdapter incomeAdapter;
     
@@ -38,14 +33,13 @@ public class IncomeController {
     }
     
     @PostMapping("add")
-    public String addIncome(@ModelAttribute Income income) {
+    public String addIncome(@ModelAttribute IncomeDto income) {
         String json = jsonMarshaller.toJsonString(income);
         log.info("Income adding received: " + json);
         User user = new User(); //todo: receive user from auth context
         user.setId(1L);
-        income.setUser(user);
         //todo: check data before saving
-        incomeService.addIncome(income);
+        incomeAdapter.addIncome(user, income);
         return "redirect:list";
     }   
     

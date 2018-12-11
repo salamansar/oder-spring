@@ -9,5 +9,8 @@ import org.salamansar.oder.module.payments.dto.IncomeDto;
  * @author Salamansar
  */
 public interface IncomeAdapter {
+	
 	List<IncomeDto> getAllIncomes(User user);
+	
+	Long addIncome(User user, IncomeDto dto);
 }

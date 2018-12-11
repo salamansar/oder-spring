@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author Salamansar
  */
 @Slf4j
-public class JsonMarshaller {
+public class JsonMarshaller {//todo: add unit test
     private ObjectMapper mapper;
 
     public JsonMarshaller(ObjectMapper mapper) {

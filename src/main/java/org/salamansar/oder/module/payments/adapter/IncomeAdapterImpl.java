@@ -28,5 +28,12 @@ public class IncomeAdapterImpl implements IncomeAdapter {
 				.map(incomeMapper::mapToDto)
 				.collect(Collectors.toList());
 	}
+
+	@Override
+	public Long addIncome(User user, IncomeDto dto) {
+		Income domain = incomeMapper.mapFromDto(dto);
+		domain.setUser(user);
+		return incomeService.addIncome(domain);
+	}
 	
 }

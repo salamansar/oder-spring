@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author Salamansar
  */
 @Data
-public class IncomeDto { //todo: use mapped dto instead domain
+public class IncomeDto {
 	private Long id;
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private Date incomeDate;

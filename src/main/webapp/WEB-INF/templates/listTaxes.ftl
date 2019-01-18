@@ -20,45 +20,51 @@
             <tr>
                 <td>Квартал</td>
                 <td>Налоговая база</td>
-                <td>Налог к оплате</td>
+                <td>Начислено налога</td>
                 <td>Обязательные платежи</td>
-                <td>Суммарный платеж</td>
+				<td>1%</td>
+                <td>Начислено всего</td>
             </tr>
-			<tr>
-				<td>I</td>
-                <td>100000</td>
-                <td>20000</td>
-                <td>5000</td>
-                <td>25000</td>
-			</tr>
-			<tr>
-				<td>II</td>
-                <td>120000</td>
-                <td>23000</td>
-                <td>5000</td>
-                <td>28000</td>
-			</tr>
-			<tr>
-				<td>III</td>
-                <td>200000</td>
-                <td>40000</td>
-                <td>5000</td>
-                <td>45000</td>
-			</tr>
-			<tr>
-				<td>IV</td>
-                <td>1000000</td>
-                <td>200000</td>
-                <td>5000</td>
-                <td>20500</td>
-			</tr>
-			<tr>
-				<td>Всего</td>
-                <td>3200000</td>
-                <td>280000</td>
-                <td>25000</td>
-                <td>225000</td>
-			</tr>
+			<#list taxes as tax>
+				<tr>
+					<td>${tax.paymentPeriodMessage}</td>
+					<td>
+						<#if tax.incomesAmount??> 
+							${tax.incomesAmount}
+                        <#else>
+                            &nbsp;
+                        </#if>
+					</td>
+					<td>
+						<#if tax.incomesTaxAmount??> 
+							${tax.incomesTaxAmount}
+                        <#else>
+                            &nbsp;
+                        </#if>
+					</td>
+					<td>
+						<#if tax.fixedPaymentsTaxAmount??> 
+							${tax.fixedPaymentsTaxAmount}
+                        <#else>
+                            &nbsp;
+                        </#if>
+					</td>
+					<td>
+						<#if tax.onePercentTaxAmount??>
+                            ${tax.onePercentTaxAmount}
+                        <#else>
+                            &nbsp;
+                        </#if>
+					</td>
+					<td>
+						<#if tax.summarizedTaxAmount??>
+                            ${tax.summarizedTaxAmount}
+                        <#else>
+                            &nbsp;
+                        </#if>
+					</td>
+				</tr>
+			</#list>
         </table>        
     </body>
 </html>

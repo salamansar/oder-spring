@@ -1,6 +1,7 @@
 package org.salamansar.oder.core.domain;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 /**
  *
@@ -26,4 +27,7 @@ public enum Quarter {
 				.orElse(null);
 	}
 	
+	public static Set<Quarter> quarters() {
+		return EnumSet.of(Quarter.I, Quarter.II, Quarter.III, Quarter.IV);
+	}
 }

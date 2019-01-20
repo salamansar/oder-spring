@@ -50,5 +50,10 @@ public class PaymentPeriod {
 				return Month.DECEMBER;
 		}
 	}
+	
+	public PaymentPeriod asQuarter(Quarter quarter) {
+		return new PaymentPeriod(this.year, quarter);
+	}
+	
 
 }

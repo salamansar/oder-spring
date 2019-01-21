@@ -3,9 +3,12 @@ package org.salamansar.oder.core.service;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import org.salamansar.oder.core.component.QuarterIncomeMapStartegyFactory;
+import org.salamansar.oder.core.component.QuarterIncomeMapStrategy;
 import org.salamansar.oder.core.dao.IncomeDao;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
+import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,8 @@ public class IncomeServiceImpl implements IncomeService {
 
 	@Autowired
 	private IncomeDao incomeDao;
+	@Autowired
+	private QuarterIncomeMapStartegyFactory quarterInocomeMapFactory;
 
 	@Override
 	@Transactional
@@ -43,4 +48,11 @@ public class IncomeServiceImpl implements IncomeService {
 		return incomeDao.findIncomeByUserAndIncomeDateBetween(user, dateFrom, dateTo);
 	}
 
+	@Override
+	public List<QuarterIncome> findQuarterIncomes(User user, PaymentPeriod period, boolean byQuants) {
+		List<Income> inocmes = findIncomes(user, period);
+		QuarterIncomeMapStrategy mapStartegy = quarterInocomeMapFactory.getStrategy(period, byQuants);
+		return mapStartegy.map(inocmes);
+	}
+	
 }

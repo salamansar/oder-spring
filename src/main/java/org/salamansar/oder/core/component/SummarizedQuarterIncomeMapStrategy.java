@@ -6,8 +6,7 @@ import java.util.stream.Collectors;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
-import org.salamansar.oder.core.domain.Tax;
-import org.salamansar.oder.core.domain.TaxCategory;
+import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.utils.IncomeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,23 +15,22 @@ import org.springframework.stereotype.Component;
  *
  * @author Salamansar
  */
-@Component("summarizedIncomeMapStrategy")
-public class SummarizedIncomeMapStrategy implements IncomeMapStrategy { //todo: refactor for using quarter incomes
-	private static final BigDecimal TAX_RATE = BigDecimal.valueOf(0.06); //todo: must be replaced for calculation, since rate may be different
+@Component("strategy.map.quarterIncome.summarized")
+public class SummarizedQuarterIncomeMapStrategy implements QuarterIncomeMapStrategy {
 	@Autowired
 	private PaymentPeriodCalculator periodCalcualtor;
 
 	@Override
-	public List<Tax> map(List<Income> incomes) {
+	public List<QuarterIncome> map(List<Income> incomes) {
 		return incomes.stream()
 				.collect(Collectors.groupingBy(i -> periodCalcualtor.calculatePeriod(i.getIncomeDate()).getYear()))
 				.entrySet().stream()
 				.map(e -> {
-					BigDecimal sum = IncomeUtils.incomesSum(e.getValue()).multiply(TAX_RATE);
-					Tax tax = new Tax(TaxCategory.INCOME_TAX);
-					tax.setPayment(sum);
-					tax.setPeriod(new PaymentPeriod(e.getKey(), Quarter.YEAR));
-					return tax;
+					BigDecimal incomeAmount = IncomeUtils.incomesSum(e.getValue());
+					QuarterIncome income = new QuarterIncome();
+					income.setPeriod(new PaymentPeriod(e.getKey(), Quarter.YEAR));
+					income.setIncomeAmount(incomeAmount);
+					return income;
 				})
 				.collect(Collectors.toList());
 	}

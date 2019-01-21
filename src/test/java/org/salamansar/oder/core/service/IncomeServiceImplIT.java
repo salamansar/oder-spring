@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 import org.envbuild.environment.DbEnvironmentBuilder;
-import org.envbuild.generator.RandomGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -13,6 +12,7 @@ import org.salamansar.oder.core.AbstractCoreIntegrationTest;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
+import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,6 +89,71 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 		assertTrue(result.stream().anyMatch(inc -> inc.getIncomeDate().getMonth() == Month.MAY));
 		assertTrue(result.stream().anyMatch(inc -> inc.getIncomeDate().getMonth() == Month.JUNE));
 		assertFalse(result.stream().anyMatch(inc -> inc.getIncomeDate().getMonth() == Month.JULY));
+	}
+	
+	@Test
+	public void getQuarterIncomesForSingleQuarter() {
+		envBuilder.setParent(LocalDate.of(2018, Month.FEBRUARY, 5))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.MARCH, 30))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.JULY, 1))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.SEPTEMBER, 30))
+					.createObject(Income.class);
+
+		List<QuarterIncome> result = incomeService.findQuarterIncomes(user, new PaymentPeriod(2018, Quarter.II), false);
+
+		assertNotNull(result);
+		assertTrue(result.isEmpty());
+		
+		result = incomeService.findQuarterIncomes(user, new PaymentPeriod(2018, Quarter.I), false);
+		
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertNotNull(result.get(0).getPeriod());
+		assertEquals(new PaymentPeriod(2018, Quarter.I), result.get(0).getPeriod());
+		assertNotNull(result.get(0).getIncomeAmount());
+	}
+	
+	@Test
+	public void getQuantizedQuarterIncomes() {
+		envBuilder.setParent(LocalDate.of(2018, Month.FEBRUARY, 5))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.MARCH, 30))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.JULY, 1))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.SEPTEMBER, 30))
+					.createObject(Income.class);
+
+		List<QuarterIncome> result = incomeService.findQuarterIncomes(user, new PaymentPeriod(2018, Quarter.YEAR), true);
+
+		assertNotNull(result);
+		assertEquals(2, result.size());
+		assertTrue(result.stream().anyMatch(inc -> inc.getPeriod().getQuarter() == Quarter.I));
+		assertTrue(result.stream().anyMatch(inc -> inc.getPeriod().getQuarter() == Quarter.III));
+		assertTrue(result.stream().allMatch(inc -> inc.getIncomeAmount() != null));
+	}
+	
+	@Test
+	public void getSummarizedQuarterIncomes() {
+		envBuilder.setParent(LocalDate.of(2018, Month.FEBRUARY, 5))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.MARCH, 30))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.JULY, 1))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.SEPTEMBER, 30))
+					.createObject(Income.class);
+
+		List<QuarterIncome> result = incomeService.findQuarterIncomes(user, new PaymentPeriod(2018, Quarter.YEAR), false);
+
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertNotNull(result.get(0).getPeriod());
+		assertEquals(new PaymentPeriod(2018, Quarter.YEAR), result.get(0).getPeriod());
+		assertNotNull(result.get(0).getIncomeAmount());
 	}
 
 }

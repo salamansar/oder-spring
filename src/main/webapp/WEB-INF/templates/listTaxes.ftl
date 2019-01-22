@@ -9,10 +9,11 @@
 		<div>
 			<form>
                 Год: 
-				<select value="2018">
-					<option value="2018">2018</option>
-					<option value="2017">2017</option>
-					<option value="2016">2016</option>
+				<select>
+					<option style="display:none;"></option>
+					<#list years as year>
+						<option value="${year?string.computer}" <#if year == selectedYear>selected="true"</#if>>${year?string.computer}</option>
+					</#list>
 				</select>
 			</form>
 		</div>

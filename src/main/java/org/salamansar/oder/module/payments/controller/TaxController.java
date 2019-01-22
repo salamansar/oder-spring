@@ -1,5 +1,6 @@
 package org.salamansar.oder.module.payments.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.User;
@@ -22,9 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TaxController {
 	@Autowired
 	private TaxAdapter adapter;
+	
+	@GetMapping
+	public String taxes() {
+		Integer currentYear = LocalDate.now().getYear();
+		return "redirect:taxes/" + currentYear;
+	}
 
 	@GetMapping("/{year}")
-	public String taxes(@PathVariable("year") Integer year, Model model) {
+	public String taxesForYear(@PathVariable("year") Integer year, Model model) {
 		User user = new User(); //todo: deal with getting user process
 		user.setId(1L);
 		List<TaxRowDto> taxRows = adapter.findAllTaxesForYear(user, year);

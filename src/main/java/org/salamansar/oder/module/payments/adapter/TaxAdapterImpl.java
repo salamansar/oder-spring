@@ -1,14 +1,17 @@
 package org.salamansar.oder.module.payments.adapter;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.salamansar.oder.core.adapter.Adapter;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
+import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.User;
+import org.salamansar.oder.core.service.IncomeService;
 import org.salamansar.oder.core.service.TaxService;
 import org.salamansar.oder.core.utils.ListBuilder;
 import org.salamansar.oder.module.payments.dto.TaxRowDto;
@@ -22,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TaxAdapterImpl implements TaxAdapter {
 	@Autowired
 	private TaxService taxService;
+	@Autowired
+	private IncomeService incomeService;
 	
 	@Override
 	public List<TaxRowDto> findAllTaxesForYear(User user, Integer year) {
@@ -38,7 +43,10 @@ public class TaxAdapterImpl implements TaxAdapter {
 				.splitByQuants(true);
 		PaymentPeriod paymentPeriod = new PaymentPeriod(year, Quarter.YEAR);
 		List<Tax> taxDomains = taxService.calculateTaxes(user, paymentPeriod, settings);
-		return mapToTaxRows(paymentPeriod, taxDomains);
+		List<TaxRowDto> taxRows = mapToTaxRows(paymentPeriod, taxDomains);
+		List<QuarterIncome> incomes = incomeService.findQuarterIncomes(user, paymentPeriod, true);
+		mergeWithIncomes(taxRows, incomes);
+		return taxRows;
 	}
 
 	private List<TaxRowDto> mapToTaxRows(PaymentPeriod period, List<Tax> taxDomains) {
@@ -81,12 +89,23 @@ public class TaxAdapterImpl implements TaxAdapter {
 		dto.setPaymentPeriod(paymentPeriod);
 		return dto;
 	}
+	
+	private void mergeWithIncomes(List<TaxRowDto> taxRows, List<QuarterIncome> incomes) {
+		Map<PaymentPeriod, BigDecimal> incomesMapping = incomes.stream()
+				.collect(Collectors.toMap(QuarterIncome::getPeriod, QuarterIncome::getIncomeAmount));
+		for(TaxRowDto dto : taxRows) {
+			dto.setIncomesAmount(incomesMapping.get(dto.getPaymentPeriod()));
+		}
+	}
 
 	@Override
 	public TaxRowDto findSummarizedTaxesForYear(User user, Integer year) {
 		PaymentPeriod paymentPeriod = new PaymentPeriod(year, Quarter.YEAR);
 		List<Tax> taxDomains = taxService.calculateTaxes(user, paymentPeriod, TaxCalculationSettings.defaults());
-		return mapToTaxRow(paymentPeriod, taxDomains);
+		TaxRowDto taxRow = mapToTaxRow(paymentPeriod, taxDomains);
+		QuarterIncome income = incomeService.findSummaryYearIncome(user, year);
+		taxRow.setIncomesAmount(income == null ? null : income.getIncomeAmount());
+		return taxRow;
 	}
 
 }

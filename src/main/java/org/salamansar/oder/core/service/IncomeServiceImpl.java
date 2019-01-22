@@ -8,6 +8,7 @@ import org.salamansar.oder.core.component.QuarterIncomeMapStrategy;
 import org.salamansar.oder.core.dao.IncomeDao;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
+import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,12 @@ public class IncomeServiceImpl implements IncomeService {
 		List<Income> inocmes = findIncomes(user, period);
 		QuarterIncomeMapStrategy mapStartegy = quarterInocomeMapFactory.getStrategy(period, byQuants);
 		return mapStartegy.map(inocmes);
+	}
+
+	@Override
+	public QuarterIncome findSummaryYearIncome(User user, Integer year) {
+		List<QuarterIncome> incomes = findQuarterIncomes(user, new PaymentPeriod(year, Quarter.YEAR), false);
+		return incomes.isEmpty() ? null : incomes.get(0);
 	}
 	
 }

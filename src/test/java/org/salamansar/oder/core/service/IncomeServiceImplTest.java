@@ -3,6 +3,7 @@ package org.salamansar.oder.core.service;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.envbuild.generator.RandomGenerator;
 import org.junit.Test;
@@ -100,6 +101,35 @@ public class IncomeServiceImplTest {
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertSame(quarterIncome, result.get(0));
+	}
+	
+	@Test
+	public void testFindSummaryYearIncome() {
+		Income income = generator.generate(Income.class);
+		QuarterIncome quarterIncome = generator.generate(QuarterIncome.class);
+		when(incomeDao.findIncomeByUserAndIncomeDateBetween(same(user),
+				eq(LocalDate.of(2018, Month.JANUARY, 1)),
+				eq(LocalDate.of(2018, Month.DECEMBER, 31))))
+				.thenReturn(Arrays.asList(income));
+		when(incomeDao.findIncomeByUserAndIncomeDateBetween(same(user),
+				eq(LocalDate.of(2019, Month.JANUARY, 1)),
+				eq(LocalDate.of(2019, Month.DECEMBER, 31))))
+				.thenReturn(Collections.emptyList());
+		when(quarterInocomeMapFactory.getStrategy(eq(new PaymentPeriod(2018, Quarter.YEAR)), eq(false)))
+				.thenReturn(mapSrategy);
+		when(quarterInocomeMapFactory.getStrategy(eq(new PaymentPeriod(2019, Quarter.YEAR)), eq(false)))
+				.thenReturn(mapSrategy);
+		when(mapSrategy.map(eq(Collections.emptyList()))).thenReturn(Collections.emptyList());
+		when(mapSrategy.map(eq(Arrays.asList(income)))).thenReturn(Arrays.asList(quarterIncome));
+		
+		QuarterIncome result = service.findSummaryYearIncome(user, 2019);
+		
+		assertNull(result);
+		
+		result = service.findSummaryYearIncome(user, 2018);
+
+		assertNotNull(result);
+		assertSame(quarterIncome, result);
 	}
 	
 }

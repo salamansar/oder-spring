@@ -13,10 +13,12 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
+import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.TaxCategory;
 import org.salamansar.oder.core.domain.User;
+import org.salamansar.oder.core.service.IncomeService;
 import org.salamansar.oder.core.service.TaxService;
 import org.salamansar.oder.module.payments.dto.TaxRowDto;
 
@@ -28,6 +30,8 @@ import org.salamansar.oder.module.payments.dto.TaxRowDto;
 public class TaxAdapterImplTest {
 	@Mock
 	private TaxService taxService;
+	@Mock
+	private IncomeService incomeService;
 	@InjectMocks
 	private TaxAdapterImpl adapter = new TaxAdapterImpl();
 	private RandomGenerator generator = new RandomGenerator();
@@ -43,10 +47,14 @@ public class TaxAdapterImplTest {
 		Tax healthTax1 = generator.generate(Tax.class, TaxCategory.HEALTH_INSURANCE, new PaymentPeriod(year, Quarter.II));
 		Tax healthTax2 = generator.generate(Tax.class, TaxCategory.HEALTH_INSURANCE, new PaymentPeriod(year, Quarter.III));
 		Tax onePercentTax1 = generator.generate(Tax.class, TaxCategory.PENSION_PERCENT, new PaymentPeriod(year, Quarter.II));
+		QuarterIncome income1 = generator.generate(QuarterIncome.class, new PaymentPeriod(year, Quarter.I));
+		QuarterIncome income2 = generator.generate(QuarterIncome.class, new PaymentPeriod(year, Quarter.II));
 		when(taxService.calculateTaxes(same(user), 
 				eq(new PaymentPeriod(year, Quarter.YEAR)), 
 				eq(new TaxCalculationSettings().splitByQuants(true))))
 				.thenReturn(Arrays.asList(healthTax2, incomeTax2, incomeTax1, pensionTax1, pensionTax2, healthTax1, onePercentTax1));
+		when(incomeService.findQuarterIncomes(same(user), eq(new PaymentPeriod(year, Quarter.YEAR)), eq(true)))
+				.thenReturn(Arrays.asList(income2, income1));
 		
 		List<TaxRowDto> result = adapter.findTaxesForYear(user, year);
 		
@@ -62,6 +70,8 @@ public class TaxAdapterImplTest {
 		assertTrue(incomeTax1.getPayment().compareTo(firstTaxRow.getIncomesTaxAmount()) == 0);
 		assertNull(firstTaxRow.getOnePercentTaxAmount());
 		assertNull(firstTaxRow.getPensionTaxAmount());
+		assertNotNull(firstTaxRow.getIncomesAmount());
+		assertTrue(income1.getIncomeAmount().compareTo(firstTaxRow.getIncomesAmount()) == 0);
 		
 		TaxRowDto secondTaxRow = result.get(1);
 		assertNotNull(secondTaxRow);
@@ -75,6 +85,8 @@ public class TaxAdapterImplTest {
 		assertTrue(onePercentTax1.getPayment().compareTo(secondTaxRow.getOnePercentTaxAmount()) == 0);
 		assertNotNull(secondTaxRow.getPensionTaxAmount());
 		assertTrue(pensionTax1.getPayment().compareTo(secondTaxRow.getPensionTaxAmount()) == 0);
+		assertNotNull(secondTaxRow.getIncomesAmount());
+		assertTrue(income2.getIncomeAmount().compareTo(secondTaxRow.getIncomesAmount()) == 0);
 		
 		TaxRowDto thirdTaxRow = result.get(2);
 		assertNotNull(thirdTaxRow);
@@ -86,6 +98,7 @@ public class TaxAdapterImplTest {
 		assertNull(thirdTaxRow.getOnePercentTaxAmount());
 		assertNotNull(thirdTaxRow.getPensionTaxAmount());
 		assertTrue(pensionTax2.getPayment().compareTo(thirdTaxRow.getPensionTaxAmount()) == 0);
+		assertNull(thirdTaxRow.getIncomesAmount());
 
 		TaxRowDto fourthTaxRow = result.get(3);
 		assertNotNull(fourthTaxRow);
@@ -95,6 +108,7 @@ public class TaxAdapterImplTest {
 		assertNull(fourthTaxRow.getIncomesTaxAmount());
 		assertNull(fourthTaxRow.getOnePercentTaxAmount());
 		assertNull(fourthTaxRow.getPensionTaxAmount());
+		assertNull(fourthTaxRow.getIncomesAmount());
 	}
 	
 	@Test
@@ -103,10 +117,13 @@ public class TaxAdapterImplTest {
 		Tax pensionTax = generator.generate(Tax.class, TaxCategory.PENSION_INSURANCE, new PaymentPeriod(year, Quarter.II));
 		Tax healthTax = generator.generate(Tax.class, TaxCategory.HEALTH_INSURANCE, new PaymentPeriod(year, Quarter.II));
 		Tax onePercentTax = generator.generate(Tax.class, TaxCategory.PENSION_PERCENT, new PaymentPeriod(year, Quarter.II));
+		QuarterIncome income = generator.generate(QuarterIncome.class, new PaymentPeriod(year, Quarter.YEAR));
 		when(taxService.calculateTaxes(same(user), 
 				eq(new PaymentPeriod(year, Quarter.YEAR)), 
 				eq(new TaxCalculationSettings())))
 				.thenReturn(Arrays.asList(incomeTax, pensionTax, healthTax, onePercentTax));
+		when(incomeService.findSummaryYearIncome(same(user), eq(year)))
+				.thenReturn(income);
 		
 		TaxRowDto result = adapter.findSummarizedTaxesForYear(user, year);
 		
@@ -121,6 +138,8 @@ public class TaxAdapterImplTest {
 		assertTrue(onePercentTax.getPayment().compareTo(result.getOnePercentTaxAmount()) == 0);
 		assertNotNull(result.getPensionTaxAmount());
 		assertTrue(pensionTax.getPayment().compareTo(result.getPensionTaxAmount()) == 0);
+		assertNotNull(result.getIncomesAmount());
+		assertTrue(income.getIncomeAmount().compareTo(result.getIncomesAmount()) == 0);
 	}
 	
 	@Test
@@ -128,6 +147,10 @@ public class TaxAdapterImplTest {
 		when(taxService.calculateTaxes(same(user), 
 				eq(new PaymentPeriod(year, Quarter.YEAR)), 
 				any(TaxCalculationSettings.class)))
+				.thenReturn(Collections.emptyList());
+		when(incomeService.findQuarterIncomes(same(user), 
+				eq(new PaymentPeriod(year, Quarter.YEAR)), 
+				anyBoolean()))
 				.thenReturn(Collections.emptyList());
 		
 		List<TaxRowDto> result = adapter.findAllTaxesForYear(user, year);
@@ -140,6 +163,7 @@ public class TaxAdapterImplTest {
 			assertNull(tax.getIncomesTaxAmount());
 			assertNull(tax.getOnePercentTaxAmount());
 			assertNull(tax.getPensionTaxAmount());
+			assertNull(tax.getIncomesAmount());
 		}
 	}
 	

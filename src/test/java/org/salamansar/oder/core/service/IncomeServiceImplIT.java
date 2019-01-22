@@ -155,5 +155,28 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 		assertEquals(new PaymentPeriod(2018, Quarter.YEAR), result.get(0).getPeriod());
 		assertNotNull(result.get(0).getIncomeAmount());
 	}
+	
+	@Test
+	public void getSummaryYearIncome() {
+		envBuilder.setParent(LocalDate.of(2018, Month.FEBRUARY, 5))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.MARCH, 30))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.JULY, 1))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.SEPTEMBER, 30))
+					.createObject(Income.class);
+
+		QuarterIncome result = incomeService.findSummaryYearIncome(user, 2018);
+
+		assertNotNull(result);
+		assertNotNull(result.getPeriod());
+		assertEquals(new PaymentPeriod(2018, Quarter.YEAR), result.getPeriod());
+		assertNotNull(result.getIncomeAmount());
+		
+		result = incomeService.findSummaryYearIncome(user, 2019);
+		
+		assertNull(result);
+	}
 
 }

@@ -66,6 +66,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertNotNull(firstTaxRow.getIncomesTaxAmount());
 		assertNull(firstTaxRow.getOnePercentTaxAmount());
 		assertNotNull(firstTaxRow.getPensionTaxAmount());
+		assertNotNull(firstTaxRow.getIncomesAmount());
 
 		TaxRowDto secondTaxRow = result.get(1);
 		assertNotNull(secondTaxRow);
@@ -75,6 +76,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertNull(secondTaxRow.getIncomesTaxAmount());
 		assertNull(secondTaxRow.getOnePercentTaxAmount());
 		assertNotNull(secondTaxRow.getPensionTaxAmount());
+		assertNull(secondTaxRow.getIncomesAmount());
 
 		TaxRowDto thirdTaxRow = result.get(2);
 		assertNotNull(thirdTaxRow);
@@ -84,6 +86,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertNotNull(thirdTaxRow.getIncomesTaxAmount());
 		assertNull(thirdTaxRow.getOnePercentTaxAmount());
 		assertNotNull(thirdTaxRow.getPensionTaxAmount());
+		assertNotNull(thirdTaxRow.getIncomesAmount());
 
 		TaxRowDto fourthTaxRow = result.get(3);
 		assertNotNull(fourthTaxRow);
@@ -93,6 +96,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertNull(fourthTaxRow.getIncomesTaxAmount());
 		assertNull(fourthTaxRow.getOnePercentTaxAmount());
 		assertNotNull(fourthTaxRow.getPensionTaxAmount());
+		assertNull(fourthTaxRow.getIncomesAmount());
 		
 		TaxRowDto fifthTaxRow = result.get(4);
 		assertNotNull(fifthTaxRow);
@@ -102,6 +106,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertNotNull(fifthTaxRow.getIncomesTaxAmount());
 		assertNotNull(fifthTaxRow.getOnePercentTaxAmount());
 		assertNotNull(fifthTaxRow.getPensionTaxAmount());
+		assertNotNull(fifthTaxRow.getIncomesAmount());
 	}
 	
 }

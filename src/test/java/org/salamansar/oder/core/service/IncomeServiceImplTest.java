@@ -132,4 +132,21 @@ public class IncomeServiceImplTest {
 		assertSame(quarterIncome, result);
 	}
 	
+	@Test
+	public void testFindYearsWithIncomes() {
+		when(incomeDao.findAllIncomesDates(same(user)))
+				.thenReturn(Arrays.asList(
+						LocalDate.of(2018, Month.MARCH, 10), 
+						LocalDate.of(2016, Month.OCTOBER, 20),
+						LocalDate.of(2018, Month.JANUARY, 6)));
+		
+		List<Integer> result = service.findYearsWithIncomes(user);
+		
+		assertNotNull(result);
+		assertEquals(2, result.size());
+		assertTrue(result.stream().anyMatch(year -> year.equals(2018)));
+		assertTrue(result.stream().anyMatch(year -> year.equals(2016)));
+	}
+	
+	
 }

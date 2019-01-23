@@ -15,4 +15,6 @@ public interface TaxAdapter {
 	List<TaxRowDto> findTaxesForYear(User user, Integer year);
 	
 	TaxRowDto findSummarizedTaxesForYear(User user, Integer year);
+	
+	List<Integer> findYearsWithIncomes(User user);
 }

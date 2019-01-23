@@ -16,6 +16,7 @@ import org.salamansar.oder.core.service.TaxService;
 import org.salamansar.oder.core.utils.ListBuilder;
 import org.salamansar.oder.module.payments.dto.TaxRowDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.comparator.Comparators;
 
 /**
  *
@@ -106,6 +107,13 @@ public class TaxAdapterImpl implements TaxAdapter {
 		QuarterIncome income = incomeService.findSummaryYearIncome(user, year);
 		taxRow.setIncomesAmount(income == null ? null : income.getIncomeAmount());
 		return taxRow;
+	}
+	
+	@Override
+	public List<Integer> findYearsWithIncomes(User user) {
+		return incomeService.findYearsWithIncomes(user).stream()
+				.sorted(Comparators.comparable().reversed())
+				.collect(Collectors.toList());
 	}
 
 }

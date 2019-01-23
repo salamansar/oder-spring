@@ -3,6 +3,7 @@ package org.salamansar.oder.core.service;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.salamansar.oder.core.component.QuarterIncomeMapStartegyFactory;
 import org.salamansar.oder.core.component.QuarterIncomeMapStrategy;
 import org.salamansar.oder.core.dao.IncomeDao;
@@ -60,6 +61,15 @@ public class IncomeServiceImpl implements IncomeService {
 	public QuarterIncome findSummaryYearIncome(User user, Integer year) {
 		List<QuarterIncome> incomes = findQuarterIncomes(user, new PaymentPeriod(year, Quarter.YEAR), false);
 		return incomes.isEmpty() ? null : incomes.get(0);
+	}
+
+	@Override
+	public List<Integer> findYearsWithIncomes(User user) {
+		List<LocalDate> incomesDates = incomeDao.findAllIncomesDates(user);
+		return incomesDates.stream()
+				.map(d -> d.getYear())
+				.distinct()
+				.collect(Collectors.toList());
 	}
 	
 }

@@ -3,6 +3,7 @@ package org.salamansar.oder.module.payments.adapter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import static org.envbuild.check.CheckCommonUtils.checkList;
 import org.envbuild.generator.RandomGenerator;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -167,4 +168,15 @@ public class TaxAdapterImplTest {
 		}
 	}
 	
+	@Test
+	public void findYearsWithIncomes() {
+		when(incomeService.findYearsWithIncomes(same(user)))
+				.thenReturn(Arrays.asList(2016, 2018));
+		
+		List<Integer> result = adapter.findYearsWithIncomes(user);
+		
+		checkList(result, 2);
+		assertEquals(2018, result.get(0).intValue());
+		assertEquals(2016, result.get(1).intValue());
+	}
 }

@@ -47,7 +47,7 @@ public class TaxController {
 
 	private void loadYears(User user, Integer year, Model model) {
 		model.addAttribute(TaxFormAttribute.SELECTED_YEAR.getAttributeName(), year);
-		model.addAttribute(TaxFormAttribute.AVAILABLE_YEARS_LIST.getAttributeName(), Arrays.asList(2018, 2017, 2016)); //todo: load available years
+		model.addAttribute(TaxFormAttribute.AVAILABLE_YEARS_LIST.getAttributeName(), adapter.findYearsWithIncomes(user));
 	}
 
 }

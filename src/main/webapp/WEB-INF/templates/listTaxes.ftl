@@ -9,7 +9,7 @@
 		<div>
 			<form>
                 Год: 
-				<select>
+				<select onchange="window.location.pathname='payments/taxes/' + this.value">
 					<option style="display:none;"></option>
 					<#list years as year>
 						<option value="${year?string.computer}" <#if year == selectedYear>selected="true"</#if>>${year?string.computer}</option>

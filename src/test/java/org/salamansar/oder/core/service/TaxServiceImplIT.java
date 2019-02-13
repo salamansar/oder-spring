@@ -192,20 +192,17 @@ public class TaxServiceImplIT extends AbstractCoreIntegrationTest {
 	}
 
 	private void prepareFixedPayments() {
-		FixedPayment payment1 = generator.generate(FixedPayment.class, TaxCategory.HEALTH_INSURANCE);
+		FixedPayment payment1 = generator.generate(FixedPayment.class, TaxCategory.HEALTH_INSURANCE, 2016);
 		payment1.setId(null);
-		payment1.setYear(2016);
 		entityManager.persist(payment1);
-		FixedPayment payment2 = generator.generate(FixedPayment.class, TaxCategory.PENSION_INSURANCE);
+		FixedPayment payment2 = generator.generate(FixedPayment.class, TaxCategory.PENSION_INSURANCE, 2016);
 		payment2.setId(null);
-		payment2.setYear(2016);
 		entityManager.persist(payment2);
 	}
 	
 	private void prepareTestIncomes() {
-		Income income1 = generator.generate(Income.class, user, LocalDate.of(2016, Month.APRIL, 5));
+		Income income1 = generator.generate(Income.class, user, LocalDate.of(2016, Month.APRIL, 5), BigDecimal.valueOf(320000));
 		income1.setId(null);
-		income1.setAmount(BigDecimal.valueOf(320000));
 		entityManager.persist(income1);
 		Income income2 = generator.generate(Income.class, user, LocalDate.of(2016, Month.JUNE, 30));
 		income2.setId(null);

@@ -41,15 +41,10 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 	public void getAllTaxes() {
 		Integer year = 2018;
 		transactionTemplate.execute(ts -> {
-			envBuilder.setParent(LocalDate.of(year, Month.FEBRUARY, 18))
-						.createObject(Income.class).alias("income1")
-					.setParent(LocalDate.of(year, Month.MARCH, 31))
-						.createObject(Income.class).alias("income2")
-					.setParent(LocalDate.of(year, Month.JULY, 1))
-						.createObject(Income.class, false).alias("income3");
-			Income income3 = envBuilder.getEnvironment().getByAlias("income3");
-			income3.setAmount(BigDecimal.valueOf(350000));
-			envBuilder.getDomainPersister().persistDomain(income3);
+			envBuilder
+					.createObject(Income.class, LocalDate.of(year, Month.FEBRUARY, 18)).alias("income1")
+					.createObject(Income.class, LocalDate.of(year, Month.MARCH, 31)).alias("income2")
+					.createObject(Income.class, LocalDate.of(year, Month.JULY, 1), BigDecimal.valueOf(350000)).alias("income3");
 			return null;
 		});
 		

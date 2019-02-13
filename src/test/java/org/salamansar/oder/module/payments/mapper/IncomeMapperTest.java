@@ -24,9 +24,8 @@ public class IncomeMapperTest {
 	
 	@Test
 	public void mapIncome() {
-		Income income =  generator.generate(Income.class);
 		LocalDate date = LocalDate.of(2018, Month.MARCH, 1);
-		income.setIncomeDate(date);
+		Income income =  generator.generate(Income.class, date);
 		
 		IncomeDto result = mapper.mapToDto(income);
 		

@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.salamansar.oder.core.domain.FixedPayment;
+import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCategory;
@@ -13,16 +14,16 @@ import org.salamansar.oder.core.domain.TaxCategory;
  *
  * @author Salamansar
  */
-public class AllYearMapStrategyTest {
-
-    private AllYearFixedPaymentMapStrategy strategy = new AllYearFixedPaymentMapStrategy();
-
+public class SingleMonthFixedPaymentStrategyTest {
+    
     @Test
     public void testMapping() {
+        SingleMonthFixedPaymentStrategy strategy = new SingleMonthFixedPaymentStrategy();
+        strategy.init(new PaymentPeriod(2018, Quarter.III));
         FixedPayment payment = new FixedPayment();
         payment.setCategory(TaxCategory.HEALTH_INSURANCE);
-        payment.setValue(BigDecimal.valueOf(1000L));
-        payment.setYear(2018);
+        payment.setValue(BigDecimal.valueOf(1000.05));
+        payment.setYear(2017);
         
         List<Tax> taxes = strategy.map(payment);
         
@@ -30,10 +31,11 @@ public class AllYearMapStrategyTest {
 		assertEquals(1, taxes.size());
 		Tax tax = taxes.get(0);
         assertEquals(payment.getCategory(), tax.getCatgory());
-        assertTrue(payment.getValue().compareTo(tax.getPayment()) == 0);
+        assertTrue(BigDecimal.valueOf(250.0125).compareTo(tax.getPayment()) == 0);
         assertNotNull(tax.getPeriod());
-        assertEquals(Quarter.YEAR, tax.getPeriod().getQuarter());
-        assertEquals(payment.getYear(), tax.getPeriod().getYear());
+        assertEquals(Quarter.III, tax.getPeriod().getQuarter());
+        assertEquals(2018, tax.getPeriod().getYear().intValue());
+        
     }
     
 }

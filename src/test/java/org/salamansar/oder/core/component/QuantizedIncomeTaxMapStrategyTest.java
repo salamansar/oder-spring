@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,13 +23,13 @@ import org.salamansar.oder.core.domain.TaxCategory;
  * @author Salamansar
  */
 @RunWith(MockitoJUnitRunner.class)
-public class SummarizedIncomeMapStrategyTest {
+public class QuantizedIncomeTaxMapStrategyTest {
 	@Mock
 	private PaymentPeriodCalculator periodCalcualtor;
 	@InjectMocks
-	private SummarizedIncomeTaxMapStrategy strategy = new SummarizedIncomeTaxMapStrategy();
+	private QuantizedIncomeTaxMapStrategy strategy = new QuantizedIncomeTaxMapStrategy();
 	private PaymentPeriodCalculatorInitializer periodCalcData;
-
+	
 	@Before
 	public void setUp() {
 		periodCalcData = PaymentPeriodCalculatorInitializer.init(periodCalcualtor);
@@ -53,15 +53,21 @@ public class SummarizedIncomeMapStrategyTest {
 		List<Tax> result = strategy.map(Arrays.asList(income1, income2, income3, income4));
 
 		assertNotNull(result);
-		assertEquals(2, result.size());
+		assertEquals(3, result.size());
 		Optional<Tax> tax = result.stream()
-				.filter(t -> new PaymentPeriod(2018, Quarter.YEAR).equals(t.getPeriod()))
+				.filter(t -> new PaymentPeriod(2018, Quarter.I).equals(t.getPeriod()))
 				.findFirst();
 		assertTrue(tax.isPresent());
 		assertEquals(TaxCategory.INCOME_TAX, tax.get().getCatgory());
-		assertTrue(BigDecimal.valueOf(10.575).compareTo(tax.get().getPayment()) == 0);
+		assertTrue(BigDecimal.valueOf(7.545).compareTo(tax.get().getPayment()) == 0);
 		tax = result.stream()
-				.filter(t -> new PaymentPeriod(2019, Quarter.YEAR).equals(t.getPeriod()))
+				.filter(t -> new PaymentPeriod(2018, Quarter.II).equals(t.getPeriod()))
+				.findFirst();
+		assertTrue(tax.isPresent());
+		assertEquals(TaxCategory.INCOME_TAX, tax.get().getCatgory());
+		assertTrue(BigDecimal.valueOf(3.03).compareTo(tax.get().getPayment()) == 0);
+		tax = result.stream()
+				.filter(t -> new PaymentPeriod(2019, Quarter.I).equals(t.getPeriod()))
 				.findFirst();
 		assertTrue(tax.isPresent());
 		assertEquals(TaxCategory.INCOME_TAX, tax.get().getCatgory());

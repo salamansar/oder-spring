@@ -16,16 +16,16 @@ import org.springframework.test.util.ReflectionTestUtils;
  * @author Salamansar
  */
 @RunWith(MockitoJUnitRunner.class)
-public class IncomeMapStrategyFactoryImplTest {
+public class IncomeTaxMapStrategyFactoryImplTest {
 	@Mock
 	private IncomeTaxMapStrategy summarizedStrategy;
 	@Mock
 	private IncomeTaxMapStrategy quantizedStrategy;
-	private IncomeMapStrategyFactoryImpl factory;
+	private IncomeTaxMapStrategyFactoryImpl factory;
 	
 	@Before
 	public void setUp() {
-		factory = new IncomeMapStrategyFactoryImpl();
+		factory = new IncomeTaxMapStrategyFactoryImpl();
 		ReflectionTestUtils.setField(factory, "summarizedStrategy", summarizedStrategy);
 		ReflectionTestUtils.setField(factory, "quantizedStrategy", quantizedStrategy);
 	}

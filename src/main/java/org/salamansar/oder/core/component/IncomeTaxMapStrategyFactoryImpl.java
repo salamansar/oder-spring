@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
  * @author Salamansar
  */
 @Component
-public class IncomeMapStrategyFactoryImpl implements IncomeTaxMapStrategyFactory {
+public class IncomeTaxMapStrategyFactoryImpl implements IncomeTaxMapStrategyFactory {
 	@Autowired
 	@Qualifier("strategy.map.incomeTax.summarized")
 	private IncomeTaxMapStrategy summarizedStrategy;

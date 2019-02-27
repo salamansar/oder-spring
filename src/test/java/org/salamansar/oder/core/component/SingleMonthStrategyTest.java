@@ -18,7 +18,7 @@ public class SingleMonthStrategyTest {
     
     @Test
     public void testMapping() {
-        SingleMonthStrategy strategy = new SingleMonthStrategy();
+        SingleMonthFixedPaymentStrategy strategy = new SingleMonthFixedPaymentStrategy();
         strategy.init(new PaymentPeriod(2018, Quarter.III));
         FixedPayment payment = new FixedPayment();
         payment.setCategory(TaxCategory.HEALTH_INSURANCE);

@@ -15,7 +15,7 @@ import org.salamansar.oder.core.domain.TaxCategory;
  */
 public class AllYearMapStrategyTest {
 
-    private AllYearMapStrategy strategy = new AllYearMapStrategy();
+    private AllYearFixedPaymentMapStrategy strategy = new AllYearFixedPaymentMapStrategy();
 
     @Test
     public void testMapping() {

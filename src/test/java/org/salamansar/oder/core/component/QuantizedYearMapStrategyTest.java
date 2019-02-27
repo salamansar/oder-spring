@@ -17,7 +17,7 @@ import org.salamansar.oder.core.domain.TaxCategory;
  */
 public class QuantizedYearMapStrategyTest {
 	
-	private QuantizedYearMapStrategy strategy = new QuantizedYearMapStrategy();
+	private QuantizedYearFixedPaymentMapStrategy strategy = new QuantizedYearFixedPaymentMapStrategy();
 	private RandomGenerator generator = new RandomGenerator();
 	
 	@Test

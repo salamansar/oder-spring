@@ -27,7 +27,7 @@ public class SummarizedIncomeMapStrategyTest {
 	@Mock
 	private PaymentPeriodCalculator periodCalcualtor;
 	@InjectMocks
-	private SummarizedIncomeMapStrategy strategy = new SummarizedIncomeMapStrategy();
+	private SummarizedIncomeTaxMapStrategy strategy = new SummarizedIncomeTaxMapStrategy();
 	private PaymentPeriodCalculatorInitializer periodCalcData;
 
 	@Before

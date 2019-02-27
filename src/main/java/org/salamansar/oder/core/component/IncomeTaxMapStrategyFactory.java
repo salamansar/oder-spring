@@ -7,8 +7,8 @@ import org.salamansar.oder.core.domain.TaxCalculationSettings;
  *
  * @author Salamansar
  */
-public interface IncomeMapStrategyFactory {
+public interface IncomeTaxMapStrategyFactory {
 	
-	IncomeMapStrategy getStrategy(PaymentPeriod period, TaxCalculationSettings settings); 
+	IncomeTaxMapStrategy getStrategy(PaymentPeriod period, TaxCalculationSettings settings); 
 			
 }

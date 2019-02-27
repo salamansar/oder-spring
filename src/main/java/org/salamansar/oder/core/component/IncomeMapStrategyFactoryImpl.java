@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
  * @author Salamansar
  */
 @Component
-public class IncomeMapStrategyFactoryImpl implements IncomeMapStrategyFactory {
+public class IncomeMapStrategyFactoryImpl implements IncomeTaxMapStrategyFactory {
 	@Autowired
-	@Qualifier("summarizedIncomeMapStrategy")
-	private IncomeMapStrategy summarizedStrategy;
+	@Qualifier("strategy.map.incomeTax.summarized")
+	private IncomeTaxMapStrategy summarizedStrategy;
 	@Autowired
-	@Qualifier("quantizedIncomeMapStrategy")
-	private IncomeMapStrategy quantizedStrategy;
+	@Qualifier("strategy.map.incomeTax.quantized")
+	private IncomeTaxMapStrategy quantizedStrategy;
 
 	@Override
-	public IncomeMapStrategy getStrategy(PaymentPeriod period, TaxCalculationSettings settings) {
+	public IncomeTaxMapStrategy getStrategy(PaymentPeriod period, TaxCalculationSettings settings) {
 		if(period.getQuarter() == Quarter.YEAR && !settings.getByQuants()) {
 			return summarizedStrategy;
 		} else {

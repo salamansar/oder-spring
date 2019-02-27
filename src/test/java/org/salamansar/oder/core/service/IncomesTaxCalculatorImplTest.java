@@ -10,14 +10,14 @@ import org.mockito.InjectMocks;
 import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.salamansar.oder.core.component.IncomeMapStrategy;
-import org.salamansar.oder.core.component.IncomeMapStrategyFactory;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.User;
+import org.salamansar.oder.core.component.IncomeTaxMapStrategy;
+import org.salamansar.oder.core.component.IncomeTaxMapStrategyFactory;
 
 /**
  *
@@ -28,9 +28,9 @@ public class IncomesTaxCalculatorImplTest {
 	@Mock
 	private IncomeService incomesService;
 	@Mock
-	private IncomeMapStrategyFactory strategyFactory;
+	private IncomeTaxMapStrategyFactory strategyFactory;
 	@Mock
-	private IncomeMapStrategy strategy;
+	private IncomeTaxMapStrategy strategy;
 	@InjectMocks
 	private IncomesTaxCalculatorImpl calculator = new IncomesTaxCalculatorImpl();
 	private RandomGenerator generator = new RandomGenerator();

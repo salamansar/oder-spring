@@ -8,6 +8,6 @@ import org.salamansar.oder.core.domain.Tax;
  *
  * @author Salamansar
  */
-public interface IncomeMapStrategy {
+public interface IncomeTaxMapStrategy {
 	List<Tax> map(List<Income> incomes);
 }

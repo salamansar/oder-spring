@@ -16,8 +16,8 @@ import org.springframework.stereotype.Component;
  *
  * @author Salamansar
  */
-@Component("summarizedIncomeMapStrategy")
-public class SummarizedIncomeMapStrategy implements IncomeMapStrategy { //todo: refactor for using quarter incomes
+@Component("strategy.map.incomeTax.summarized")
+public class SummarizedIncomeTaxMapStrategy implements IncomeTaxMapStrategy { //todo: refactor for using quarter incomes
 	private static final BigDecimal TAX_RATE = BigDecimal.valueOf(0.06); //todo: must be replaced for calculation, since rate may be different
 	@Autowired
 	private PaymentPeriodCalculator periodCalcualtor;

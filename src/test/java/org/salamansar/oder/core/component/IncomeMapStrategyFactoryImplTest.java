@@ -18,9 +18,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 @RunWith(MockitoJUnitRunner.class)
 public class IncomeMapStrategyFactoryImplTest {
 	@Mock
-	private IncomeMapStrategy summarizedStrategy;
+	private IncomeTaxMapStrategy summarizedStrategy;
 	@Mock
-	private IncomeMapStrategy quantizedStrategy;
+	private IncomeTaxMapStrategy quantizedStrategy;
 	private IncomeMapStrategyFactoryImpl factory;
 	
 	@Before
@@ -32,7 +32,7 @@ public class IncomeMapStrategyFactoryImplTest {
 
 	@Test
 	public void testGetSummarizedStrategy() {
-		IncomeMapStrategy result = factory.getStrategy(new PaymentPeriod(2018, Quarter.YEAR), new TaxCalculationSettings());
+		IncomeTaxMapStrategy result = factory.getStrategy(new PaymentPeriod(2018, Quarter.YEAR), new TaxCalculationSettings());
 		
 		assertSame(summarizedStrategy, result);
 	}
@@ -42,7 +42,7 @@ public class IncomeMapStrategyFactoryImplTest {
 		final TaxCalculationSettings settings = new TaxCalculationSettings();
 		settings.setByQuants(true);
 		
-		IncomeMapStrategy result = factory.getStrategy(new PaymentPeriod(2018, Quarter.YEAR), settings);
+		IncomeTaxMapStrategy result = factory.getStrategy(new PaymentPeriod(2018, Quarter.YEAR), settings);
 		
 		assertSame(quantizedStrategy, result);
 		

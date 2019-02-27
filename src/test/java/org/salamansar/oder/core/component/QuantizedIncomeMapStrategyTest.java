@@ -27,7 +27,7 @@ public class QuantizedIncomeMapStrategyTest {
 	@Mock
 	private PaymentPeriodCalculator periodCalcualtor;
 	@InjectMocks
-	private QuantizedIncomeMapStrategy strategy = new QuantizedIncomeMapStrategy();
+	private QuantizedIncomeTaxMapStrategy strategy = new QuantizedIncomeTaxMapStrategy();
 	private PaymentPeriodCalculatorInitializer periodCalcData;
 	
 	@Before

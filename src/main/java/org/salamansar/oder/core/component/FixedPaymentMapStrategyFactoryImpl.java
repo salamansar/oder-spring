@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component;
 public class FixedPaymentMapStrategyFactoryImpl implements FixedPaymentMapStrategyFactory {
 	
 	@Autowired
-	@Qualifier("allYearFixedPaymentMapStrategy")
+	@Qualifier("strategy.map.fixedPayment.allYear")
 	private ObjectFactory<FixedPaymentMapStrategy> allYearsStrategy;
 	@Autowired
-	@Qualifier("singleMonthFixedPaymentMapStrategy")
+	@Qualifier("strategy.map.fixedPayment.single")
 	private ObjectFactory<FixedPaymentMapStrategy> singleMonthStrategy;
 	@Autowired
-	@Qualifier("quantizedYearFixedPaymentMapStrategy")
+	@Qualifier("strategy.map.fixedPayment.quantized")
 	private ObjectFactory<FixedPaymentMapStrategy> quantizedYearStrategy;
 	
 	@Override

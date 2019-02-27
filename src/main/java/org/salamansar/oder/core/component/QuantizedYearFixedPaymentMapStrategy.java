@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
  *
  * @author Salamansar
  */
-@Component("quantizedYearFixedPaymentMapStrategy")
+@Component("strategy.map.fixedPayment.quantized")
 @Scope("prototype")
-public class QuantizedYearMapStrategy implements FixedPaymentMapStrategy {
+public class QuantizedYearFixedPaymentMapStrategy implements FixedPaymentMapStrategy {
 
 	@Override
 	public List<Tax> map(FixedPayment payment) {

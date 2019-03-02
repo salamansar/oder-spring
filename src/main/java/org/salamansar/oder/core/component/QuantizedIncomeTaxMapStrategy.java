@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCategory;
-import org.salamansar.oder.core.utils.IncomeUtils;
+import org.salamansar.oder.core.utils.PaymentsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +26,7 @@ public class QuantizedIncomeTaxMapStrategy implements IncomeTaxMapStrategy { //t
 				.collect(Collectors.groupingBy(income -> periodCalcualtor.calculatePeriod(income.getIncomeDate())))
 				.entrySet().stream()
 				.map(e -> {
-					BigDecimal sum = IncomeUtils.incomesSum(e.getValue()).multiply(TAX_RATE);
+					BigDecimal sum = PaymentsUtils.incomesSum(e.getValue()).multiply(TAX_RATE);
 					Tax tax = new Tax(TaxCategory.INCOME_TAX);
 					tax.setPayment(sum);
 					tax.setPeriod(e.getKey());

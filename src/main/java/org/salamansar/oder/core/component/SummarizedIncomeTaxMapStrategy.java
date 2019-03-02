@@ -8,7 +8,7 @@ import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCategory;
-import org.salamansar.oder.core.utils.IncomeUtils;
+import org.salamansar.oder.core.utils.PaymentsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +28,7 @@ public class SummarizedIncomeTaxMapStrategy implements IncomeTaxMapStrategy { //
 				.collect(Collectors.groupingBy(i -> periodCalcualtor.calculatePeriod(i.getIncomeDate()).getYear()))
 				.entrySet().stream()
 				.map(e -> {
-					BigDecimal sum = IncomeUtils.incomesSum(e.getValue()).multiply(TAX_RATE);
+					BigDecimal sum = PaymentsUtils.incomesSum(e.getValue()).multiply(TAX_RATE);
 					Tax tax = new Tax(TaxCategory.INCOME_TAX);
 					tax.setPayment(sum);
 					tax.setPeriod(new PaymentPeriod(e.getKey(), Quarter.YEAR));

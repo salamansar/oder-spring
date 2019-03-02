@@ -7,7 +7,7 @@ import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.QuarterIncome;
-import org.salamansar.oder.core.utils.IncomeUtils;
+import org.salamansar.oder.core.utils.PaymentsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +26,7 @@ public class SummarizedQuarterIncomeMapStrategy implements QuarterIncomeMapStrat
 				.collect(Collectors.groupingBy(i -> periodCalcualtor.calculatePeriod(i.getIncomeDate()).getYear()))
 				.entrySet().stream()
 				.map(e -> {
-					BigDecimal incomeAmount = IncomeUtils.incomesSum(e.getValue());
+					BigDecimal incomeAmount = PaymentsUtils.incomesSum(e.getValue());
 					QuarterIncome income = new QuarterIncome();
 					income.setPeriod(new PaymentPeriod(e.getKey(), Quarter.YEAR));
 					income.setIncomeAmount(incomeAmount);

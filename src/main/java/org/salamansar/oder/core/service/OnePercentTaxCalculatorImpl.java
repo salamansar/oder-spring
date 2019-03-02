@@ -12,7 +12,7 @@ import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.TaxCategory;
 import org.salamansar.oder.core.domain.User;
-import org.salamansar.oder.core.utils.IncomeUtils;
+import org.salamansar.oder.core.utils.PaymentsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +39,7 @@ public class OnePercentTaxCalculatorImpl implements OnePercentTaxCalculator {
 					.getYear()))
 					.entrySet().stream()
 					.map(e -> {
-						BigDecimal sum = IncomeUtils.incomesSum(e.getValue());
+						BigDecimal sum = PaymentsUtils.incomesSum(e.getValue());
 						if (sum.compareTo(PERCENT_THRESHOLD) > 0) {
 							Tax tax = new Tax(TaxCategory.PENSION_PERCENT);
 							tax.setPeriod(new PaymentPeriod(e.getKey(), Quarter.YEAR));

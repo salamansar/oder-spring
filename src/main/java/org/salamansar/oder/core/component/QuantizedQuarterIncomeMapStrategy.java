@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.QuarterIncome;
-import org.salamansar.oder.core.utils.IncomeUtils;
+import org.salamansar.oder.core.utils.PaymentsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class QuantizedQuarterIncomeMapStrategy implements QuarterIncomeMapStrate
 				.collect(Collectors.groupingBy(income -> paymentPeriodCalculator.calculatePeriod(income.getIncomeDate())))
 				.entrySet().stream()
 				.map(e -> {
-					BigDecimal incomeAmount = IncomeUtils.incomesSum(e.getValue());
+					BigDecimal incomeAmount = PaymentsUtils.incomesSum(e.getValue());
 					QuarterIncome income = new QuarterIncome();
 					income.setPeriod(e.getKey());
 					income.setIncomeAmount(incomeAmount);

@@ -55,5 +55,8 @@ public class PaymentPeriod {
 		return new PaymentPeriod(this.year, quarter);
 	}
 	
-
+	public PaymentPeriod asYear(Integer year) {
+		return new PaymentPeriod(year, quarter);
+	}
+	
 }

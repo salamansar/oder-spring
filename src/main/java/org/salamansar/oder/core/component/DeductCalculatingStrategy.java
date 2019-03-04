@@ -12,5 +12,5 @@ import org.salamansar.oder.core.domain.User;
  */
 public interface DeductCalculatingStrategy {
 	
-	List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period, TaxCalculationSettings settings);
+	List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period);
 }

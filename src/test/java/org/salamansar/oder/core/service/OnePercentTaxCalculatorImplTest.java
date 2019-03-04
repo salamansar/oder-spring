@@ -64,7 +64,7 @@ public class OnePercentTaxCalculatorImplTest {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
 		TaxCalculationSettings settings = new TaxCalculationSettings();
 		
-		List<Tax> result = calculator.calculateOneTaxesPercent(user, period, settings);
+		List<Tax> result = calculator.calculateOnePercentTaxes(user, period, settings);
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
@@ -82,7 +82,7 @@ public class OnePercentTaxCalculatorImplTest {
 		TaxCalculationSettings settings = new TaxCalculationSettings();
 		settings.setByQuants(true);
 		
-		List<Tax> result = calculator.calculateOneTaxesPercent(user, period, settings);
+		List<Tax> result = calculator.calculateOnePercentTaxes(user, period, settings);
 
 		assertNotNull(result);
 		assertEquals(0, result.size());
@@ -94,7 +94,7 @@ public class OnePercentTaxCalculatorImplTest {
 		TaxCalculationSettings settings = new TaxCalculationSettings();
 		settings.setByQuants(true);
 		
-		List<Tax> result = calculator.calculateOneTaxesPercent(user, period, settings);
+		List<Tax> result = calculator.calculateOnePercentTaxes(user, period, settings);
 
 		assertNotNull(result);
 		assertEquals(0, result.size());

@@ -71,4 +71,17 @@ public class PaymentPeriodTest {
 		assertEquals(Quarter.YEAR, period.getQuarter());
 	}
 	
+	@Test
+	public void testAsYear() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+		
+		PaymentPeriod result = period.asYear(2016);
+		
+		assertNotSame(period, result);
+		assertEquals(2016, result.getYear().intValue());
+		assertEquals(2018, period.getYear().intValue());
+		assertEquals(Quarter.YEAR, result.getQuarter());
+		assertEquals(Quarter.YEAR, period.getQuarter());
+	}
+	
 }

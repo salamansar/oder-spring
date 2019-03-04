@@ -6,7 +6,6 @@ import java.util.List;
 import org.salamansar.oder.core.domain.FixedPayment;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
-import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.TaxDeduction;
 import org.salamansar.oder.core.domain.User;
@@ -28,14 +27,13 @@ public class AllYearDeductCalculatingStrategy implements DeductCalculatingStrate
 	private OnePercentTaxCalculator onePercentCalculator;
 	
 	@Override
-	public List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period, TaxCalculationSettings settings) {
+	public List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period) {
 		List<FixedPayment> payments = fixedPaymentService.findFixedPaymentsByYear(period.getYear());
 		BigDecimal fixedPayment = PaymentsUtils.fixedPaymentsSum(payments);
-		List<Tax> onePercent = onePercentCalculator.calculateOneTaxesPercent(
+		BigDecimal onePercentPayment = onePercentCalculator.calculateOnePercentAmount(
 				user, 
 				new PaymentPeriod(period.getYear() - 1, Quarter.YEAR), 
 				TaxCalculationSettings.defaults());
-		BigDecimal onePercentPayment = PaymentsUtils.taxesSum(onePercent);
 		TaxDeduction result = new TaxDeduction();
 		result.setPeriod(period);
 		result.setDeduction(fixedPayment.add(onePercentPayment));

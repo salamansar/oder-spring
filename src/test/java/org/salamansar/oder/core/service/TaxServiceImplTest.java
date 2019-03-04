@@ -60,7 +60,7 @@ public class TaxServiceImplTest {
 		TaxCalculationSettings defualtSettings = new TaxCalculationSettings();
 		when(incomesTaxCalculator.calculateIncomeTaxes(eq(user), any(PaymentPeriod.class), eq(defualtSettings)))
 				.thenReturn(Arrays.asList(tax1));
-		when(onePercentTaxCalculator.calculateOneTaxesPercent(eq(user), any(PaymentPeriod.class), eq(defualtSettings)))
+		when(onePercentTaxCalculator.calculateOnePercentTaxes(eq(user), any(PaymentPeriod.class), eq(defualtSettings)))
 				.thenReturn(Arrays.asList(tax2, tax3));
 		
 		List<Tax> result = taxService.calculateTaxes(user, new PaymentPeriod(2018, Quarter.YEAR));

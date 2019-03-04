@@ -15,7 +15,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.salamansar.oder.core.domain.FixedPayment;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
-import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.TaxDeduction;
 import org.salamansar.oder.core.domain.User;
@@ -45,15 +44,13 @@ public class AllYearDeductCalculatingStrategyTest {
 		FixedPayment fixed2 = generator.generate(FixedPayment.class, BigDecimal.valueOf(1000));
 		when(fixedPaymentService.findFixedPaymentsByYear(eq(period.getYear())))
 				.thenReturn(Arrays.asList(fixed1, fixed2));
-		Tax percent1 = generator.generate(Tax.class, true, BigDecimal.valueOf(50));
-		Tax percent2 = generator.generate(Tax.class, true, BigDecimal.valueOf(500));
-		when(onePercentCalculator.calculateOneTaxesPercent(
+		when(onePercentCalculator.calculateOnePercentAmount(
 				same(user), 
 				eq(new PaymentPeriod(2017, Quarter.YEAR)), 
 				eq(TaxCalculationSettings.defaults()))
-		).thenReturn(Arrays.asList(percent1, percent2));
+		).thenReturn(BigDecimal.valueOf(550));
 		
-		List<TaxDeduction> result = strategy.calculateDeductions(user, period, TaxCalculationSettings.defaults());
+		List<TaxDeduction> result = strategy.calculateDeductions(user, period);
 		
 		assertNotNull(result);
 		assertEquals(1, result.size());
@@ -68,13 +65,13 @@ public class AllYearDeductCalculatingStrategyTest {
 		FixedPayment fixed2 = generator.generate(FixedPayment.class, BigDecimal.valueOf(1000));
 		when(fixedPaymentService.findFixedPaymentsByYear(eq(period.getYear())))
 				.thenReturn(Arrays.asList(fixed1, fixed2));
-		when(onePercentCalculator.calculateOneTaxesPercent(
+		when(onePercentCalculator.calculateOnePercentAmount(
 				same(user),
 				eq(new PaymentPeriod(2017, Quarter.YEAR)),
 				eq(TaxCalculationSettings.defaults()))
-		).thenReturn(Collections.emptyList());
+		).thenReturn(BigDecimal.ZERO);
 
-		List<TaxDeduction> result = strategy.calculateDeductions(user, period, TaxCalculationSettings.defaults());
+		List<TaxDeduction> result = strategy.calculateDeductions(user, period);
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
@@ -87,15 +84,13 @@ public class AllYearDeductCalculatingStrategyTest {
 	public void calculateForOnePercentOnly() {
 		when(fixedPaymentService.findFixedPaymentsByYear(eq(period.getYear())))
 				.thenReturn(Collections.emptyList());
-		Tax percent1 = generator.generate(Tax.class, true, BigDecimal.valueOf(50));
-		Tax percent2 = generator.generate(Tax.class, true, BigDecimal.valueOf(500));
-		when(onePercentCalculator.calculateOneTaxesPercent(
+		when(onePercentCalculator.calculateOnePercentAmount(
 				same(user),
 				eq(new PaymentPeriod(2017, Quarter.YEAR)),
 				eq(TaxCalculationSettings.defaults()))
-		).thenReturn(Arrays.asList(percent1, percent2));
+		).thenReturn(BigDecimal.valueOf(550));
 
-		List<TaxDeduction> result = strategy.calculateDeductions(user, period, TaxCalculationSettings.defaults());
+		List<TaxDeduction> result = strategy.calculateDeductions(user, period);
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
@@ -108,13 +103,13 @@ public class AllYearDeductCalculatingStrategyTest {
 	public void calculateForEmptyPayments() {
 		when(fixedPaymentService.findFixedPaymentsByYear(eq(period.getYear())))
 				.thenReturn(Collections.emptyList());
-		when(onePercentCalculator.calculateOneTaxesPercent(
+		when(onePercentCalculator.calculateOnePercentAmount(
 				same(user),
 				eq(new PaymentPeriod(2017, Quarter.YEAR)),
 				eq(TaxCalculationSettings.defaults()))
-		).thenReturn(Collections.emptyList());
+		).thenReturn(BigDecimal.ZERO);
 
-		List<TaxDeduction> result = strategy.calculateDeductions(user, period, TaxCalculationSettings.defaults());
+		List<TaxDeduction> result = strategy.calculateDeductions(user, period);
 
 		assertNotNull(result);
 		assertEquals(1, result.size());

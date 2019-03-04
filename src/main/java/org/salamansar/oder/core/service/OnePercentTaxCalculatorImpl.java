@@ -30,7 +30,7 @@ public class OnePercentTaxCalculatorImpl implements OnePercentTaxCalculator {
 	private IncomeService incomesService;
 
 	@Override
-	public List<Tax> calculateOneTaxesPercent(User user, PaymentPeriod period, TaxCalculationSettings settings) {
+	public List<Tax> calculateOnePercentTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
 		if(period.getQuarter() == Quarter.YEAR && !settings.getByQuants()) {
 			List<Income> incomes = incomesService.findIncomes(user, period);
 			return incomes.stream()
@@ -58,5 +58,12 @@ public class OnePercentTaxCalculatorImpl implements OnePercentTaxCalculator {
 		}
 	}
 	
+	
+
+	@Override
+	public BigDecimal calculateOnePercentAmount(User user, PaymentPeriod period, TaxCalculationSettings settings) {
+		List<Tax> taxes = calculateOnePercentTaxes(user, period, settings);
+		return PaymentsUtils.taxesSum(taxes);
+	}
 	
 }

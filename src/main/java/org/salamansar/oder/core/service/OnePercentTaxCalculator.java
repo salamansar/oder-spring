@@ -15,5 +15,10 @@ public interface OnePercentTaxCalculator {
 	
 	List<Tax> calculateOnePercentTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings);
 	
+	/**
+	 * Calculate amount of One Percent pension tax. <br>
+	 * If taxes weren't found, then zero will be returned.
+	 * @return taxes sum or 0
+	 */
 	BigDecimal calculateOnePercentAmount(User user, PaymentPeriod period, TaxCalculationSettings settings);
 }

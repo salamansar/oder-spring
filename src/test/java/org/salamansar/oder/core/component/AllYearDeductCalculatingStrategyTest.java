@@ -118,4 +118,22 @@ public class AllYearDeductCalculatingStrategyTest {
 				BigDecimal.ZERO.compareTo(result.get(0).getDeduction()) == 0);
 	}
 	
+	@Test
+	public void calculateForQuarterPeriod() {
+		FixedPayment fixed1 = generator.generate(FixedPayment.class, BigDecimal.valueOf(100));
+		FixedPayment fixed2 = generator.generate(FixedPayment.class, BigDecimal.valueOf(1000));
+		when(fixedPaymentService.findFixedPaymentsByYear(eq(period.getYear())))
+				.thenReturn(Arrays.asList(fixed1, fixed2));
+		when(onePercentCalculator.calculateOnePercentAmount(
+				same(user),
+				eq(new PaymentPeriod(2017, Quarter.YEAR)),
+				eq(TaxCalculationSettings.defaults()))
+		).thenReturn(BigDecimal.ZERO);
+
+		List<TaxDeduction> result = strategy.calculateDeductions(user, period.asQuarter(Quarter.I));
+
+		assertNotNull(result);
+		assertEquals(0, result.size());
+	}
+	
 }

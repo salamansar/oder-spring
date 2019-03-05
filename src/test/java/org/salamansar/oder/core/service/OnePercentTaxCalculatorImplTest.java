@@ -2,6 +2,7 @@ package org.salamansar.oder.core.service;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import org.envbuild.generator.RandomGenerator;
@@ -77,6 +78,38 @@ public class OnePercentTaxCalculatorImplTest {
 	}
 	
 	@Test
+	public void claculatePercentForNotEnoughAmount() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+		TaxCalculationSettings settings = new TaxCalculationSettings();
+		Income income1 = new Income();
+		income1.setIncomeDate(periodCalcData.getFirstQuarter());
+		income1.setAmount(BigDecimal.valueOf(10000.50));
+		Income income2 = new Income();
+		income2.setIncomeDate(periodCalcData.getSecondQuarter());
+		income2.setAmount(BigDecimal.valueOf(250000.50));
+		when(incomesService.findIncomes(same(user), any(PaymentPeriod.class)))
+				.thenReturn(Arrays.asList(income1, income2));
+		
+		List<Tax> result = calculator.calculateOnePercentTaxes(user, period, settings);
+
+		assertNotNull(result);
+		assertEquals(0, result.size());		
+	}
+	
+	@Test
+	public void claculatePercentForEmptyIncomes() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+		TaxCalculationSettings settings = new TaxCalculationSettings();
+		when(incomesService.findIncomes(same(user), any(PaymentPeriod.class)))
+				.thenReturn(Collections.emptyList());
+		
+		List<Tax> result = calculator.calculateOnePercentTaxes(user, period, settings);
+
+		assertNotNull(result);
+		assertEquals(0, result.size());
+	}
+	
+	@Test
 	public void claculateForQuantized() {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
 		TaxCalculationSettings settings = new TaxCalculationSettings();
@@ -100,4 +133,71 @@ public class OnePercentTaxCalculatorImplTest {
 		assertEquals(0, result.size());
 	}
 
+	@Test
+	public void calculatePercentAmount() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+		TaxCalculationSettings settings = new TaxCalculationSettings();
+
+		BigDecimal result = calculator.calculateOnePercentAmount(user, period, settings);
+
+		assertNotNull(result);		
+		assertTrue(BigDecimal.valueOf(750.0125).compareTo(result) == 0);
+	}
+	
+	@Test
+	public void claculateAmountForNotEnoughAmount() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+		TaxCalculationSettings settings = new TaxCalculationSettings();
+		Income income1 = new Income();
+		income1.setIncomeDate(periodCalcData.getFirstQuarter());
+		income1.setAmount(BigDecimal.valueOf(10000.50));
+		Income income2 = new Income();
+		income2.setIncomeDate(periodCalcData.getSecondQuarter());
+		income2.setAmount(BigDecimal.valueOf(250000.50));
+		when(incomesService.findIncomes(same(user), any(PaymentPeriod.class)))
+				.thenReturn(Arrays.asList(income1, income2));
+
+		BigDecimal result = calculator.calculateOnePercentAmount(user, period, settings);
+
+		assertNotNull(result);
+		assertTrue(BigDecimal.ZERO.compareTo(result) == 0);
+	}
+
+	@Test
+	public void claculateAmountForEmptyIncomes() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+		TaxCalculationSettings settings = new TaxCalculationSettings();
+		when(incomesService.findIncomes(same(user), any(PaymentPeriod.class)))
+				.thenReturn(Collections.emptyList());
+
+		BigDecimal result = calculator.calculateOnePercentAmount(user, period, settings);
+
+		assertNotNull(result);
+		assertTrue(BigDecimal.ZERO.compareTo(result) == 0);
+	}
+
+		
+	@Test
+	public void claculateAmountForQuantized() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+		TaxCalculationSettings settings = new TaxCalculationSettings();
+		settings.setByQuants(true);
+
+		BigDecimal result = calculator.calculateOnePercentAmount(user, period, settings);
+
+		assertNotNull(result);
+		assertTrue(BigDecimal.ZERO.compareTo(result) == 0);
+	}
+
+	@Test
+	public void claculateAmountForQuarter() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.III);
+		TaxCalculationSettings settings = new TaxCalculationSettings();
+		settings.setByQuants(true);
+
+		BigDecimal result = calculator.calculateOnePercentAmount(user, period, settings);
+
+		assertNotNull(result);
+		assertTrue(BigDecimal.ZERO.compareTo(result) == 0);
+	}
 }

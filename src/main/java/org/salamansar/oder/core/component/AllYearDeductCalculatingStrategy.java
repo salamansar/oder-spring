@@ -2,6 +2,7 @@ package org.salamansar.oder.core.component;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.salamansar.oder.core.domain.FixedPayment;
 import org.salamansar.oder.core.domain.PaymentPeriod;
@@ -28,16 +29,20 @@ public class AllYearDeductCalculatingStrategy implements DeductCalculatingStrate
 	
 	@Override
 	public List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period) {
-		List<FixedPayment> payments = fixedPaymentService.findFixedPaymentsByYear(period.getYear());
-		BigDecimal fixedPayment = PaymentsUtils.fixedPaymentsSum(payments);
-		BigDecimal onePercentPayment = onePercentCalculator.calculateOnePercentAmount(
-				user, 
-				new PaymentPeriod(period.getYear() - 1, Quarter.YEAR), 
-				TaxCalculationSettings.defaults());
-		TaxDeduction result = new TaxDeduction();
-		result.setPeriod(period);
-		result.setDeduction(fixedPayment.add(onePercentPayment));
-		return Arrays.asList(result);
+		if(period.getQuarter() == Quarter.YEAR) {
+			List<FixedPayment> payments = fixedPaymentService.findFixedPaymentsByYear(period.getYear());
+			BigDecimal fixedPayment = PaymentsUtils.fixedPaymentsSum(payments);
+			BigDecimal onePercentPayment = onePercentCalculator.calculateOnePercentAmount(
+					user, 
+					new PaymentPeriod(period.getYear() - 1, Quarter.YEAR), 
+					TaxCalculationSettings.defaults());
+			TaxDeduction result = new TaxDeduction();
+			result.setPeriod(period);
+			result.setDeduction(fixedPayment.add(onePercentPayment));
+			return Arrays.asList(result);
+		} else {
+			return Collections.emptyList();
+		}
 	}
 	
 }

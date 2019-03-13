@@ -112,10 +112,7 @@ public class AllYearDeductCalculatingStrategyTest {
 		List<TaxDeduction> result = strategy.calculateDeductions(user, period);
 
 		assertNotNull(result);
-		assertEquals(1, result.size());
-		assertEquals(period, result.get(0).getPeriod());
-		assertTrue("Expected 0, but was " + result.get(0).getDeduction().toString(),
-				BigDecimal.ZERO.compareTo(result.get(0).getDeduction()) == 0);
+		assertEquals(0, result.size());
 	}
 	
 	@Test

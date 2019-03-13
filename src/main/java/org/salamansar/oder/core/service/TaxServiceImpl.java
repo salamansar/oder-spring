@@ -22,6 +22,8 @@ public class TaxServiceImpl implements TaxService {
 	private FixedPaymentTaxCalculator fixedPaymentCalculator;
 	@Autowired
 	private IncomeTaxCalculator incomesTaxCalculator;
+	@Autowired
+	private DeductsCalculator deductsCalculator;
 
 	@Override
 	public List<Tax> calculateTaxes(User user, PaymentPeriod period) {
@@ -40,8 +42,8 @@ public class TaxServiceImpl implements TaxService {
 	}
 
 	@Override
-	public List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period) {
-		return null; //todo: implement
+	public List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period, TaxCalculationSettings settings) {
+		return deductsCalculator.calculateDeducts(user, period, settings);
 	}
 	
 }

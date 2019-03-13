@@ -16,6 +16,7 @@ import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.TaxCategory;
+import org.salamansar.oder.core.domain.TaxDeduction;
 import org.salamansar.oder.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -189,6 +190,64 @@ public class TaxServiceImplIT extends AbstractCoreIntegrationTest {
 		assertNotNull(taxes.get(0).getPeriod());
 		assertEquals(period2015, taxes.get(0).getPeriod());
 		assertEquals(TaxCategory.INCOME_TAX, taxes.get(0).getCatgory());
+	}
+	
+	@Test
+	public void calculateDeductsForYearSummarized() {
+		PaymentPeriod period2016 = new PaymentPeriod(2016, Quarter.YEAR);
+		List<TaxDeduction> deducts = service.calculateDeductions(user, period2016, TaxCalculationSettings.defaults());
+
+		assertNotNull(deducts);
+		assertEquals(1, deducts.size());
+		assertNotNull(deducts.get(0).getPeriod());
+		assertNotNull(deducts.get(0).getPeriod());
+		assertEquals(period2016, deducts.get(0).getPeriod());
+
+		PaymentPeriod period2015 = new PaymentPeriod(2015, Quarter.YEAR);
+		deducts = service.calculateDeductions(user, period2015, TaxCalculationSettings.defaults());
+
+		assertNotNull(deducts);
+		assertEquals(0, deducts.size());
+	}
+	
+	@Test
+	public void calculateDeductsForYearQuantized() {
+		PaymentPeriod period2016 = new PaymentPeriod(2016, Quarter.YEAR);
+		List<TaxDeduction> deducts = service.calculateDeductions(user, period2016, TaxCalculationSettings.defaults().splitByQuants(true));
+
+		assertNotNull(deducts);
+		assertEquals(4, deducts.size());
+		assertTrue(deducts.stream().allMatch(t
+				-> t.getDeduction()!= null
+				&& t.getPeriod() != null && t.getPeriod().getYear().equals(period2016.getYear())));
+		assertEquals(1, deducts.stream().filter(t -> Quarter.I == t.getPeriod().getQuarter()).count());
+		assertEquals(1, deducts.stream().filter(t -> Quarter.II == t.getPeriod().getQuarter()).count());
+		assertEquals(1, deducts.stream().filter(t -> Quarter.III == t.getPeriod().getQuarter()).count());
+		assertEquals(1, deducts.stream().filter(t -> Quarter.IV == t.getPeriod().getQuarter()).count());
+
+		PaymentPeriod period2015 = new PaymentPeriod(2015, Quarter.YEAR);
+		deducts = service.calculateDeductions(user, period2015, TaxCalculationSettings.defaults().splitByQuants(true));
+
+		assertNotNull(deducts);
+		assertEquals(0, deducts.size());
+	}
+	
+	@Test
+	public void calculateDeductsForQuarter() {
+		PaymentPeriod period2016 = new PaymentPeriod(2016, Quarter.II);
+		List<TaxDeduction> deducts = service.calculateDeductions(user, period2016, TaxCalculationSettings.defaults());
+
+		assertNotNull(deducts);
+		assertEquals(1, deducts.size());
+		assertNotNull(deducts.get(0).getPeriod());
+		assertNotNull(deducts.get(0).getPeriod());
+		assertEquals(period2016, deducts.get(0).getPeriod());
+
+		PaymentPeriod period2015 = new PaymentPeriod(2015, Quarter.II);
+		deducts = service.calculateDeductions(user, period2015, TaxCalculationSettings.defaults());
+
+		assertNotNull(deducts);
+		assertEquals(0, deducts.size());
 	}
 
 	private void prepareFixedPayments() {

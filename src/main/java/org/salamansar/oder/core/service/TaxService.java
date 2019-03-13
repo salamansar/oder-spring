@@ -17,5 +17,5 @@ public interface TaxService {
 	
 	List<Tax> calculateTaxes(User user, PaymentPeriod period);
 	
-	List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period);
+	List<TaxDeduction> calculateDeductions(User user, PaymentPeriod period, TaxCalculationSettings settings);
 }

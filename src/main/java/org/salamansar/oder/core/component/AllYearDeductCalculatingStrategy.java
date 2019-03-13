@@ -36,13 +36,16 @@ public class AllYearDeductCalculatingStrategy implements DeductCalculatingStrate
 					user, 
 					new PaymentPeriod(period.getYear() - 1, Quarter.YEAR), 
 					TaxCalculationSettings.defaults());
-			TaxDeduction result = new TaxDeduction();
-			result.setPeriod(period);
-			result.setDeduction(fixedPayment.add(onePercentPayment));
-			return Arrays.asList(result);
-		} else {
-			return Collections.emptyList();
+			BigDecimal deductionValue = fixedPayment.add(onePercentPayment);
+			if(BigDecimal.ZERO.compareTo(deductionValue) < 0) {
+				TaxDeduction result = new TaxDeduction();
+				result.setPeriod(period);
+				result.setDeduction(deductionValue);
+				return Arrays.asList(result);
+			}
 		}
+			
+		return Collections.emptyList();
 	}
 	
 }

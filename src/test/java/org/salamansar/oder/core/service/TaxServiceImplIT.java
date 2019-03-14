@@ -9,6 +9,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.salamansar.oder.core.AbstractCoreIntegrationTest;
+import org.salamansar.oder.core.domain.DeductibleTax;
 import org.salamansar.oder.core.domain.FixedPayment;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
@@ -148,7 +149,7 @@ public class TaxServiceImplIT extends AbstractCoreIntegrationTest {
 		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.I));
 		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.II));
 		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.III));
-		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.II));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.IV));
 		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.INCOME_TAX == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.II));
 		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.INCOME_TAX == t.getCatgory() && t.getPeriod().getQuarter() == Quarter.III));
 
@@ -248,6 +249,180 @@ public class TaxServiceImplIT extends AbstractCoreIntegrationTest {
 
 		assertNotNull(deducts);
 		assertEquals(0, deducts.size());
+	}
+	
+	@Test
+	public void calculateDeductiableTaxesForFirstQuarter() {
+		PaymentPeriod period = new PaymentPeriod(2016, Quarter.I);
+		List<DeductibleTax> taxes = service.calculateDeductedTaxes(user, period);
+
+		assertNotNull(taxes);
+		assertEquals(2, taxes.size());
+		assertTrue(taxes.stream().allMatch(t
+				-> t.getCatgory() != null
+				&& t.getPayment() != null
+				&& t.getDeduction() == null
+				&& t.getPeriod() != null && t.getPeriod().equals(period)));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory()));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory()));
+
+		taxes = service.calculateDeductedTaxes(user, new PaymentPeriod(2015, Quarter.I));
+
+		assertNotNull(taxes);
+		assertTrue(taxes.isEmpty());
+	}
+
+	@Test
+	public void calculateDeductiableTaxesForSecondQuarter() {
+		PaymentPeriod period = new PaymentPeriod(2016, Quarter.II);
+		List<DeductibleTax> taxes = service.calculateDeductedTaxes(user, period);
+
+		assertNotNull(taxes);
+		assertEquals(3, taxes.size());
+		assertTrue(taxes.stream().allMatch(t
+				-> t.getCatgory() != null
+				&& t.getPayment() != null
+				&& t.getPeriod() != null && t.getPeriod().equals(period)));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() && t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.INCOME_TAX == t.getCatgory() && t.getDeduction() != null));
+
+		taxes = service.calculateDeductedTaxes(user, new PaymentPeriod(2015, Quarter.II));
+
+		assertNotNull(taxes);
+		assertTrue(taxes.isEmpty());
+	}
+
+	@Test
+	public void calculateDeductiableTaxesForThirdQuarter() {
+		PaymentPeriod period = new PaymentPeriod(2016, Quarter.III);
+		List<DeductibleTax> taxes = service.calculateDeductedTaxes(user, period);
+
+		assertNotNull(taxes);
+		assertEquals(3, taxes.size());
+		assertTrue(taxes.stream().allMatch(t
+				-> t.getCatgory() != null
+				&& t.getPayment() != null
+				&& t.getPeriod() != null && t.getPeriod().equals(period)));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory()));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory()));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.INCOME_TAX == t.getCatgory()));
+
+		PaymentPeriod period2015 = new PaymentPeriod(2015, Quarter.III);
+		taxes = service.calculateDeductedTaxes(user, period2015);
+
+		assertNotNull(taxes);
+		assertEquals(1, taxes.size());
+		assertNotNull(taxes.get(0).getCatgory());
+		assertNotNull(taxes.get(0).getPayment());
+		assertNotNull(taxes.get(0).getPeriod());
+		assertEquals(period2015, taxes.get(0).getPeriod());
+		assertEquals(TaxCategory.INCOME_TAX, taxes.get(0).getCatgory());
+	}
+
+	@Test
+	public void calculateDeductiableTaxesForFourthQuarter() {
+		PaymentPeriod period = new PaymentPeriod(2016, Quarter.IV);
+		List<DeductibleTax> taxes = service.calculateDeductedTaxes(user, period);
+
+		assertNotNull(taxes);
+		assertEquals(2, taxes.size());
+		assertTrue(taxes.stream().allMatch(t
+				-> t.getCatgory() != null
+				&& t.getPayment() != null
+				&& t.getDeduction() == null
+				&& t.getPeriod() != null && t.getPeriod().equals(period)));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory()));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory()));
+
+		taxes = service.calculateDeductedTaxes(user, new PaymentPeriod(2015, Quarter.IV));
+
+		assertNotNull(taxes);
+		assertTrue(taxes.isEmpty());
+	}
+
+	@Test
+	public void calculateDeductiableTaxesForYear() {
+		PaymentPeriod period2016 = new PaymentPeriod(2016, Quarter.YEAR);
+		List<DeductibleTax> taxes = service.calculateDeductedTaxes(user, period2016, new TaxCalculationSettings().splitByQuants(true));
+
+		assertNotNull(taxes);
+		assertEquals(10, taxes.size());
+		assertTrue(taxes.stream().allMatch(t
+				-> t.getCatgory() != null
+				&& t.getPayment() != null
+				&& t.getPeriod() != null && t.getPeriod().getYear().equals(2016)));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.I 
+				&& t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.II
+				&& t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.III
+				&& t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.IV
+				&& t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.I
+				&& t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.II
+				&& t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.III
+				&& t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.IV
+				&& t.getDeduction() == null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.INCOME_TAX == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.II
+				&& t.getDeduction() != null));
+		assertTrue(taxes.stream().anyMatch(t -> TaxCategory.INCOME_TAX == t.getCatgory() 
+				&& t.getPeriod().getQuarter() == Quarter.III
+				&& t.getDeduction() != null));
+
+		PaymentPeriod period2015 = new PaymentPeriod(2015, Quarter.YEAR);
+		taxes = service.calculateDeductedTaxes(user, period2015);
+
+		assertNotNull(taxes);
+		assertEquals(1, taxes.size());
+		assertNotNull(taxes.get(0).getCatgory());
+		assertNotNull(taxes.get(0).getPayment());
+		assertNull(taxes.get(0).getDeduction());
+		assertNotNull(taxes.get(0).getPeriod());
+		assertEquals(period2015, taxes.get(0).getPeriod());
+		assertEquals(TaxCategory.INCOME_TAX, taxes.get(0).getCatgory());
+	}
+	
+	@Test
+	public void calculateDeductiableTaxesForYearSummarized() {
+		PaymentPeriod period2016 = new PaymentPeriod(2016, Quarter.YEAR);
+		List<DeductibleTax> taxes = service.calculateDeductedTaxes(user, period2016, TaxCalculationSettings.defaults());
+
+		assertNotNull(taxes);
+		assertEquals(4, taxes.size());
+		assertTrue(taxes.stream().allMatch(t
+				-> t.getCatgory() != null
+				&& t.getPayment() != null
+				&& t.getPeriod() != null && t.getPeriod().equals(period2016)));
+		assertEquals(1, taxes.stream().filter(t -> TaxCategory.HEALTH_INSURANCE == t.getCatgory() && t.getDeduction() == null).count());
+		assertEquals(1, taxes.stream().filter(t -> TaxCategory.PENSION_INSURANCE == t.getCatgory() && t.getDeduction() == null).count());
+		assertEquals(1, taxes.stream().filter(t -> TaxCategory.INCOME_TAX == t.getCatgory() && t.getDeduction() != null).count());
+		assertEquals(1, taxes.stream().filter(t -> TaxCategory.PENSION_PERCENT == t.getCatgory() && t.getDeduction() == null).count());
+
+		PaymentPeriod period2015 = new PaymentPeriod(2015, Quarter.YEAR);
+		taxes = service.calculateDeductedTaxes(user, period2015, TaxCalculationSettings.defaults());
+
+		assertNotNull(taxes);
+		assertEquals(1, taxes.size());
+		assertNotNull(taxes.get(0).getCatgory());
+		assertNotNull(taxes.get(0).getPayment());
+		assertNotNull(taxes.get(0).getPeriod());
+		assertEquals(period2015, taxes.get(0).getPeriod());
+		assertEquals(TaxCategory.INCOME_TAX, taxes.get(0).getCatgory());
+		assertNull(taxes.get(0).getDeduction());
 	}
 
 	private void prepareFixedPayments() {

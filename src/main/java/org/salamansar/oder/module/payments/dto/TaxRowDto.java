@@ -49,5 +49,12 @@ public class TaxRowDto {
 		return value == null ? BigDecimal.ZERO : value;
 	}
 	
+	public BigDecimal getSummarizedDeductedTaxAmount() {
+		BigDecimal fixedPayment = getFixedPaymentsTaxAmount();
+		if (fixedPayment == null && incomesDeductedTaxAmount == null) {
+			return null;
+		}
+		return valueOrZero(fixedPayment).add(valueOrZero(incomesDeductedTaxAmount));
+	}
 	
 }

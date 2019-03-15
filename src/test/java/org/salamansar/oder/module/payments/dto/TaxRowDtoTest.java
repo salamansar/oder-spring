@@ -88,4 +88,41 @@ public class TaxRowDtoTest {
 		assertTrue(BigDecimal.valueOf(1300).compareTo(dto.getSummarizedTaxAmount()) == 0);
 	}
 	
+	@Test
+	public void testSummarizedDeductedTaxAmount() {
+		TaxRowDto dto = new TaxRowDto();
+		
+		assertNull(dto.getSummarizedDeductedTaxAmount());
+		
+		dto.setPensionTaxAmount(BigDecimal.valueOf(200));
+		
+		assertNotNull(dto.getSummarizedDeductedTaxAmount());
+		assertTrue(dto.getPensionTaxAmount().compareTo(dto.getSummarizedDeductedTaxAmount()) == 0);
+		
+		dto.setHealthInsuranceTaxAmount(BigDecimal.valueOf(100));
+		dto.setPensionTaxAmount(null);
+
+		assertNotNull(dto.getSummarizedDeductedTaxAmount());
+		assertTrue(dto.getHealthInsuranceTaxAmount().compareTo(dto.getSummarizedDeductedTaxAmount()) == 0);
+		
+		dto.setPensionTaxAmount(BigDecimal.valueOf(200));
+
+		assertNotNull(dto.getSummarizedDeductedTaxAmount());
+		assertTrue(BigDecimal.valueOf(300).compareTo(dto.getSummarizedDeductedTaxAmount()) == 0);
+		
+		dto.setHealthInsuranceTaxAmount(null);
+		dto.setPensionTaxAmount(null);
+		dto.setIncomesDeductedTaxAmount(BigDecimal.valueOf(1000));
+		
+		assertNotNull(dto.getSummarizedDeductedTaxAmount());
+		assertTrue(dto.getIncomesDeductedTaxAmount().compareTo(dto.getSummarizedDeductedTaxAmount()) == 0);
+		
+		dto.setPensionTaxAmount(BigDecimal.valueOf(200));
+		dto.setHealthInsuranceTaxAmount(BigDecimal.valueOf(100));
+
+		assertNotNull(dto.getSummarizedDeductedTaxAmount());
+		assertTrue(BigDecimal.valueOf(1300).compareTo(dto.getSummarizedDeductedTaxAmount()) == 0);
+		
+	}
+	
 }

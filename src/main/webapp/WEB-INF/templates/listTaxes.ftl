@@ -26,6 +26,7 @@
 				<td>Налог к оплате</td>
 				<td>1%</td>
                 <td>Начислено всего</td>
+                <td>Всего к оплате</td>
             </tr>
 			<#list taxes as tax>
 				<tr>
@@ -68,6 +69,13 @@
 					<td>
 						<#if tax.summarizedTaxAmount??>
                             ${tax.summarizedTaxAmount}
+                        <#else>
+                            &nbsp;
+                        </#if>
+					</td>
+					<td>
+						<#if tax.summarizedDeductedTaxAmount??>
+                            ${tax.summarizedDeductedTaxAmount}
                         <#else>
                             &nbsp;
                         </#if>

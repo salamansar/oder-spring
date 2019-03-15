@@ -14,6 +14,9 @@ public class DeductibleTax extends Tax {
 	private BigDecimal deduction;
 	
 	public BigDecimal getDeductedPayment() {
+		if(getPayment() == null) {
+			return null;
+		}
 		BigDecimal deducted = getAmount(getPayment()).subtract(getAmount(deduction));
 		if(deducted.compareTo(BigDecimal.ZERO) > 0) {
 			return deducted;

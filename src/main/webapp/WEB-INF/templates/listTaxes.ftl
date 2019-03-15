@@ -23,6 +23,7 @@
                 <td>Налоговая база</td>
                 <td>Начислено налога</td>
                 <td>Обязательные платежи</td>
+				<td>Налог к оплате</td>
 				<td>1%</td>
                 <td>Начислено всего</td>
             </tr>
@@ -46,6 +47,13 @@
 					<td>
 						<#if tax.fixedPaymentsTaxAmount??> 
 							${tax.fixedPaymentsTaxAmount}
+                        <#else>
+                            &nbsp;
+                        </#if>
+					</td>
+					<td>
+						<#if tax.incomesDeductedTaxAmount??> 
+							${tax.incomesDeductedTaxAmount}
                         <#else>
                             &nbsp;
                         </#if>

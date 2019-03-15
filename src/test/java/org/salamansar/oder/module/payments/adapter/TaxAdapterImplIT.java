@@ -59,6 +59,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertEquals(new PaymentPeriod(year, Quarter.I), firstTaxRow.getPaymentPeriod());
 		assertNotNull(firstTaxRow.getHealthInsuranceTaxAmount());
 		assertNotNull(firstTaxRow.getIncomesTaxAmount());
+		assertNotNull(firstTaxRow.getIncomesDeductedTaxAmount());
 		assertNull(firstTaxRow.getOnePercentTaxAmount());
 		assertNotNull(firstTaxRow.getPensionTaxAmount());
 		assertNotNull(firstTaxRow.getIncomesAmount());
@@ -69,6 +70,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertEquals(new PaymentPeriod(year, Quarter.II), secondTaxRow.getPaymentPeriod());
 		assertNotNull(secondTaxRow.getHealthInsuranceTaxAmount());
 		assertNull(secondTaxRow.getIncomesTaxAmount());
+		assertNull(secondTaxRow.getIncomesDeductedTaxAmount());
 		assertNull(secondTaxRow.getOnePercentTaxAmount());
 		assertNotNull(secondTaxRow.getPensionTaxAmount());
 		assertNull(secondTaxRow.getIncomesAmount());
@@ -79,6 +81,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertEquals(new PaymentPeriod(year, Quarter.III), thirdTaxRow.getPaymentPeriod());
 		assertNotNull(thirdTaxRow.getHealthInsuranceTaxAmount());
 		assertNotNull(thirdTaxRow.getIncomesTaxAmount());
+		assertNotNull(thirdTaxRow.getIncomesDeductedTaxAmount());
 		assertNull(thirdTaxRow.getOnePercentTaxAmount());
 		assertNotNull(thirdTaxRow.getPensionTaxAmount());
 		assertNotNull(thirdTaxRow.getIncomesAmount());
@@ -89,6 +92,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertEquals(new PaymentPeriod(year, Quarter.IV), fourthTaxRow.getPaymentPeriod());
 		assertNotNull(fourthTaxRow.getHealthInsuranceTaxAmount());
 		assertNull(fourthTaxRow.getIncomesTaxAmount());
+		assertNull(fourthTaxRow.getIncomesDeductedTaxAmount());
 		assertNull(fourthTaxRow.getOnePercentTaxAmount());
 		assertNotNull(fourthTaxRow.getPensionTaxAmount());
 		assertNull(fourthTaxRow.getIncomesAmount());
@@ -99,6 +103,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		assertEquals(new PaymentPeriod(year, Quarter.YEAR), fifthTaxRow.getPaymentPeriod());
 		assertNotNull(fifthTaxRow.getHealthInsuranceTaxAmount());
 		assertNotNull(fifthTaxRow.getIncomesTaxAmount());
+		assertNotNull(fifthTaxRow.getIncomesDeductedTaxAmount());
 		assertNotNull(fifthTaxRow.getOnePercentTaxAmount());
 		assertNotNull(fifthTaxRow.getPensionTaxAmount());
 		assertNotNull(fifthTaxRow.getIncomesAmount());

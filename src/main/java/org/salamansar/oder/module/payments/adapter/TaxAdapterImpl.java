@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.salamansar.oder.core.adapter.Adapter;
+import org.salamansar.oder.core.domain.DeductibleTax;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.QuarterIncome;
@@ -43,14 +44,14 @@ public class TaxAdapterImpl implements TaxAdapter {
 		TaxCalculationSettings settings = new TaxCalculationSettings()
 				.splitByQuants(true);
 		PaymentPeriod paymentPeriod = new PaymentPeriod(year, Quarter.YEAR);
-		List<Tax> taxDomains = taxService.calculateTaxes(user, paymentPeriod, settings);
+		List<DeductibleTax> taxDomains = taxService.calculateDeductedTaxes(user, paymentPeriod, settings);
 		List<TaxRowDto> taxRows = mapToTaxRows(paymentPeriod, taxDomains);
 		List<QuarterIncome> incomes = incomeService.findQuarterIncomes(user, paymentPeriod, true);
 		mergeWithIncomes(taxRows, incomes);
 		return taxRows;
 	}
 
-	private List<TaxRowDto> mapToTaxRows(PaymentPeriod period, List<Tax> taxDomains) {
+	private List<TaxRowDto> mapToTaxRows(PaymentPeriod period, List<DeductibleTax> taxDomains) {
 		Map<PaymentPeriod, TaxRowDto> rows = taxDomains.stream()
 				.collect(Collectors.groupingBy(Tax::getPeriod))
 				.entrySet().stream()
@@ -62,13 +63,17 @@ public class TaxAdapterImpl implements TaxAdapter {
 				.collect(Collectors.toList());
 	}
 	
-	private TaxRowDto mapToTaxRow(PaymentPeriod period, List<Tax> taxes) {
+	private TaxRowDto mapToTaxRow(PaymentPeriod period, List<DeductibleTax> taxes) {
 		TaxRowDto dto = new TaxRowDto();
 		dto.setPaymentPeriod(period);
-		for(Tax tax : taxes) {
+		for(DeductibleTax tax : taxes) {
 			switch(tax.getCatgory()) {
 				case HEALTH_INSURANCE: dto.setHealthInsuranceTaxAmount(tax.getPayment()); break;
-				case INCOME_TAX: dto.setIncomesTaxAmount(tax.getPayment()); break;
+				case INCOME_TAX: {
+					dto.setIncomesTaxAmount(tax.getPayment()); 
+					dto.setIncomesDeductedTaxAmount(tax.getDeductedPayment());
+					break;
+				}
 				case PENSION_INSURANCE: dto.setPensionTaxAmount(tax.getPayment()); break;
 				case PENSION_PERCENT: dto.setOnePercentTaxAmount(tax.getPayment()); break;
 			}
@@ -102,7 +107,7 @@ public class TaxAdapterImpl implements TaxAdapter {
 	@Override
 	public TaxRowDto findSummarizedTaxesForYear(User user, Integer year) {
 		PaymentPeriod paymentPeriod = new PaymentPeriod(year, Quarter.YEAR);
-		List<Tax> taxDomains = taxService.calculateTaxes(user, paymentPeriod, TaxCalculationSettings.defaults());
+		List<DeductibleTax> taxDomains = taxService.calculateDeductedTaxes(user, paymentPeriod, TaxCalculationSettings.defaults());
 		TaxRowDto taxRow = mapToTaxRow(paymentPeriod, taxDomains);
 		QuarterIncome income = incomeService.findSummaryYearIncome(user, year);
 		taxRow.setIncomesAmount(income == null ? null : income.getIncomeAmount());

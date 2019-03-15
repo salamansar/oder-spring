@@ -13,6 +13,7 @@ import org.salamansar.oder.core.domain.Quarter;
 public class TaxRowDto {
 	private BigDecimal incomesAmount;
 	private BigDecimal incomesTaxAmount;
+	private BigDecimal incomesDeductedTaxAmount;
 	private BigDecimal onePercentTaxAmount;
 	private BigDecimal healthInsuranceTaxAmount;
 	private BigDecimal pensionTaxAmount;

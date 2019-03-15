@@ -32,7 +32,7 @@ public class DeductibleTaxTest {
 		DeductibleTax tax = new DeductibleTax();
 		tax.setDeduction(BigDecimal.valueOf(100));
 
-		assertTrue(BigDecimal.ZERO.compareTo(tax.getDeductedPayment()) == 0);
+		assertNull(tax.getDeductedPayment());
 	}
 	
 	
@@ -49,6 +49,6 @@ public class DeductibleTaxTest {
 	public void calculateDeductedWithBothEmpty() {
 		DeductibleTax tax = new DeductibleTax();
 
-		assertTrue(BigDecimal.ZERO.compareTo(tax.getDeductedPayment()) == 0);
+		assertNull(tax.getDeductedPayment());
 	}
 }

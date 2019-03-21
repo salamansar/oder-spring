@@ -18,10 +18,12 @@ import org.springframework.stereotype.Component;
 @Component("strategy.map.fixedPayment.quantized")
 @Scope("prototype")
 public class QuantizedYearFixedPaymentMapStrategy implements FixedPaymentMapStrategy {
+	
+	private FixedPaymentAmountCalculator amountCalculator; //todo: check initialization
 
 	@Override
 	public List<Tax> map(FixedPayment payment) {
-		final BigDecimal paymentAmount = payment.getValue().divide(BigDecimal.valueOf(4)); //todo: do division with rounding rules
+		BigDecimal paymentAmount = amountCalculator.calculate(payment);
 		return EnumSet.allOf(Quarter.class).stream()
 				.filter((quarter) -> (quarter != Quarter.YEAR))
 				.map((quarter) -> new PaymentPeriod(payment.getYear(), quarter))
@@ -34,4 +36,9 @@ public class QuantizedYearFixedPaymentMapStrategy implements FixedPaymentMapStra
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public void initialize(PaymentPeriod period, FixedPaymentAmountCalculator amountCalculator) {
+		this.amountCalculator = amountCalculator;
+	}
+	
 }

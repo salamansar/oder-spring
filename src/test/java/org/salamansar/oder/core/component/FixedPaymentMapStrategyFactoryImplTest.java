@@ -3,6 +3,7 @@ package org.salamansar.oder.core.component;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.*;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
@@ -43,6 +44,24 @@ public class FixedPaymentMapStrategyFactoryImplTest {
         FixedPaymentMapStrategy strategy = factory.getStrategy(new PaymentPeriod(2018, Quarter.YEAR), TaxCalculationSettings.defaults());
         
         assertSame(allYearsStrategy, strategy);
+		verify(allYearsStrategy).initialize(
+				eq(new PaymentPeriod(2018, Quarter.YEAR)),
+				isA(PlainFixedPaymentAmountCalculator.class));
+    }
+	
+    @Test
+    public void selectAllYearsRounded() {
+        FixedPaymentMapStrategy strategy = factory.getStrategy(new PaymentPeriod(2018, Quarter.YEAR), 
+				new TaxCalculationSettings().withRoundUp(true));
+        
+        assertSame(allYearsStrategy, strategy);
+		ArgumentCaptor<FixedPaymentAmountCalculator> amountCalcCaptor = ArgumentCaptor.forClass(FixedPaymentAmountCalculator.class);
+		verify(allYearsStrategy).initialize(
+				eq(new PaymentPeriod(2018, Quarter.YEAR)),
+				amountCalcCaptor.capture());
+		assertTrue(amountCalcCaptor.getValue() instanceof RoundingFixedPaymentWrapper);
+		FixedPaymentAmountCalculator mainCalculator = (FixedPaymentAmountCalculator) ReflectionTestUtils.getField(amountCalcCaptor.getValue(), "delegate");
+		assertTrue(mainCalculator instanceof PlainFixedPaymentAmountCalculator);
     }
     
     @Test
@@ -50,8 +69,25 @@ public class FixedPaymentMapStrategyFactoryImplTest {
         FixedPaymentMapStrategy strategy = factory.getStrategy(new PaymentPeriod(2018, Quarter.IV), TaxCalculationSettings.defaults());
         
         assertSame(singleMonthStrategy, strategy);
-        PeriodInitialized initializedStrategy = (PeriodInitialized) singleMonthStrategy;
-        verify(initializedStrategy).init(eq(new PaymentPeriod(2018, Quarter.IV)));
+        verify(singleMonthStrategy).initialize(
+				eq(new PaymentPeriod(2018, Quarter.IV)), 
+				isA(QuarterFixedPaymentAmountCalculator.class));
+    }
+	
+    @Test
+    public void selectSingleMonthRounded() {
+        FixedPaymentMapStrategy strategy = factory.getStrategy(
+				new PaymentPeriod(2018, Quarter.IV), 
+				new TaxCalculationSettings().withRoundUp(true));
+        
+        assertSame(singleMonthStrategy, strategy);
+		ArgumentCaptor<FixedPaymentAmountCalculator> amountCalcCaptor = ArgumentCaptor.forClass(FixedPaymentAmountCalculator.class);
+        verify(singleMonthStrategy).initialize(
+				eq(new PaymentPeriod(2018, Quarter.IV)), 
+				amountCalcCaptor.capture());
+		assertTrue(amountCalcCaptor.getValue() instanceof RoundingFixedPaymentWrapper);
+		FixedPaymentAmountCalculator mainCalculator = (FixedPaymentAmountCalculator) ReflectionTestUtils.getField(amountCalcCaptor.getValue(), "delegate");
+		assertTrue(mainCalculator instanceof QuarterFixedPaymentAmountCalculator);
     }
     
 	@Test
@@ -62,5 +98,26 @@ public class FixedPaymentMapStrategyFactoryImplTest {
 		FixedPaymentMapStrategy strategy = factory.getStrategy(new PaymentPeriod(2018, Quarter.YEAR), settings);
 
 		assertSame(quantizedYearStrategy, strategy);
+		verify(quantizedYearStrategy).initialize(
+				eq(new PaymentPeriod(2018, Quarter.YEAR)),
+				isA(QuarterFixedPaymentAmountCalculator.class));
+	}
+	
+	@Test
+	public void selectQuantizedPaymentsForYearRounded() {
+		TaxCalculationSettings settings = new TaxCalculationSettings()
+				.splitByQuants(true)
+				.withRoundUp(true);
+		
+		FixedPaymentMapStrategy strategy = factory.getStrategy(new PaymentPeriod(2018, Quarter.YEAR), settings);
+
+		assertSame(quantizedYearStrategy, strategy);
+		ArgumentCaptor<FixedPaymentAmountCalculator> amountCalcCaptor = ArgumentCaptor.forClass(FixedPaymentAmountCalculator.class);
+		verify(quantizedYearStrategy).initialize(
+				eq(new PaymentPeriod(2018, Quarter.YEAR)),
+				amountCalcCaptor.capture());
+		assertTrue(amountCalcCaptor.getValue() instanceof RoundingFixedPaymentWrapper);
+		FixedPaymentAmountCalculator mainCalculator = (FixedPaymentAmountCalculator) ReflectionTestUtils.getField(amountCalcCaptor.getValue(), "delegate");
+		assertTrue(mainCalculator instanceof QuarterFixedPaymentAmountCalculator);
 	}
 }

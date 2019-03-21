@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 public class DeductibleTax extends Tax {
 	private BigDecimal deduction;
 	
-	public BigDecimal getDeductedPayment() {
+	public BigDecimal getDeductedPayment() { //todo: deal with roundUp
 		if(getPayment() == null) {
 			return null;
 		}

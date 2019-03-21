@@ -16,13 +16,21 @@ import org.springframework.stereotype.Component;
 @Component("strategy.map.fixedPayment.allYear")
 @Scope("prototype")
 public class AllYearFixedPaymentMapStrategy implements FixedPaymentMapStrategy {
+	
+	private FixedPaymentAmountCalculator amountCalculator; //todo: check initialization
 
 	@Override
 	public List<Tax> map(FixedPayment payment) {
         Tax tax = new Tax(payment.getCategory());
-        tax.setPayment(payment.getValue());
+        tax.setPayment(amountCalculator.calculate(payment));
         tax.setPeriod(new PaymentPeriod(payment.getYear(), Quarter.YEAR));
         return Arrays.asList(tax);
 	}
+	
+	@Override
+	public void initialize(PaymentPeriod period, FixedPaymentAmountCalculator amountCalculator) {
+		this.amountCalculator = amountCalculator;
+	}
+	
 
 }

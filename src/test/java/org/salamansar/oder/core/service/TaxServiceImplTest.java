@@ -1,5 +1,6 @@
 package org.salamansar.oder.core.service;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,8 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.*;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.salamansar.oder.core.component.DeductCombineStrategy;
+import org.salamansar.oder.core.component.DeductCombineStrategyFactory;
 import org.salamansar.oder.core.domain.DeductibleTax;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
@@ -43,6 +46,10 @@ public class TaxServiceImplTest {
 	private DeductsCalculator deductsCalculator;
 	@Spy
 	private TaxMapper taxMapper = Mappers.getMapper(TaxMapper.class);
+	@Mock
+	private DeductCombineStrategyFactory deductCombinerFactory;
+	@Mock
+	private DeductCombineStrategy deductCombiner;
 	@InjectMocks
 	private TaxServiceImpl taxService = new TaxServiceImpl();
 	
@@ -59,6 +66,9 @@ public class TaxServiceImplTest {
 				.thenReturn(Collections.emptyList());
 		when(onePercentTaxCalculator.calculateOnePercentTaxes(any(User.class), any(PaymentPeriod.class), any(TaxCalculationSettings.class)))
 				.thenReturn(Collections.emptyList());
+		when(deductCombinerFactory.getStrategy(any(TaxCalculationSettings.class))).thenReturn(deductCombiner);
+		when(deductCombiner.applyDeduct(any(BigDecimal.class), any(BigDecimal.class)))
+				.thenReturn(BigDecimal.valueOf(100));
 	}
 	
 

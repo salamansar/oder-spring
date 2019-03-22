@@ -40,4 +40,8 @@ public class PaymentsUtils {
 		return summarize(payments, payment -> payment.getValue());
 	}
 	
+	public static BigDecimal getAmount(BigDecimal srcAmount) {
+		return srcAmount == null ? BigDecimal.ZERO : srcAmount;
+	}
+	
 }

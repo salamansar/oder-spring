@@ -31,8 +31,7 @@ public class TaxMapperTest {
 		assertNotNull(result.getPayment());
 		assertTrue(tax.getPayment().compareTo(result.getPayment()) == 0);
 		assertNull(result.getDeduction());
-		assertNotNull(result.getDeductedPayment());
-		assertTrue(tax.getPayment().compareTo(result.getDeductedPayment()) == 0);
+		assertNull(result.getDeductedPayment());
 	}
 	
 }

@@ -10,11 +10,11 @@ import org.salamansar.oder.module.payments.dto.TaxRowDto;
  */
 public interface TaxAdapter {
 	
-	List<TaxRowDto> findAllTaxesForYear(User user, Integer year);
+	List<TaxRowDto> findAllTaxesForYear(User user, Integer year, boolean roundUp);
 	
-	List<TaxRowDto> findTaxesForYear(User user, Integer year);
+	List<TaxRowDto> findTaxesForYear(User user, Integer year, boolean roundUp);
 	
-	TaxRowDto findSummarizedTaxesForYear(User user, Integer year);
+	TaxRowDto findSummarizedTaxesForYear(User user, Integer year, boolean roundUp);
 	
 	List<Integer> findYearsWithIncomes(User user);
 }

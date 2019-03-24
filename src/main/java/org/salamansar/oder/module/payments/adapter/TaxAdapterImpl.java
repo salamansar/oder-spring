@@ -31,18 +31,19 @@ public class TaxAdapterImpl implements TaxAdapter {
 	private IncomeService incomeService;
 	
 	@Override
-	public List<TaxRowDto> findAllTaxesForYear(User user, Integer year) {
-		List<TaxRowDto> quarterTaxes = findTaxesForYear(user, year);
-		TaxRowDto summary = findSummarizedTaxesForYear(user, year);
+	public List<TaxRowDto> findAllTaxesForYear(User user, Integer year, boolean roundUp) {
+		List<TaxRowDto> quarterTaxes = findTaxesForYear(user, year, roundUp);
+		TaxRowDto summary = findSummarizedTaxesForYear(user, year, roundUp);
 		return ListBuilder.of(quarterTaxes)
 				.and(summary)
 				.build();
 	}
 
 	@Override
-	public List<TaxRowDto> findTaxesForYear(User user, Integer year) {
+	public List<TaxRowDto> findTaxesForYear(User user, Integer year, boolean roundUp) {
 		TaxCalculationSettings settings = new TaxCalculationSettings()
-				.splitByQuants(true);
+				.splitByQuants(true)
+				.withRoundUp(roundUp);
 		PaymentPeriod paymentPeriod = new PaymentPeriod(year, Quarter.YEAR);
 		List<DeductibleTax> taxDomains = taxService.calculateDeductedTaxes(user, paymentPeriod, settings);
 		List<TaxRowDto> taxRows = mapToTaxRows(paymentPeriod, taxDomains);
@@ -105,9 +106,11 @@ public class TaxAdapterImpl implements TaxAdapter {
 	}
 
 	@Override
-	public TaxRowDto findSummarizedTaxesForYear(User user, Integer year) {
+	public TaxRowDto findSummarizedTaxesForYear(User user, Integer year, boolean roundUp) {
 		PaymentPeriod paymentPeriod = new PaymentPeriod(year, Quarter.YEAR);
-		List<DeductibleTax> taxDomains = taxService.calculateDeductedTaxes(user, paymentPeriod, TaxCalculationSettings.defaults());
+		TaxCalculationSettings settings = new TaxCalculationSettings()
+				.withRoundUp(roundUp);
+		List<DeductibleTax> taxDomains = taxService.calculateDeductedTaxes(user, paymentPeriod, settings);
 		TaxRowDto taxRow = mapToTaxRow(paymentPeriod, taxDomains);
 		QuarterIncome income = incomeService.findSummaryYearIncome(user, year);
 		taxRow.setIncomesAmount(income == null ? null : income.getIncomeAmount());

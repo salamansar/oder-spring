@@ -52,12 +52,12 @@ public class TaxAdapterImplTest {
 		QuarterIncome income2 = generator.generate(QuarterIncome.class, new PaymentPeriod(year, Quarter.II));
 		when(taxService.calculateDeductedTaxes(same(user), 
 				eq(new PaymentPeriod(year, Quarter.YEAR)), 
-				eq(new TaxCalculationSettings().splitByQuants(true))))
+				eq(new TaxCalculationSettings().splitByQuants(true).withRoundUp(true))))
 				.thenReturn(Arrays.asList(healthTax2, incomeTax2, incomeTax1, pensionTax1, pensionTax2, healthTax1, onePercentTax1));
 		when(incomeService.findQuarterIncomes(same(user), eq(new PaymentPeriod(year, Quarter.YEAR)), eq(true)))
 				.thenReturn(Arrays.asList(income2, income1));
 		
-		List<TaxRowDto> result = adapter.findTaxesForYear(user, year);
+		List<TaxRowDto> result = adapter.findTaxesForYear(user, year, true);
 		
 		assertNotNull(result);
 		assertEquals(4, result.size());
@@ -125,12 +125,12 @@ public class TaxAdapterImplTest {
 		QuarterIncome income = generator.generate(QuarterIncome.class, new PaymentPeriod(year, Quarter.YEAR));
 		when(taxService.calculateDeductedTaxes(same(user), 
 				eq(new PaymentPeriod(year, Quarter.YEAR)), 
-				eq(new TaxCalculationSettings())))
+				eq(new TaxCalculationSettings().withRoundUp(true))))
 				.thenReturn(Arrays.asList(incomeTax, pensionTax, healthTax, onePercentTax));
 		when(incomeService.findSummaryYearIncome(same(user), eq(year)))
 				.thenReturn(income);
 		
-		TaxRowDto result = adapter.findSummarizedTaxesForYear(user, year);
+		TaxRowDto result = adapter.findSummarizedTaxesForYear(user, year, true);
 		
 		assertNotNull(result);		
 		assertNotNull(result.getPaymentPeriod());
@@ -159,7 +159,7 @@ public class TaxAdapterImplTest {
 				anyBoolean()))
 				.thenReturn(Collections.emptyList());
 		
-		List<TaxRowDto> result = adapter.findAllTaxesForYear(user, year);
+		List<TaxRowDto> result = adapter.findAllTaxesForYear(user, year, false);
 		
 		assertNotNull(result);		
 		assertEquals(5, result.size());

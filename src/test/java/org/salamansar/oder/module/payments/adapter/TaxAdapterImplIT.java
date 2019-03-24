@@ -48,7 +48,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 			return null;
 		});
 		
-		List<TaxRowDto> result = taxAdapter.findAllTaxesForYear(user, year);
+		List<TaxRowDto> result = taxAdapter.findAllTaxesForYear(user, year, false);
 		
 		assertNotNull(result);
 		assertEquals(5, result.size());

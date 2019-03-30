@@ -1,6 +1,7 @@
 package org.salamansar.oder.core.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -42,6 +43,10 @@ public class PaymentsUtils {
 	
 	public static BigDecimal getAmount(BigDecimal srcAmount) {
 		return srcAmount == null ? BigDecimal.ZERO : srcAmount;
+	}
+	
+	public static BigDecimal roundUp(BigDecimal amount) {
+		return amount == null ? null : amount.setScale(0, RoundingMode.CEILING);
 	}
 	
 }

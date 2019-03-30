@@ -16,6 +16,7 @@ import org.salamansar.oder.core.domain.TaxDeduction;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.core.mapper.TaxMapper;
 import org.salamansar.oder.core.utils.ListBuilder;
+import org.salamansar.oder.core.utils.PaymentsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,14 +46,26 @@ public class TaxServiceImpl implements TaxService {
 
 	@Override
 	public List<Tax> calculateTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
+		List<Tax> taxes = calculateRawTaxes(user, period, new TaxCalculationSettings().splitByQuants(settings.getByQuants()));
+		if(settings.getRoundUp()) {
+			taxes.forEach(this::roundUp);
+		}
+		return taxes;
+	}
+	
+	private List<Tax> calculateRawTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
+		//todo: remove rounding in calculators
 		List<Tax> incomeTaxes = incomesTaxCalculator.calculateIncomeTaxes(user, period, settings);
 		List<Tax> fixedPayments = fixedPaymentCalculator.calculateFixedPayments(period, settings);
 		List<Tax> onePersentPayments = onePercentCalculator.calculateOnePercentTaxes(user, period, settings);
-		//todo: refactor rounding operations
 		return ListBuilder.of(incomeTaxes)
 				.and(fixedPayments)
 				.and(onePersentPayments)
 				.build();
+	}
+	
+	private void roundUp(Tax tax) {
+		tax.setPayment(PaymentsUtils.roundUp(tax.getPayment()));
 	}
 
 	@Override
@@ -67,8 +80,20 @@ public class TaxServiceImpl implements TaxService {
 	
 	@Override
 	public List<DeductibleTax> calculateDeductedTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
+		List<DeductibleTax> taxes = calculateRawDeductedTaxes(
+				user, 
+				period, 
+				new TaxCalculationSettings().splitByQuants(settings.getByQuants())
+		);
+		if (settings.getRoundUp()) {
+			taxes.forEach(this::roundUp);
+		}
+		return taxes;
+	}
+	
+	public List<DeductibleTax> calculateRawDeductedTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
 		TaxToDeductiableMapper mapper = getMapper(user, period, settings);
-		List<Tax> rawTaxes = calculateTaxes(user, period, settings);
+		List<Tax> rawTaxes = calculateRawTaxes(user, period, settings);
 		return rawTaxes.stream()
 				.map(mapper::map)
 				.collect(Collectors.toList());
@@ -81,10 +106,15 @@ public class TaxServiceImpl implements TaxService {
 		return new TaxToDeductiableMapper(deductions, combineStrategy);
 	}
 	
+	private void roundUp(DeductibleTax tax) {
+		tax.setPayment(PaymentsUtils.roundUp(tax.getPayment()));
+		tax.setDeductedPayment(PaymentsUtils.roundUp(tax.getDeductedPayment()));
+	}
+	
 	private class TaxToDeductiableMapper {
 
 		private final Map<PaymentPeriod, TaxDeduction> deductions;
-		private final DeductCombineStrategy deductCombiner;
+		private final DeductCombineStrategy deductCombiner; //todo: remove rounding in combiner
 
 		public TaxToDeductiableMapper(Map<PaymentPeriod, TaxDeduction> deductions, DeductCombineStrategy deductCombiner) {
 			this.deductions = deductions;

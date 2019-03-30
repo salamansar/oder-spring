@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.envbuild.generator.RandomGenerator;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -95,6 +96,33 @@ public class TaxServiceImplTest {
 	}
 	
 	@Test
+	public void calculateTaxesWithRoundsUp() {
+		when(incomeService.findIncomes(same(user), any(PaymentPeriod.class)))
+				.thenReturn(Arrays.asList(income));
+		Tax tax1 = generator.generate(Tax.class, BigDecimal.valueOf(100.5));
+		Tax tax2 = generator.generate(Tax.class, BigDecimal.valueOf(300.001));
+		Tax tax3 = generator.generate(Tax.class, BigDecimal.valueOf(320.99));
+		TaxCalculationSettings defualtSettings = new TaxCalculationSettings();
+		when(incomesTaxCalculator.calculateIncomeTaxes(eq(user), any(PaymentPeriod.class), eq(defualtSettings)))
+				.thenReturn(Arrays.asList(tax1));
+		when(fixedPaymentCalculator.calculateFixedPayments(any(PaymentPeriod.class), eq(defualtSettings)))
+				.thenReturn(Arrays.asList(tax2));
+		when(onePercentTaxCalculator.calculateOnePercentTaxes(eq(user), any(PaymentPeriod.class), eq(defualtSettings)))
+				.thenReturn(Arrays.asList(tax3));
+
+		List<Tax> result = taxService.calculateTaxes(user, new PaymentPeriod(2018, Quarter.YEAR), new TaxCalculationSettings().withRoundUp(true));
+
+		assertNotNull(result);
+		assertEquals(3, result.size());
+		assertTrue(result.contains(tax1));
+		assertTrue(result.contains(tax2));
+		assertTrue(result.contains(tax3));
+		assertTrue(result.stream().anyMatch(t -> BigDecimal.valueOf(101).compareTo(t.getPayment()) == 0));
+		assertTrue(result.stream().anyMatch(t -> BigDecimal.valueOf(301).compareTo(t.getPayment()) == 0));
+		assertTrue(result.stream().anyMatch(t -> BigDecimal.valueOf(321).compareTo(t.getPayment()) == 0));
+	}
+	
+	@Test
 	public void calucalteDeductedTaxesWithDeductsFilled() {
 		Tax tax1 = generator.generate(Tax.class, new PaymentPeriod(2018, Quarter.I), TaxCategory.INCOME_TAX);
 		Tax tax2 = generator.generate(Tax.class, new PaymentPeriod(2018, Quarter.III), TaxCategory.INCOME_TAX);
@@ -175,4 +203,63 @@ public class TaxServiceImplTest {
 		assertEquals(0, result.size());
 	}
 	
+	@Test
+	public void calucalteRoundedDeductedTaxes() {
+		Tax tax1 = generator.generate(Tax.class, new PaymentPeriod(2018, Quarter.I), TaxCategory.INCOME_TAX, BigDecimal.valueOf(100.7));
+		Tax tax2 = generator.generate(Tax.class, new PaymentPeriod(2018, Quarter.III), TaxCategory.INCOME_TAX, BigDecimal.valueOf(300.001));
+		Tax tax3 = generator.generate(Tax.class, new PaymentPeriod(2018, Quarter.IV), TaxCategory.INCOME_TAX, BigDecimal.valueOf(600.86));
+		when(incomesTaxCalculator.calculateIncomeTaxes(same(user), any(PaymentPeriod.class), eq(TaxCalculationSettings.defaults())))
+				.thenReturn(Arrays.asList(tax1, tax2, tax3));
+		TaxDeduction deduction1 = generator.generate(TaxDeduction.class, new PaymentPeriod(2018, Quarter.II), BigDecimal.valueOf(100.5));
+		TaxDeduction deduction2 = generator.generate(TaxDeduction.class, new PaymentPeriod(2018, Quarter.III), BigDecimal.valueOf(180.25));
+		TaxDeduction deduction3 = generator.generate(TaxDeduction.class, new PaymentPeriod(2018, Quarter.IV), BigDecimal.valueOf(180.25));
+		when(deductsCalculator.calculateDeducts(same(user), any(PaymentPeriod.class), eq(TaxCalculationSettings.defaults())))
+				.thenReturn(Arrays.asList(deduction1, deduction2, deduction3));
+		when(deductCombiner.applyDeduct(any(BigDecimal.class), any(BigDecimal.class)))
+				.thenAnswer(inv -> {
+					BigDecimal par1 = inv.getArgumentAt(0, BigDecimal.class);
+					BigDecimal par2 = inv.getArgumentAt(1, BigDecimal.class);
+					return par2 == null ? par1 : par1.subtract(par2);
+				});
+
+		List<DeductibleTax> result = taxService.calculateDeductedTaxes(
+				user, 
+				new PaymentPeriod(2018, Quarter.YEAR), 
+				new TaxCalculationSettings().withRoundUp(true)
+		);
+
+		assertNotNull(result);
+		assertEquals(3, result.size());
+		assertTrue(result.stream().allMatch(t
+				-> t.getCatgory() != null
+				&& t.getPayment() != null
+				&& t.getPeriod() != null
+				&& t.getDeductedPayment() != null));
+		
+		Optional<DeductibleTax> firstQuarterTax = result.stream().filter(t
+				-> t.getPeriod().getQuarter() == Quarter.I)
+				.findAny();
+		assertTrue(firstQuarterTax.isPresent());
+		assertNull(firstQuarterTax.get().getDeduction());
+		assertTrue(BigDecimal.valueOf(101).compareTo(firstQuarterTax.get().getPayment()) == 0);
+		assertTrue(BigDecimal.valueOf(101).compareTo(firstQuarterTax.get().getDeductedPayment()) == 0);
+
+		Optional<DeductibleTax> thirdQuarterTax = result.stream().filter(t
+				-> t.getPeriod().getQuarter() == Quarter.III)
+				.findAny();
+		assertTrue(thirdQuarterTax.isPresent());
+		assertNotNull(thirdQuarterTax.get().getDeduction());
+		assertTrue(BigDecimal.valueOf(180.25).compareTo(thirdQuarterTax.get().getDeduction()) == 0);
+		assertTrue(BigDecimal.valueOf(301).compareTo(thirdQuarterTax.get().getPayment()) == 0);
+		assertTrue(BigDecimal.valueOf(120).compareTo(thirdQuarterTax.get().getDeductedPayment()) == 0);
+		
+		Optional<DeductibleTax> fourthQuarterTax = result.stream().filter(t
+				-> t.getPeriod().getQuarter() == Quarter.IV)
+				.findAny();
+		assertTrue(fourthQuarterTax.isPresent());
+		assertNotNull(fourthQuarterTax.get().getDeduction());
+		assertTrue(BigDecimal.valueOf(180.25).compareTo(fourthQuarterTax.get().getDeduction()) == 0);
+		assertTrue(BigDecimal.valueOf(601).compareTo(fourthQuarterTax.get().getPayment()) == 0);
+		assertTrue(BigDecimal.valueOf(421).compareTo(fourthQuarterTax.get().getDeductedPayment()) == 0);
+	}
 }

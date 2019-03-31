@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.salamansar.oder.core.component.DeductCombineStrategy;
-import org.salamansar.oder.core.component.DeductCombineStrategyFactory;
 import org.salamansar.oder.core.domain.DeductibleTax;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Tax;
@@ -37,7 +36,7 @@ public class TaxServiceImpl implements TaxService {
 	@Autowired
 	private TaxMapper taxMapper;
 	@Autowired
-	private DeductCombineStrategyFactory deductCombinerFactory;
+	private DeductCombineStrategy deductCombiner;
 
 	@Override
 	public List<Tax> calculateTaxes(User user, PaymentPeriod period) {
@@ -54,7 +53,6 @@ public class TaxServiceImpl implements TaxService {
 	}
 	
 	private List<Tax> calculateRawTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
-		//todo: remove rounding in calculators
 		List<Tax> incomeTaxes = incomesTaxCalculator.calculateIncomeTaxes(user, period, settings);
 		List<Tax> fixedPayments = fixedPaymentCalculator.calculateFixedPayments(period, settings);
 		List<Tax> onePersentPayments = onePercentCalculator.calculateOnePercentTaxes(user, period, settings);
@@ -102,8 +100,7 @@ public class TaxServiceImpl implements TaxService {
 	private TaxToDeductiableMapper getMapper(User user, PaymentPeriod period, TaxCalculationSettings settings) {
 		Map<PaymentPeriod, TaxDeduction> deductions = calculateDeductions(user, period, settings).stream()
 				.collect(Collectors.toMap(TaxDeduction::getPeriod, Function.identity()));
-		DeductCombineStrategy combineStrategy = deductCombinerFactory.getStrategy(settings);
-		return new TaxToDeductiableMapper(deductions, combineStrategy);
+		return new TaxToDeductiableMapper(deductions);
 	}
 	
 	private void roundUp(DeductibleTax tax) {
@@ -114,11 +111,9 @@ public class TaxServiceImpl implements TaxService {
 	private class TaxToDeductiableMapper {
 
 		private final Map<PaymentPeriod, TaxDeduction> deductions;
-		private final DeductCombineStrategy deductCombiner; //todo: remove rounding in combiner
 
-		public TaxToDeductiableMapper(Map<PaymentPeriod, TaxDeduction> deductions, DeductCombineStrategy deductCombiner) {
+		public TaxToDeductiableMapper(Map<PaymentPeriod, TaxDeduction> deductions) {
 			this.deductions = deductions;
-			this.deductCombiner = deductCombiner;
 		}
 
 		public DeductibleTax map(Tax tax) {

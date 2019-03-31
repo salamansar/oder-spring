@@ -17,7 +17,6 @@ import static org.mockito.Mockito.*;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.salamansar.oder.core.component.DeductCombineStrategy;
-import org.salamansar.oder.core.component.DeductCombineStrategyFactory;
 import org.salamansar.oder.core.domain.DeductibleTax;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
@@ -48,11 +47,9 @@ public class TaxServiceImplTest {
 	@Spy
 	private TaxMapper taxMapper = Mappers.getMapper(TaxMapper.class);
 	@Mock
-	private DeductCombineStrategyFactory deductCombinerFactory;
-	@Mock
 	private DeductCombineStrategy deductCombiner;
 	@InjectMocks
-	private TaxServiceImpl taxService = new TaxServiceImpl();
+	private TaxServiceImpl taxService;
 	
 	private RandomGenerator generator = new RandomGenerator();
 	
@@ -67,7 +64,6 @@ public class TaxServiceImplTest {
 				.thenReturn(Collections.emptyList());
 		when(onePercentTaxCalculator.calculateOnePercentTaxes(any(User.class), any(PaymentPeriod.class), any(TaxCalculationSettings.class)))
 				.thenReturn(Collections.emptyList());
-		when(deductCombinerFactory.getStrategy(any(TaxCalculationSettings.class))).thenReturn(deductCombiner);
 		when(deductCombiner.applyDeduct(any(BigDecimal.class), any(BigDecimal.class)))
 				.thenReturn(BigDecimal.valueOf(100));
 	}

@@ -65,29 +65,6 @@ public class IncomesTaxCalculatorImplIT extends AbstractCoreIntegrationTest {
 	}
 	
 	@Test
-	public void calculateQuantizedWithRoundUp() {
-		List<Tax> result = incomesTaxCalculator.calculateIncomeTaxes(
-				user,
-				new PaymentPeriod(2018, Quarter.YEAR), 
-				new TaxCalculationSettings().splitByQuants(true).withRoundUp(true));
-		
-		assertNotNull(result);
-		assertEquals(2, result.size());
-		Optional<Tax> tax1 = result.stream()
-				.filter(t -> new PaymentPeriod(2018, Quarter.I).equals(t.getPeriod()))
-				.findAny();
-		assertTrue(tax1.isPresent());
-		assertEquals(TaxCategory.INCOME_TAX, tax1.get().getCatgory());
-		assertTrue(BigDecimal.valueOf(9361).compareTo(tax1.get().getPayment()) == 0);
-		Optional<Tax> tax2 = result.stream()
-				.filter(t -> new PaymentPeriod(2018, Quarter.III).equals(t.getPeriod()))
-				.findAny();
-		assertTrue(tax2.isPresent());
-		assertEquals(TaxCategory.INCOME_TAX, tax2.get().getCatgory());
-		assertTrue(BigDecimal.valueOf(7).compareTo(tax2.get().getPayment()) == 0);
-	}
-	
-	@Test
 	public void calculateSummarized() {
 		List<Tax> result = incomesTaxCalculator.calculateIncomeTaxes(
 				user,
@@ -99,20 +76,6 @@ public class IncomesTaxCalculatorImplIT extends AbstractCoreIntegrationTest {
 		assertEquals(TaxCategory.INCOME_TAX, result.get(0).getCatgory());
 		assertEquals(new PaymentPeriod(2018, Quarter.YEAR), result.get(0).getPeriod());
 		assertTrue(BigDecimal.valueOf(9366.048).compareTo(result.get(0).getPayment()) == 0);
-	}
-	
-	@Test
-	public void calculateSummarizedWithRoundUp() {
-		List<Tax> result = incomesTaxCalculator.calculateIncomeTaxes(
-				user,
-				new PaymentPeriod(2018, Quarter.YEAR),
-				new TaxCalculationSettings().withRoundUp(true));
-
-		assertNotNull(result);
-		assertEquals(1, result.size());
-		assertEquals(TaxCategory.INCOME_TAX, result.get(0).getCatgory());
-		assertEquals(new PaymentPeriod(2018, Quarter.YEAR), result.get(0).getPeriod());
-		assertTrue(BigDecimal.valueOf(9367).compareTo(result.get(0).getPayment()) == 0);
 	}
 	
 }

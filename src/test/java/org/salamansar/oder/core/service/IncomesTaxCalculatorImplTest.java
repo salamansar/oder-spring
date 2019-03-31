@@ -17,7 +17,6 @@ import org.salamansar.oder.core.domain.Tax;
 import org.salamansar.oder.core.domain.TaxCalculationSettings;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.core.component.TaxAmountCalculator;
-import org.salamansar.oder.core.component.TaxAmountCalculatorFactory;
 import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.TaxCategory;
 
@@ -30,11 +29,9 @@ public class IncomesTaxCalculatorImplTest {
 	@Mock
 	private IncomeService incomesService;
 	@Mock
-	private TaxAmountCalculatorFactory strategyFactory;
-	@Mock
 	private TaxAmountCalculator amountCalculator;
 	@InjectMocks
-	private IncomesTaxCalculatorImpl calculator = new IncomesTaxCalculatorImpl();
+	private IncomesTaxCalculatorImpl calculator;
 	private RandomGenerator generator = new RandomGenerator();
 	
 	@Test
@@ -46,8 +43,6 @@ public class IncomesTaxCalculatorImplTest {
 		TaxCalculationSettings settings = new TaxCalculationSettings().splitByQuants(true);
 		when(incomesService.findQuarterIncomes(same(user), same(period), eq(true)))
 				.thenReturn(Arrays.asList(income1, income2));
-		when(strategyFactory.getCalculator(same(settings)))
-				.thenReturn(amountCalculator);
 		when(amountCalculator.calculateTax(same(income1)))
 				.thenReturn(BigDecimal.valueOf(100));
 		

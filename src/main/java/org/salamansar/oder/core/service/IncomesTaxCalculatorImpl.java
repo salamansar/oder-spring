@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.salamansar.oder.core.component.TaxAmountCalculator;
 import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.TaxCategory;
-import org.salamansar.oder.core.component.TaxAmountCalculatorFactory;
 
 /**
  *
@@ -22,16 +21,15 @@ public class IncomesTaxCalculatorImpl implements IncomeTaxCalculator {
 	@Autowired
 	private IncomeService incomesService;
 	@Autowired
-	private TaxAmountCalculatorFactory calculatorFactory;
+	private TaxAmountCalculator amountCalculator;
 
 	@Override
 	public List<Tax> calculateIncomeTaxes(User user, PaymentPeriod period, TaxCalculationSettings settings) {
 		List<QuarterIncome> incomes = incomesService.findQuarterIncomes(user, period, settings.getByQuants());
-		TaxAmountCalculator calculator = calculatorFactory.getCalculator(settings);
 		return incomes.stream()
 				.map(e -> {
 					Tax tax = new Tax(TaxCategory.INCOME_TAX);
-					tax.setPayment(calculator.calculateTax(e));
+					tax.setPayment(amountCalculator.calculateTax(e));
 					tax.setPeriod(e.getPeriod());
 					return tax;
 				})

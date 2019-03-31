@@ -38,7 +38,7 @@ public class FixedPaymentTaxCalculatorImplIT extends AbstractCoreIntegrationTest
 	public void calculateQuantized() {
 		List<Tax> result = taxCalculator.calculateFixedPayments(
 				new PaymentPeriod(2015, Quarter.YEAR), 
-				new TaxCalculationSettings().splitByQuants(true));
+				new TaxCalculationSettings().splitByQuants(true).withRoundUp(true));
 		
 		assertNotNull(result);
 		assertEquals(8, result.size());
@@ -53,28 +53,6 @@ public class FixedPaymentTaxCalculatorImplIT extends AbstractCoreIntegrationTest
 					-> t.getCatgory() == TaxCategory.HEALTH_INSURANCE
 					&& new PaymentPeriod(2015, quarter).equals(t.getPeriod())
 					&& BigDecimal.valueOf(367.5).compareTo(t.getPayment()) == 0));
-		}
-	}
-	
-	@Test
-	public void calculateQuantizedRounded() {
-		List<Tax> result = taxCalculator.calculateFixedPayments(
-				new PaymentPeriod(2015, Quarter.YEAR), 
-				new TaxCalculationSettings().splitByQuants(true).withRoundUp(true));
-		
-		assertNotNull(result);
-		assertEquals(8, result.size());
-		
-		for(int i=1; i<=4; i++) {
-			Quarter quarter = Quarter.fromNumber(i);
-			assertTrue(result.stream().anyMatch(t
-					-> t.getCatgory() == TaxCategory.PENSION_INSURANCE
-					&& new PaymentPeriod(2015, quarter).equals(t.getPeriod())
-					&& BigDecimal.valueOf(8114).compareTo(t.getPayment()) == 0));
-			assertTrue(result.stream().anyMatch(t
-					-> t.getCatgory() == TaxCategory.HEALTH_INSURANCE
-					&& new PaymentPeriod(2015, quarter).equals(t.getPeriod())
-					&& BigDecimal.valueOf(368).compareTo(t.getPayment()) == 0));
 		}
 	}
 	
@@ -98,29 +76,10 @@ public class FixedPaymentTaxCalculatorImplIT extends AbstractCoreIntegrationTest
 	}
 	
 	@Test
-	public void calculateSummarizedRounded() {
-		List<Tax> result = taxCalculator.calculateFixedPayments(
-				new PaymentPeriod(2015, Quarter.YEAR),
-				new TaxCalculationSettings().withRoundUp(true));
-
-		assertNotNull(result);
-		assertEquals(2, result.size());
-
-		assertTrue(result.stream().anyMatch(t
-				-> t.getCatgory() == TaxCategory.PENSION_INSURANCE
-				&& new PaymentPeriod(2015, Quarter.YEAR).equals(t.getPeriod())
-				&& BigDecimal.valueOf(32454).compareTo(t.getPayment()) == 0));
-		assertTrue(result.stream().anyMatch(t
-				-> t.getCatgory() == TaxCategory.HEALTH_INSURANCE
-				&& new PaymentPeriod(2015, Quarter.YEAR).equals(t.getPeriod())
-				&& BigDecimal.valueOf(1470).compareTo(t.getPayment()) == 0));
-	}
-	
-	@Test
 	public void calculateSingleMonth() {
 		List<Tax> result = taxCalculator.calculateFixedPayments(
 				new PaymentPeriod(2015, Quarter.II),
-				new TaxCalculationSettings());
+				new TaxCalculationSettings().withRoundUp(true));
 
 		assertNotNull(result);
 		assertEquals(2, result.size());
@@ -133,25 +92,6 @@ public class FixedPaymentTaxCalculatorImplIT extends AbstractCoreIntegrationTest
 				-> t.getCatgory() == TaxCategory.HEALTH_INSURANCE
 				&& new PaymentPeriod(2015, Quarter.II).equals(t.getPeriod())
 				&& BigDecimal.valueOf(367.5).compareTo(t.getPayment()) == 0));
-	}
-	
-	@Test
-	public void calculateSingleMonthRounded() {
-		List<Tax> result = taxCalculator.calculateFixedPayments(
-				new PaymentPeriod(2015, Quarter.II),
-				new TaxCalculationSettings().withRoundUp(true));
-
-		assertNotNull(result);
-		assertEquals(2, result.size());
-
-		assertTrue(result.stream().anyMatch(t
-				-> t.getCatgory() == TaxCategory.PENSION_INSURANCE
-				&& new PaymentPeriod(2015, Quarter.II).equals(t.getPeriod())
-				&& BigDecimal.valueOf(8114).compareTo(t.getPayment()) == 0));
-		assertTrue(result.stream().anyMatch(t
-				-> t.getCatgory() == TaxCategory.HEALTH_INSURANCE
-				&& new PaymentPeriod(2015, Quarter.II).equals(t.getPeriod())
-				&& BigDecimal.valueOf(368).compareTo(t.getPayment()) == 0));
 	}
 	
 }

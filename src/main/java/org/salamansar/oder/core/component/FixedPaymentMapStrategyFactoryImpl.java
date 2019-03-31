@@ -52,11 +52,7 @@ public class FixedPaymentMapStrategyFactoryImpl implements FixedPaymentMapStrate
 		} else {
 			calculator = new QuarterFixedPaymentAmountCalculator();
 		}
-		if(settings.getRoundUp()) {
-			return new RoundingFixedPaymentWrapper(calculator);
-		} else {
-			return calculator;
-		}
+		return calculator;
 	}
 	
 }

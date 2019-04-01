@@ -33,9 +33,11 @@ public class TaxAdapterImpl implements TaxAdapter {
 	@Override
 	public List<TaxRowDto> findAllTaxesForYear(User user, Integer year, boolean roundUp) {
 		List<TaxRowDto> quarterTaxes = findTaxesForYear(user, year, roundUp);
-		TaxRowDto summary = findSummarizedTaxesForYear(user, year, roundUp);
+		TaxRowDto summary = calculateSummary(quarterTaxes);
+		TaxRowDto allYear = findSummarizedTaxesForYear(user, year, roundUp);
 		return ListBuilder.of(quarterTaxes)
 				.and(summary)
+				.and(allYear)
 				.build();
 	}
 
@@ -102,6 +104,35 @@ public class TaxAdapterImpl implements TaxAdapter {
 				.collect(Collectors.toMap(QuarterIncome::getPeriod, QuarterIncome::getIncomeAmount));
 		for(TaxRowDto dto : taxRows) {
 			dto.setIncomesAmount(incomesMapping.get(dto.getPaymentPeriod()));
+		}
+	}
+	
+	private TaxRowDto calculateSummary(List<TaxRowDto> quarterTaxes) {
+		return quarterTaxes.stream()
+				.collect(Collectors.reducing(new TaxRowDto(), (accum, val) -> {
+					accum.setHealthInsuranceTaxAmount(combineValues(accum.getHealthInsuranceTaxAmount(), val.getHealthInsuranceTaxAmount()));
+					accum.setIncomesAmount(combineValues(accum.getIncomesAmount(), val.getIncomesAmount()));
+					accum.setIncomesDeductedTaxAmount(combineValues(accum.getIncomesDeductedTaxAmount(), val.getIncomesDeductedTaxAmount()));
+					accum.setIncomesTaxAmount(combineValues(accum.getIncomesTaxAmount(), val.getIncomesTaxAmount()));
+					accum.setOnePercentTaxAmount(combineValues(accum.getOnePercentTaxAmount(), val.getOnePercentTaxAmount()));
+					accum.setPensionTaxAmount(combineValues(accum.getPensionTaxAmount(), val.getPensionTaxAmount()));
+					return accum;
+				}));
+	}
+	
+	private BigDecimal combineValues(BigDecimal accum, BigDecimal val) {
+		if(accum == null) {
+			if(val == null) {
+				return null;
+			} else {
+				return val;
+			}
+		} else {
+			if(val == null) {
+				return accum;
+			} else {
+				return accum.add(val);
+			}
 		}
 	}
 

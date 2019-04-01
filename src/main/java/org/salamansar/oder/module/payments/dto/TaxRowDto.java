@@ -21,9 +21,8 @@ public class TaxRowDto {
 	
 	public String getPaymentPeriodMessage() {
 		if(paymentPeriod == null) {
-			return null;
-		}
-		if(paymentPeriod.getQuarter() == Quarter.YEAR) {
+			return "Суммарно";
+		} else if(paymentPeriod.getQuarter() == Quarter.YEAR) {
 			return "Год";
 		} else {
 			return paymentPeriod.getQuarter().name();

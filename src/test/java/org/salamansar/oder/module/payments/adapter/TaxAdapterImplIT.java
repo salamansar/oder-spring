@@ -51,7 +51,7 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		List<TaxRowDto> result = taxAdapter.findAllTaxesForYear(user, year, false);
 		
 		assertNotNull(result);
-		assertEquals(5, result.size());
+		assertEquals(6, result.size());
 		
 		TaxRowDto firstTaxRow = result.get(0);
 		assertNotNull(firstTaxRow);
@@ -99,14 +99,24 @@ public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
 		
 		TaxRowDto fifthTaxRow = result.get(4);
 		assertNotNull(fifthTaxRow);
-		assertNotNull(fifthTaxRow.getPaymentPeriod());
-		assertEquals(new PaymentPeriod(year, Quarter.YEAR), fifthTaxRow.getPaymentPeriod());
+		assertNull(fifthTaxRow.getPaymentPeriod());
 		assertNotNull(fifthTaxRow.getHealthInsuranceTaxAmount());
 		assertNotNull(fifthTaxRow.getIncomesTaxAmount());
 		assertNotNull(fifthTaxRow.getIncomesDeductedTaxAmount());
-		assertNotNull(fifthTaxRow.getOnePercentTaxAmount());
+		assertNull(fifthTaxRow.getOnePercentTaxAmount());
 		assertNotNull(fifthTaxRow.getPensionTaxAmount());
 		assertNotNull(fifthTaxRow.getIncomesAmount());
+		
+		TaxRowDto sixthTaxRow = result.get(5);
+		assertNotNull(sixthTaxRow);
+		assertNotNull(sixthTaxRow.getPaymentPeriod());
+		assertEquals(new PaymentPeriod(year, Quarter.YEAR), sixthTaxRow.getPaymentPeriod());
+		assertNotNull(sixthTaxRow.getHealthInsuranceTaxAmount());
+		assertNotNull(sixthTaxRow.getIncomesTaxAmount());
+		assertNotNull(sixthTaxRow.getIncomesDeductedTaxAmount());
+		assertNotNull(sixthTaxRow.getOnePercentTaxAmount());
+		assertNotNull(sixthTaxRow.getPensionTaxAmount());
+		assertNotNull(sixthTaxRow.getIncomesAmount());
 	}
 	
 }

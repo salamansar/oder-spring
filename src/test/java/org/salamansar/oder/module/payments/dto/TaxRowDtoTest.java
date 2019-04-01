@@ -16,7 +16,8 @@ public class TaxRowDtoTest {
 	public void testQuarterCaption() {
 		TaxRowDto dto = new TaxRowDto();
 		
-		assertNull(dto.getPaymentPeriodMessage());
+		assertNotNull(dto.getPaymentPeriodMessage());
+		assertEquals("Суммарно", dto.getPaymentPeriodMessage());
 		
 		dto.setPaymentPeriod(new PaymentPeriod(2018, Quarter.III));
 		

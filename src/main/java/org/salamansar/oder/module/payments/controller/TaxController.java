@@ -7,6 +7,7 @@ import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.module.payments.adapter.TaxAdapter;
+import org.salamansar.oder.module.payments.dto.PaymentPeriodFormatter;
 import org.salamansar.oder.module.payments.dto.TaxRowDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -82,7 +83,6 @@ public class TaxController {
 	}
 	
 	private void setPaymentPeriod(PaymentPeriod period, Model model) {
-		model.addAttribute(TaxFormAttribute.SELECTED_YEAR.attributeName(), period.getYear());
-		model.addAttribute(TaxFormAttribute.SELECTED_QUARTER.attributeName(), period.getQuarter().asNumber());
+		model.addAttribute(TaxFormAttribute.PAYMENT_PERIOD_INFO.attributeName(), new PaymentPeriodFormatter(period));
 	}
 }

@@ -8,6 +8,7 @@ public enum TaxFormAttribute {
 	AVAILABLE_YEARS_LIST("years"),
 	TAX_SINGLE("tax"),
 	TAXES_LIST("taxes"),
+	PAYMENT_PERIOD_INFO("paymentPeriod"),
 	ROUND_UP_SIGN("roundUp"),
 	SELECTED_QUARTER("selectedQuarter"),
 	SELECTED_YEAR("selectedYear");

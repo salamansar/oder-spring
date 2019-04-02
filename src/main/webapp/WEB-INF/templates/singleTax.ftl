@@ -8,7 +8,7 @@
 		<script type="text/javascript">
 			function forwardWithParameters() {
 				roundUp = $("#roundUpCheckBox").is(":checked");
-				url = "/payments/taxes/${selectedYear?string.computer}/${selectedQuarter}";
+				url = "/payments/taxes/${paymentPeriod.year?string.computer}/${paymentPeriod.quarter}";
 				if(roundUp != undefined && roundUp) {
 					url += "?roundUp=true";
 				}
@@ -17,6 +17,7 @@
 		</script>
     </head>
     <body>
+		<h1>Налоговые платежи за период: ${paymentPeriod.formattedMessage}</h1>
 		<div>
 			<form>
 				<span>
@@ -30,10 +31,6 @@
 			</form>
 		</div>
         <table>
-            <tr>
-                <td>Квартал</td>
-				<td>${tax.paymentPeriodMessage}</td>
-			</tr>
 			<tr>
                 <td>Налоговая база</td>
 				<td>

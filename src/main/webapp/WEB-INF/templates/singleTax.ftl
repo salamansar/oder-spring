@@ -7,12 +7,8 @@
 		<script type="text/javascript" src="/lib/jquery-3.3.1.min.js"></script>
 		<script type="text/javascript">
 			function forwardWithParameters() {
-				year = $("#yearsSelector").val();
 				roundUp = $("#roundUpCheckBox").is(":checked");
-				url = "/payments/taxes";
-				if(year != undefined) {
-					url += "/" + year;
-				}
+				url = "/payments/taxes/${selectedYear?string.computer}/${selectedQuarter}";
 				if(roundUp != undefined && roundUp) {
 					url += "?roundUp=true";
 				}

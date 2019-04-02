@@ -19,6 +19,11 @@ public enum Quarter {
     Quarter(int value) {
         this.value = value;
     }
+	
+	public int asNumber() {
+		return value;
+	}
+	
     
 	public static Quarter fromNumber(int num) {
 		return EnumSet.allOf(Quarter.class).stream()

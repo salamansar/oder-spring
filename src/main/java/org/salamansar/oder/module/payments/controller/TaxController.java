@@ -54,28 +54,35 @@ public class TaxController {
 		//todo: check parameters
 		User user = new User(); //todo: deal with getting user process
 		user.setId(1L);
-		loadSingleTax(user, year, quarter, roundUp, model);
+		PaymentPeriod period = new PaymentPeriod(year, Quarter.fromNumber(quarter));
+		loadSingleTax(user, period, roundUp, model);
+		setPaymentPeriod(period, model);
 		return "singleTax";
 	}
 
 	private void loadTaxes(User user, Integer year, Model model, Boolean roundUp) {
 		List<TaxRowDto> taxRows = adapter.findAllTaxesForYear(user, year, roundUp != null && roundUp);
-		model.addAttribute(TaxFormAttribute.TAXES_LIST.getAttributeName(), taxRows);
-		model.addAttribute(TaxFormAttribute.ROUND_UP_SIGN.getAttributeName(), roundUp);
+		model.addAttribute(TaxFormAttribute.TAXES_LIST.attributeName(), taxRows);
+		model.addAttribute(TaxFormAttribute.ROUND_UP_SIGN.attributeName(), roundUp);
 	}
 
 	private void loadYears(User user, Integer year, Model model) {
-		model.addAttribute(TaxFormAttribute.SELECTED_YEAR.getAttributeName(), year);
-		model.addAttribute(TaxFormAttribute.AVAILABLE_YEARS_LIST.getAttributeName(), adapter.findYearsWithIncomes(user));
+		model.addAttribute(TaxFormAttribute.SELECTED_YEAR.attributeName(), year);
+		model.addAttribute(TaxFormAttribute.AVAILABLE_YEARS_LIST.attributeName(), adapter.findYearsWithIncomes(user));
 	}
 
-	private void loadSingleTax(User user, Integer year, Integer quarter, Boolean roundUp, Model model) {
+	private void loadSingleTax(User user, PaymentPeriod paymentPeriod, Boolean roundUp, Model model) {
 		TaxRowDto taxRow = adapter.findTaxForPeriod(
 				user,
-				new PaymentPeriod(year, Quarter.fromNumber(quarter)), 
+				paymentPeriod, 
 				roundUp != null && roundUp
 		);
-		model.addAttribute(TaxFormAttribute.TAX_SINGLE.getAttributeName(), taxRow);
-		model.addAttribute(TaxFormAttribute.ROUND_UP_SIGN.getAttributeName(), roundUp);
+		model.addAttribute(TaxFormAttribute.TAX_SINGLE.attributeName(), taxRow);
+		model.addAttribute(TaxFormAttribute.ROUND_UP_SIGN.attributeName(), roundUp);
+	}
+	
+	private void setPaymentPeriod(PaymentPeriod period, Model model) {
+		model.addAttribute(TaxFormAttribute.SELECTED_YEAR.attributeName(), period.getYear());
+		model.addAttribute(TaxFormAttribute.SELECTED_QUARTER.attributeName(), period.getQuarter().asNumber());
 	}
 }

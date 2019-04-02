@@ -9,6 +9,7 @@ public enum TaxFormAttribute {
 	TAX_SINGLE("tax"),
 	TAXES_LIST("taxes"),
 	ROUND_UP_SIGN("roundUp"),
+	SELECTED_QUARTER("selectedQuarter"),
 	SELECTED_YEAR("selectedYear");
 	
 	private final String attributeName;
@@ -17,7 +18,7 @@ public enum TaxFormAttribute {
 		this.attributeName = attributeName;
 	}
 
-	public String getAttributeName() {
+	public String attributeName() {
 		return attributeName;
 	}
 }

@@ -124,14 +124,15 @@ public class TaxAdapterImplTest {
 		DeductibleTax healthTax = generator.generate(DeductibleTax.class, TaxCategory.HEALTH_INSURANCE, new PaymentPeriod(year, Quarter.II));
 		DeductibleTax onePercentTax = generator.generate(DeductibleTax.class, TaxCategory.PENSION_PERCENT, new PaymentPeriod(year, Quarter.II));
 		QuarterIncome income = generator.generate(QuarterIncome.class, new PaymentPeriod(year, Quarter.YEAR));
+		PaymentPeriod period = new PaymentPeriod(year, Quarter.YEAR);
 		when(taxService.calculateDeductedTaxes(same(user), 
-				eq(new PaymentPeriod(year, Quarter.YEAR)), 
+				eq(period), 
 				eq(new TaxCalculationSettings().withRoundUp(true))))
 				.thenReturn(Arrays.asList(incomeTax, pensionTax, healthTax, onePercentTax));
-		when(incomeService.findSummaryYearIncome(same(user), eq(year)))
+		when(incomeService.findSingleIncome(same(user), eq(period)))
 				.thenReturn(income);
 		
-		TaxRowDto result = adapter.findSummarizedTaxesForYear(user, year, true);
+		TaxRowDto result = adapter.findTaxForPeriod(user, period, true);
 		
 		assertNotNull(result);		
 		assertNotNull(result.getPaymentPeriod());

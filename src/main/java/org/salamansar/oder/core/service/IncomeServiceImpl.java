@@ -58,8 +58,8 @@ public class IncomeServiceImpl implements IncomeService {
 	}
 
 	@Override
-	public QuarterIncome findSummaryYearIncome(User user, Integer year) {
-		List<QuarterIncome> incomes = findQuarterIncomes(user, new PaymentPeriod(year, Quarter.YEAR), false);
+	public QuarterIncome findSingleIncome(User user, PaymentPeriod period) {
+		List<QuarterIncome> incomes = findQuarterIncomes(user, period, false);
 		return incomes.isEmpty() ? null : incomes.get(0);
 	}
 

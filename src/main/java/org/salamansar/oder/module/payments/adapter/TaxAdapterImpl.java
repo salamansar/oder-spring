@@ -34,7 +34,7 @@ public class TaxAdapterImpl implements TaxAdapter {
 	public List<TaxRowDto> findAllTaxesForYear(User user, Integer year, boolean roundUp) {
 		List<TaxRowDto> quarterTaxes = findTaxesForYear(user, year, roundUp);
 		TaxRowDto summary = calculateSummary(quarterTaxes);
-		TaxRowDto allYear = findSummarizedTaxesForYear(user, year, roundUp);
+		TaxRowDto allYear = findTaxForPeriod(user, new PaymentPeriod(year, Quarter.YEAR), roundUp);
 		return ListBuilder.of(quarterTaxes)
 				.and(summary)
 				.and(allYear)
@@ -137,13 +137,12 @@ public class TaxAdapterImpl implements TaxAdapter {
 	}
 
 	@Override
-	public TaxRowDto findSummarizedTaxesForYear(User user, Integer year, boolean roundUp) {
-		PaymentPeriod paymentPeriod = new PaymentPeriod(year, Quarter.YEAR);
+	public TaxRowDto findTaxForPeriod(User user, PaymentPeriod paymentPeriod, boolean roundUp) {
 		TaxCalculationSettings settings = new TaxCalculationSettings()
 				.withRoundUp(roundUp);
 		List<DeductibleTax> taxDomains = taxService.calculateDeductedTaxes(user, paymentPeriod, settings);
 		TaxRowDto taxRow = mapToTaxRow(paymentPeriod, taxDomains);
-		QuarterIncome income = incomeService.findSummaryYearIncome(user, year);
+		QuarterIncome income = incomeService.findSingleIncome(user, paymentPeriod);
 		taxRow.setIncomesAmount(income == null ? null : income.getIncomeAmount());
 		return taxRow;
 	}

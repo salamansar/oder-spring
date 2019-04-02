@@ -167,14 +167,14 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 				.setParent(LocalDate.of(2018, Month.SEPTEMBER, 30))
 					.createObject(Income.class);
 
-		QuarterIncome result = incomeService.findSummaryYearIncome(user, 2018);
+		QuarterIncome result = incomeService.findSingleIncome(user, new PaymentPeriod(2018, Quarter.YEAR));
 
 		assertNotNull(result);
 		assertNotNull(result.getPeriod());
 		assertEquals(new PaymentPeriod(2018, Quarter.YEAR), result.getPeriod());
 		assertNotNull(result.getIncomeAmount());
 		
-		result = incomeService.findSummaryYearIncome(user, 2019);
+		result = incomeService.findSingleIncome(user, new PaymentPeriod(2019, Quarter.YEAR));
 		
 		assertNull(result);
 	}

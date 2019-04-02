@@ -1,6 +1,7 @@
 package org.salamansar.oder.module.payments.adapter;
 
 import java.util.List;
+import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.module.payments.dto.TaxRowDto;
 
@@ -14,7 +15,7 @@ public interface TaxAdapter {
 	
 	List<TaxRowDto> findTaxesForYear(User user, Integer year, boolean roundUp);
 	
-	TaxRowDto findSummarizedTaxesForYear(User user, Integer year, boolean roundUp);
+	TaxRowDto findTaxForPeriod(User user, PaymentPeriod period, boolean roundUp);
 	
 	List<Integer> findYearsWithIncomes(User user);
 }

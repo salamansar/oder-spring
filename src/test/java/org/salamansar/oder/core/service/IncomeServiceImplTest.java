@@ -122,11 +122,11 @@ public class IncomeServiceImplTest {
 		when(mapSrategy.map(eq(Collections.emptyList()))).thenReturn(Collections.emptyList());
 		when(mapSrategy.map(eq(Arrays.asList(income)))).thenReturn(Arrays.asList(quarterIncome));
 		
-		QuarterIncome result = service.findSummaryYearIncome(user, 2019);
+		QuarterIncome result = service.findSingleIncome(user, new PaymentPeriod(2019, Quarter.YEAR));
 		
 		assertNull(result);
 		
-		result = service.findSummaryYearIncome(user, 2018);
+		result = service.findSingleIncome(user, new PaymentPeriod(2018, Quarter.YEAR));
 
 		assertNotNull(result);
 		assertSame(quarterIncome, result);

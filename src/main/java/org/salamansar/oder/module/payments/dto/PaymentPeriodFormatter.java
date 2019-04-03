@@ -27,7 +27,7 @@ public class PaymentPeriodFormatter {
 	}
 
 	public Integer getQuarter() {
-		return paymentPeriod.getQuarter().asNumber();
+		return paymentPeriod.getQuarter().getNumberValue();
 	}
 	
 }

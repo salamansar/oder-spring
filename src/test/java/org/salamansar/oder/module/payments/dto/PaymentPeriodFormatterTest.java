@@ -36,7 +36,7 @@ public class PaymentPeriodFormatterTest {
 	
 	@Test
 	public void gettingQuarter() {
-		assertEquals(paymentPeriod.getQuarter().asNumber(), formatter.getQuarter().intValue());
+		assertEquals(paymentPeriod.getQuarter().getNumberValue(), formatter.getQuarter().intValue());
 	}
 	
 	@Test

@@ -21,6 +21,11 @@
 		<div>
 			<form>
 				<span>
+					<a href="/payments/taxes/${paymentPeriod.year?string.computer}">
+						К сетке налогов
+					</a>
+				</span>
+				<span>
 					Округлять вверх:
 					<input id="roundUpCheckBox" 
 							type="checkbox" 

@@ -20,7 +20,7 @@ public enum Quarter {
         this.value = value;
     }
 	
-	public int asNumber() {
+	public int getNumberValue() {
 		return value;
 	}
 	

@@ -44,6 +44,7 @@
 		</div>
         <table>
             <tr>
+				<td>&nbsp;</td>
                 <td>Квартал</td>
                 <td>Налоговая база</td>
                 <td>Начислено налога</td>
@@ -55,6 +56,15 @@
             </tr>
 			<#list taxes as tax>
 				<tr>
+					<td>
+						<#if tax.paymentPeriod??> 
+							<a href="/payments/taxes/${tax.paymentPeriod.year?string.computer}/${tax.paymentPeriod.quarter.numberValue}">
+								Подробнее
+							</a>
+                        <#else>
+                            &nbsp;
+                        </#if>
+					</td>
 					<td>${tax.paymentPeriodMessage}</td>
 					<td>
 						<#if tax.incomesAmount??> 

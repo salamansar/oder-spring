@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class PaymentPeriodTest {
 	
 	@Test
-	public void testMonthsForFirstQuarter() {
+	public void monthsForFirstQuarter() {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.I);
 		
 		assertEquals(Month.JANUARY, period.getStartMonth());
@@ -19,7 +19,7 @@ public class PaymentPeriodTest {
 	}
 	
 	@Test
-	public void testMonthsForSecondQuarter() {
+	public void monthsForSecondQuarter() {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.II);
 		
 		assertEquals(Month.APRIL, period.getStartMonth());
@@ -27,7 +27,7 @@ public class PaymentPeriodTest {
 	}
 	
 	@Test
-	public void testMonthsForThirdQuarter() {
+	public void monthsForThirdQuarter() {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.III);
 		
 		assertEquals(Month.JULY, period.getStartMonth());
@@ -35,7 +35,7 @@ public class PaymentPeriodTest {
 	}
 	
 	@Test
-	public void testMonthsForFourthQuarter() {
+	public void monthsForFourthQuarter() {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.IV);
 		
 		assertEquals(Month.OCTOBER, period.getStartMonth());
@@ -43,7 +43,7 @@ public class PaymentPeriodTest {
 	}
 	
 	@Test
-	public void testMonthsForYear() {
+	public void monthsForYear() {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
 		
 		assertEquals(Month.JANUARY, period.getStartMonth());
@@ -51,7 +51,7 @@ public class PaymentPeriodTest {
 	}
 	
 	@Test
-	public void testMonthsForNullValue() {
+	public void monthsForNullValue() {
 		PaymentPeriod period = new PaymentPeriod(2018, null);
 		
 		assertNull(period.getStartMonth());
@@ -59,7 +59,7 @@ public class PaymentPeriodTest {
 	}
 	
 	@Test
-	public void testAsQaurter() {
+	public void asQaurter() {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
 		
 		PaymentPeriod result = period.asQuarter(Quarter.III);
@@ -72,13 +72,39 @@ public class PaymentPeriodTest {
 	}
 	
 	@Test
-	public void testAsYear() {
+	public void asYear() {
 		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
 		
 		PaymentPeriod result = period.asYear(2016);
 		
 		assertNotSame(period, result);
 		assertEquals(2016, result.getYear().intValue());
+		assertEquals(2018, period.getYear().intValue());
+		assertEquals(Quarter.YEAR, result.getQuarter());
+		assertEquals(Quarter.YEAR, period.getQuarter());
+	}
+	
+	@Test
+	public void previousYear() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+
+		PaymentPeriod result = period.previousYear();
+
+		assertNotSame(period, result);
+		assertEquals(2017, result.getYear().intValue());
+		assertEquals(2018, period.getYear().intValue());
+		assertEquals(Quarter.YEAR, result.getQuarter());
+		assertEquals(Quarter.YEAR, period.getQuarter());
+	}
+	
+	@Test
+	public void nextYear() {
+		PaymentPeriod period = new PaymentPeriod(2018, Quarter.YEAR);
+
+		PaymentPeriod result = period.nextYear();
+
+		assertNotSame(period, result);
+		assertEquals(2019, result.getYear().intValue());
 		assertEquals(2018, period.getYear().intValue());
 		assertEquals(Quarter.YEAR, result.getQuarter());
 		assertEquals(Quarter.YEAR, period.getQuarter());

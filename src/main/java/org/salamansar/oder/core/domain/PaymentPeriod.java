@@ -59,4 +59,12 @@ public class PaymentPeriod {
 		return new PaymentPeriod(year, quarter);
 	}
 	
+	public PaymentPeriod previousYear() {
+		return new PaymentPeriod(year - 1, quarter);
+	}
+	
+	public PaymentPeriod nextYear() {
+		return new PaymentPeriod(year + 1, quarter);
+	}
+	
 }

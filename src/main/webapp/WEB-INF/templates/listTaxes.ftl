@@ -3,13 +3,29 @@
     <head>
         <title>Список налогов</title>
         <meta charset="UTF-8">
-		<link rel="stylesheet" type="text/css" href="/style.css">
-		<script type="text/javascript" src="/lib/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../style/style.css">
+		<link rel="stylesheet" type="text/css" href="../../style/jquery-ui-1.12.1.css">
+		<link rel="stylesheet" type="text/css" href="../../style/jquery-ui.theme-1.12.1.css">
+		<script type="text/javascript" src="../../lib/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="../../lib/jquery-ui-1.12.1.min.js"></script>
 		<script type="text/javascript">
+			$(function() {
+				$("#yearsSelector").selectmenu({
+					change: function(event, data) {
+						forwardWithParameters();
+					}
+				});
+				$("#roundUpCheckBox").checkboxradio({
+					change: function(event, data) {
+						forwardWithParameters();
+					}
+				});
+			});
+
 			function forwardWithParameters() {
 				year = $("#yearsSelector").val();
 				roundUp = $("#roundUpCheckBox").is(":checked");
-				url = "/payments/taxes";
+				url = ".";
 				if(year != undefined) {
 					url += "/" + year;
 				}
@@ -25,7 +41,7 @@
 			<form>
 				<span>
 					Год: 
-					<select id="yearsSelector" onchange="forwardWithParameters()">
+					<select id="yearsSelector" class="ui-widget">
 						<option style="display:none;"></option>
 						<#list years as year>
 							<option value="${year?string.computer}" <#if year == selectedYear>selected="true"</#if>>${year?string.computer}</option>
@@ -35,8 +51,8 @@
 				<span>
 					Округлять вверх:
 					<input id="roundUpCheckBox" 
+							class="ui-widget"
 							type="checkbox" 
-							onchange="forwardWithParameters()"
 							<#if roundUp?? && roundUp>checked="true"</#if>
 						/>
 				</span>

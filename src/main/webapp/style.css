@@ -5,3 +5,52 @@ table, td {
 table {
 	border-collapse: collapse;
 }
+
+.widgetsLine {
+	margin: 10px;
+}
+
+.widgetsLine span {
+	margin: 0 10px;
+}
+
+.comboBox {
+	position: relative;
+	width: 150px;
+	display: inline-block;
+}
+
+.comboBox select {
+	background-color: #FFFFA3;
+	width: 150px;
+	border: 1px solid #8F8F0D;
+	color: #8F8F0D;
+	font-size: 14px;
+	padding: 5px;
+	display: box;
+	-webkit-appearance: button;
+	appearance: button;
+}
+
+.comboBox::after {
+	content: '\25BC';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #B5B526;
+	pointer-events: none;
+	padding: 5px 10px;
+	color: #8F8F0D;
+}
+
+.comboBox:hover::after {
+	background-color: #8F8F0D;
+	color: #B5B526;
+}
+
+.color-primary-0 { color: #D3D347 }	/* Main Primary color */
+.color-primary-1 { color: #FFFFA3 }
+.color-primary-2 { color: #F5F573 }
+.color-primary-3 { color: #B5B526 }
+.color-primary-4 { color: #8F8F0D }

@@ -21,24 +21,26 @@
 		</script>
     </head>
     <body>
-		<div>
+		<div class="widgetsLine">
 			<form>
 				<span>
-					Год: 
-					<select id="yearsSelector" onchange="forwardWithParameters()">
-						<option style="display:none;"></option>
-						<#list years as year>
-							<option value="${year?string.computer}" <#if year == selectedYear>selected="true"</#if>>${year?string.computer}</option>
-						</#list>
-					</select>
-				</span>
+					<label for="yearsSelector">Год</label> 
+					<div class="comboBox">
+						<select id="yearsSelector" onchange="forwardWithParameters()">
+							<option style="display:none;"></option>
+							<#list years as year>
+								<option value="${year?string.computer}" <#if year == selectedYear>selected="true"</#if>>${year?string.computer}</option>
+							</#list>
+						</select>
+					</div>
 				<span>
-					Округлять вверх:
+				<span>
 					<input id="roundUpCheckBox" 
 							type="checkbox" 
 							onchange="forwardWithParameters()"
 							<#if roundUp?? && roundUp>checked="true"</#if>
 						/>
+					<label for="roundUpCheckBox">Округлять вверх</label>
 				</span>
 			</form>
 		</div>

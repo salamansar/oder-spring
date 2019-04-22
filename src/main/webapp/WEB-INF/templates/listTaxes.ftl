@@ -35,12 +35,14 @@
 					</div>
 				<span>
 				<span>
-					<input id="roundUpCheckBox" 
-							type="checkbox" 
-							onchange="forwardWithParameters()"
-							<#if roundUp?? && roundUp>checked="true"</#if>
-						/>
-					<label for="roundUpCheckBox">Округлять вверх</label>
+					<div class="checkBox">
+						<input id="roundUpCheckBox" 
+								type="checkbox" 
+								onchange="forwardWithParameters()"
+								<#if roundUp?? && roundUp>checked="true"</#if>
+							/>
+						<label for="roundUpCheckBox">Округлять вверх</label>
+					</div>
 				</span>
 			</form>
 		</div>

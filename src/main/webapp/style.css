@@ -3,12 +3,22 @@ body {
 	font-size: 0.95em;
 }
 
-table, td {	
-	border: 1px black solid;
+td {	
+	background: #FFFFA3;
+	min-width: 80px;
+}
+
+th {
+	background: #D3D347;
+	text-align: center;
+}
+
+td, th {
+	padding: 3px 6px;
 }
 
 table {
-	border-collapse: collapse;
+	border-spacing: 5px;
 }
 
 .widgetsLine {

@@ -19,10 +19,43 @@ td, th {
 
 table {
 	border-spacing: 5px;
+	margin: 0 auto;
 }
 
 .widgetsLine {
-	margin: 10px;
+	margin: 10px 10px 10px 0;
+	vertical-align: middle;
+}
+
+.page {
+	margin: 0 auto;
+	width: 1024px;
+}
+
+.header {
+	background-color: #FFFFA3;
+	border: 1px #D3D347 solid;
+	
+}
+
+.logo {
+	width: 64px;
+	height: 64px;
+	padding: 5px 10px; 
+	vertical-align: middle;
+}
+
+.menu {
+	margin: 0 5px;
+	
+}
+
+.menu a, .menu a:visited {
+	color: #B5B526;
+}
+
+.menu a:hover {
+	color: #8F8F0D
 }
 
 /*---combobox-------*/
@@ -121,6 +154,8 @@ table {
 	background: #FFFFA3;
 	color: #8F8F0D;
 	padding: 3px 6px;
+	border: 1px #D3D347 solid;
+	vertical-align: top;
 }
 
 .color-primary-0 { color: #D3D347 }	/* Main Primary color */

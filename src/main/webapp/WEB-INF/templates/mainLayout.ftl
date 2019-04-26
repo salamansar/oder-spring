@@ -12,17 +12,25 @@
     <body>
 		<div class="page">
 			<div class="header">
-				<span>
+				<div>
 					<a href="/index.html"> 
 						<img src="/img/logo.png" class="logo"/>
 					</a>
-				</span>
-				<span class="menu">
-					<a href="payments/incomes/list">Доходы</a>
-				</span>
-				<span class="menu">
-					<a href="payments/taxes">Налоги</a>
-				</span>
+				</div>
+				<div class="menu">
+					<a href="/payments/incomes/list">
+						<div class="linkWrapper">
+							Доходы
+						</div>
+					</a>
+				</div>
+				<div class="menu">
+					<a href="/payments/taxes">
+						<div class="linkWrapper">
+							Налоги
+						</div>
+					</a>
+				</div>
 			</div>
 			<div class="content"> 
 				<#nested/>

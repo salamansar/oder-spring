@@ -35,7 +35,11 @@ table {
 .header {
 	background-color: #FFFFA3;
 	border: 1px #D3D347 solid;
-	
+	height: 74px;
+}
+
+.header div {
+	display: inline-block;
 }
 
 .logo {
@@ -46,16 +50,31 @@ table {
 }
 
 .menu {
-	margin: 0 5px;
-	
+	height: 64px;
+	line-height: 64px;
+	padding: 0 5px;
+	border-left: 1px #D3D347 solid;
+}
+
+a {
+	text-decoration: none;
 }
 
 .menu a, .menu a:visited {
 	color: #B5B526;
+	vertical-align: middle;
 }
 
 .menu a:hover {
 	color: #8F8F0D
+}
+
+.linkWrapper {
+	height: 100%;
+}
+
+.linkWrapper:hover {
+	border-bottom: 2px #8F8F0D solid;
 }
 
 /*---combobox-------*/

@@ -183,8 +183,7 @@ a {
 }
 
 .button input:hover {
-	transform: translateY(-1px) translateX(-1px);
-	background: #D3D347
+	transform: translateY(-1px) translateX(1px);
 }
 /*-----widgets common----*/
 .checkBox, .comboBox, .button {

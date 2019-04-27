@@ -45,7 +45,7 @@ table {
 .logo {
 	width: 64px;
 	height: 64px;
-	padding: 5px 10px; 
+	padding: 5px 20px; 
 	vertical-align: middle;
 }
 
@@ -66,7 +66,7 @@ a {
 }
 
 .menu a:hover {
-	color: #8F8F0D
+	color: #8F8F0D;
 }
 
 .linkWrapper {
@@ -74,6 +74,11 @@ a {
 }
 
 .linkWrapper:hover {
+	border-bottom: 2px #8F8F0D solid;
+}
+
+.linkWrapper.selected {
+	color: #8F8F0D;
 	border-bottom: 2px #8F8F0D solid;
 }
 

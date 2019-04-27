@@ -1,7 +1,8 @@
 <#import "mainLayout.ftl" as layout>
 <@layout.mainLayout 
 	title="Список налогов"
-	headSection="listTaxesHead.ftl">
+	headSection="listTaxesHead.ftl"
+	selectedTab="taxes">
 
 	<div class="widgetsLine">
 		<form>

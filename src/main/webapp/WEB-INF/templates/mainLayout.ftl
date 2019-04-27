@@ -1,4 +1,4 @@
-<#macro mainLayout title headSection="">
+<#macro mainLayout title headSection="" selectedTab="">
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,16 +17,16 @@
 						<img src="/img/logo.png" class="logo"/>
 					</a>
 				</div>
-				<div class="menu">
+				<div class='menu'>
 					<a href="/payments/incomes/list">
-						<div class="linkWrapper">
+						<div class='linkWrapper <#if selectedTab="incomes">selected</#if>'>
 							Доходы
 						</div>
 					</a>
 				</div>
-				<div class="menu">
+				<div class='menu'>
 					<a href="/payments/taxes">
-						<div class="linkWrapper">
+						<div class='linkWrapper <#if selectedTab="taxes">selected</#if>'>
 							Налоги
 						</div>
 					</a>

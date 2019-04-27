@@ -20,6 +20,7 @@ td, th {
 table {
 	border-spacing: 5px;
 	margin: 0 auto;
+	min-width: 600px;
 }
 
 .widgetsLine {
@@ -29,7 +30,8 @@ table {
 
 .page {
 	margin: 0 auto;
-	width: 1024px;
+	min-width: 1024px;
+	display: table;
 }
 
 .header {
@@ -171,8 +173,21 @@ a {
 	opacity:0.5;
 }
 
+/*----------button-------------*/
+.button input {
+	background: none;
+	border: 1px solid #8F8F0D;
+	font: inherit;
+	color: #8F8F0D;
+	margin: 2px 0;
+}
+
+.button input:hover {
+	transform: translateY(-1px) translateX(-1px);
+	background: #D3D347
+}
 /*-----widgets common----*/
-.checkBox, .comboBox {
+.checkBox, .comboBox, .button {
 	display: inline-block;
 	position:relative;
 	background: #FFFFA3;

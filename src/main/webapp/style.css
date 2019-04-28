@@ -3,6 +3,10 @@ body {
 	font-size: 0.95em;
 }
 
+h1 {
+	text-align: center;
+}
+
 td {	
 	background: #FFFFA3;
 	min-width: 80px;
@@ -180,6 +184,7 @@ a {
 	font: inherit;
 	color: #8F8F0D;
 	margin: 2px 0;
+	cursor: pointer;
 }
 
 .button input:hover {

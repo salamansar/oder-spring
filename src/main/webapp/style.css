@@ -140,6 +140,7 @@ a {
 	vertical-align: middle;
 	transition: background 0.3s;
 	box-sizing:border-box;
+	cursor: pointer;
 }
 
 .checkBox input[type="checkbox"]::after {
@@ -191,7 +192,7 @@ a {
 	transform: translateY(-1px) translateX(1px);
 }
 /*-----widgets common----*/
-.checkBox, .comboBox, .button {
+.checkBox, .comboBox, .button, .messageWidget {
 	display: inline-block;
 	position:relative;
 	background: #FFFFA3;
@@ -199,6 +200,11 @@ a {
 	padding: 3px 6px;
 	border: 1px #D3D347 solid;
 	vertical-align: top;
+}
+
+/*-----------message-----------*/
+.paymentPeriod {
+	font-weight: bolder; 
 }
 
 .color-primary-0 { color: #D3D347 }	/* Main Primary color */

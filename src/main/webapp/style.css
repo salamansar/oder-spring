@@ -27,6 +27,21 @@ table {
 	min-width: 600px;
 }
 
+.taxesList tr:hover td {
+	background: #F5F573;
+}
+
+.row-tooltip {
+	position: absolute;
+	margin-left: -100px;
+	display: none;
+	width: 200px;
+}
+
+.taxesList tr:hover .row-tooltip {
+	display: inline;
+}
+
 .widgetsLine {
 	margin: 10px 10px 10px 0;
 	vertical-align: middle;
@@ -66,12 +81,12 @@ a {
 	text-decoration: none;
 }
 
-.menu a, .menu a:visited {
+a, a:visited {
 	color: #B5B526;
 	vertical-align: middle;
 }
 
-.menu a:hover {
+a:hover {
 	color: #8F8F0D;
 }
 
@@ -221,6 +236,7 @@ a {
 	text-align: right;
 }
 
+.color-primary-0 { color: #D3D347 }	/* Main Primary color */
 .color-primary-1 { color: #FFFFA3 }
 .color-primary-2 { color: #F5F573 }
 .color-primary-3 { color: #B5B526 }

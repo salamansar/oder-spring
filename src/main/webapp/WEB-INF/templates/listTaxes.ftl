@@ -31,9 +31,8 @@
 			</span>
 		</form>
 	</div>
-	<table>
+	<table class="taxesList">
 		<tr>
-			<th></th>
 			<th>Квартал</th>
 			<th>Налоговая база</th>
 			<th>Начислено налога</th>
@@ -47,14 +46,14 @@
 			<tr>
 				<td>
 					<#if tax.paymentPeriod??> 
-						<a href="/payments/taxes/${tax.paymentPeriod.year?string.computer}/${tax.paymentPeriod.quarter.numberValue}">
-							Подробнее
-						</a>
-					<#else>
-						&nbsp;
+						<span class="row-tooltip">
+							<a href="/payments/taxes/${tax.paymentPeriod.year?string.computer}/${tax.paymentPeriod.quarter.numberValue}">
+								Подробнее
+							</a>
+						</span>
 					</#if>
+					${tax.paymentPeriodMessage}
 				</td>
-				<td>${tax.paymentPeriodMessage}</td>
 				<td>
 					<#if tax.incomesAmount??> 
 						${tax.incomesAmount}

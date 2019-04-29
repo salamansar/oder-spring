@@ -186,6 +186,7 @@ a {
 	color: #8F8F0D;
 	margin: 2px 0;
 	cursor: pointer;
+	min-width: 120px;
 }
 
 .button input:hover {
@@ -207,7 +208,19 @@ a {
 	font-weight: bolder; 
 }
 
-.color-primary-0 { color: #D3D347 }	/* Main Primary color */
+/*input form*/
+.inputForm table {
+	min-width: 400px;	
+}
+
+.inputForm input[type="text"], .inputForm input[type="date"] {
+	width: 200px;
+}
+
+.inputForm td:first-child {
+	text-align: right;
+}
+
 .color-primary-1 { color: #FFFFA3 }
 .color-primary-2 { color: #F5F573 }
 .color-primary-3 { color: #B5B526 }

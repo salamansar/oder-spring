@@ -6,11 +6,11 @@
 
 	<div class="widgetsLine">
 		<form>
-			<span>
+			<div class="back-arrow-wrapper">
 				<a href="/payments/taxes/${paymentPeriod.year?string.computer}">
-					К сетке налогов
+					<div class="back-arrow"></div>
 				</a>
-			</span>
+			</div>
 			<div class="messageWidget">
 				Период: <span class="paymentPeriod">${paymentPeriod.formattedMessage}</span>
 			</div>

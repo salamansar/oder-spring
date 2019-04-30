@@ -103,6 +103,36 @@ a:hover {
 	border-bottom: 2px #8F8F0D solid;
 }
 
+.back-arrow-wrapper {
+	display: inline-block;
+	line-height: 20px;
+	background: #FFFFA3;
+	border: 1px #D3D347 solid;
+	padding: 5px 5px 5px 15px;
+}
+
+.back-arrow {
+	width: 20px;
+	height: 20px;
+	border-width: 2px 0 0 2px;
+	border-color: #B5B526;
+	border-style: solid;
+	display: inline-block;
+	transform: rotate(-45deg);
+	vertical-align: middle;
+}
+
+.back-arrow:hover {
+	border-width: 3px 0 0 3px;
+	border-color: #8F8F0D;
+	width: 19px;
+	height: 19px;
+}
+
+.back-arrow:active {
+	transform: rotate(-45deg) translateX(1px) translateY(1px) scale(0.9);
+}
+
 /*---combobox-------*/
 
 .comboBox span {
@@ -216,6 +246,7 @@ a:hover {
 	padding: 3px 6px;
 	border: 1px #D3D347 solid;
 	vertical-align: top;
+	min-height: 30px;
 }
 
 /*-----------message-----------*/

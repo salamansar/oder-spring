@@ -254,13 +254,15 @@ a:hover {
 	font-weight: bolder; 
 }
 
-/*input form*/
+/*-------input form------------*/
 .inputForm table {
 	min-width: 400px;	
 }
 
 .inputForm input[type="text"], .inputForm input[type="date"] {
 	width: 200px;
+	background-color: #F5F573;
+	border: 1px #D3D347 solid;
 }
 
 .inputForm td:first-child {

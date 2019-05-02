@@ -13,6 +13,8 @@ import org.salamansar.oder.core.domain.User;
 public interface IncomeService {
     List<Income> getAllIncomes(User user);
     
+	Income getIncome(Long id);
+	
     Long addIncome(Income income);
 	
 	List<Income> findIncomes(User user, PaymentPeriod period);

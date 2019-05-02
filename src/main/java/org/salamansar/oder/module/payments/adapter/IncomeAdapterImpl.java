@@ -35,5 +35,16 @@ public class IncomeAdapterImpl implements IncomeAdapter {
 		domain.setUser(user);
 		return incomeService.addIncome(domain);
 	}
+
+	@Override
+	public IncomeDto getIncome(User user, Long id) {
+		Income storedIncome = incomeService.getIncome(id);
+		if(storedIncome != null && user.getId().equals(storedIncome.getUser().getId())) {
+			return incomeMapper.mapToDto(storedIncome);
+		} else {
+			//todo: throw illegal access exception
+			return null;
+		}
+	}
 	
 }

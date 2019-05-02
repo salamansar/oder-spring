@@ -12,6 +12,8 @@ import org.springframework.data.repository.CrudRepository;
  * @author Salamansar
  */
 public interface IncomeDao extends CrudRepository<Income, Long> {
+	
+	Income getIncomeById(Long id);
 
 	List<Income> findIncomeByUserOrderByIncomeDateDesc(User user);
 

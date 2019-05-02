@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -52,4 +53,13 @@ public class IncomeController {//todo: unit test
         return "listIncomes";
     }
     
+	@GetMapping("edit/{id}")
+	public String editIncomeForm(@PathVariable("id") Long id, Model model) {
+		User user = new User(); //todo: replace with getting from auth context
+		user.setId(1L);
+		IncomeDto income = incomeAdapter.getIncome(user, id);
+		model.addAttribute("income", income);
+		model.addAttribute("mode", "edit");
+		return "addIncome";
+	}
 }

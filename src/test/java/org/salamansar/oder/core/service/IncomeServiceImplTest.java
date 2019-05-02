@@ -58,6 +58,18 @@ public class IncomeServiceImplTest {
 		assertEquals(1, result.size());
 		assertSame(income, result.get(0));
 	}
+	
+	@Test
+	public void testGetIncomeById() {
+		Income income = generator.generate(Income.class);
+		when(incomeDao.getIncomeById(income.getId())).thenReturn(income);
+		
+		Income result = service.getIncome(income.getId());
+		
+		assertNotNull(result);
+		assertSame(income, result);
+	}
+	
 
 	@Test
 	public void testAddIncome() {

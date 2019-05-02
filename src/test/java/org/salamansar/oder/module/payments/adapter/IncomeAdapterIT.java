@@ -88,4 +88,26 @@ public class IncomeAdapterIT extends AbstractPaymentModuleIntegrationTest {
 		assertNotNull(domain.getIncomeDate());
 	}
 	
+	@Test
+	public void getIncome() {
+		transactionTemplate.execute(ts -> {
+			envBuilder.setParent(LocalDate.now())
+					.createObject(Income.class).alias("income");
+			return null;
+		});
+		Income income = envBuilder.getEnvironment().getByAlias("income");
+		
+		IncomeDto result = adapter.getIncome(user, income.getId());
+		
+		checkIncomeDto(income, result);
+	}
+	
+	@Test
+	public void getIncomeWithNotExistsDomain() {
+		IncomeDto result = adapter.getIncome(user, -1L);
+
+		assertNull(result);
+	}
+	
+	
 }

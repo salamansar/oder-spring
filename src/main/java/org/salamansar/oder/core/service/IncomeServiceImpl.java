@@ -9,7 +9,6 @@ import org.salamansar.oder.core.component.QuarterIncomeMapStrategy;
 import org.salamansar.oder.core.dao.IncomeDao;
 import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
-import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +28,13 @@ public class IncomeServiceImpl implements IncomeService {
 	private QuarterIncomeMapStartegyFactory quarterInocomeMapFactory;
 
 	@Override
-	@Transactional
 	public List<Income> getAllIncomes(User user) {
 		return incomeDao.findIncomeByUserOrderByIncomeDateDesc(user);
+	}
+
+	@Override
+	public Income getIncome(Long id) {
+		return incomeDao.getIncomeById(id);
 	}
 
 	@Override

@@ -13,4 +13,6 @@ public interface IncomeAdapter {
 	List<IncomeDto> getAllIncomes(User user);
 	
 	Long addIncome(User user, IncomeDto dto);
+	
+	IncomeDto getIncome(User user, Long id);
 }

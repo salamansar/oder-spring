@@ -52,6 +52,18 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 
 		assertNotNull(newId);
 	}
+	
+	@Test
+	public void getIncome() {
+		envBuilder.setParent(LocalDate.now())
+				.createObject(Income.class).alias("income");
+		Income income = envBuilder.getEnvironment().getByAlias("income");
+		
+		Income result = incomeService.getIncome(income.getId());
+		
+		assertNotNull(result);		
+	}
+	
 
 	@Test
 	public void getAllIncomes() {

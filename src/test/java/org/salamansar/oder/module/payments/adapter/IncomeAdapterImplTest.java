@@ -67,4 +67,29 @@ public class IncomeAdapterImplTest {
 		assertSame(user, domain.getUser());
 	}
 	
+	@Test
+	public void getIncome() {
+		IncomeDto dto = generator.generate(IncomeDto.class);
+		Income domain = generator.generate(Income.class, user);
+		when(incomeMapper.mapToDto(eq(domain))).thenReturn(dto);
+		when(incomeService.getIncome(eq(domain.getId()))).thenReturn(domain);
+		
+		IncomeDto result = adapter.getIncome(user, domain.getId());
+		
+		assertNotNull(result);
+		assertSame(dto, result);
+	}
+	
+	@Test
+	public void notFoundIncomeOnGetting() {
+		IncomeDto dto = generator.generate(IncomeDto.class);
+		Income domain = generator.generate(Income.class, user);
+		when(incomeMapper.mapToDto(eq(domain))).thenReturn(dto);
+		
+		IncomeDto result = adapter.getIncome(user, domain.getId());
+		
+		assertNull(result);
+	}
+	
+	
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 import org.envbuild.environment.DbEnvironmentBuilder;
 import org.junit.Before;
 import org.junit.Test;
@@ -54,14 +55,28 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 	}
 	
 	@Test
+	public void updateIncome() {
+		envBuilder.setParent(LocalDate.now())
+				.createObject(Income.class).alias("income");
+		Income income = envBuilder.getEnvironment().getByAlias("income");
+		income.setDocumentNumber(333);
+		
+		incomeService.updateIncome(income);
+
+		Income updated = entityManager.find(Income.class, income.getId());
+		assertEquals(333, updated.getDocumentNumber().intValue());
+	}
+	
+	@Test
 	public void getIncome() {
 		envBuilder.setParent(LocalDate.now())
 				.createObject(Income.class).alias("income");
 		Income income = envBuilder.getEnvironment().getByAlias("income");
 		
-		Income result = incomeService.getIncome(income.getId());
+		Optional<Income> result = incomeService.getIncome(income.getId());
 		
-		assertNotNull(result);		
+		assertNotNull(result);
+		assertTrue(result.isPresent());
 	}
 	
 

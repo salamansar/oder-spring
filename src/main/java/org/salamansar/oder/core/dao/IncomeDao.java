@@ -13,8 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface IncomeDao extends CrudRepository<Income, Long> {
 	
-	Income getIncomeById(Long id);
-
 	List<Income> findIncomeByUserOrderByIncomeDateDesc(User user);
 
 	List<Income> findIncomeByUserAndIncomeDateBetween(User user, LocalDate dateFrom, LocalDate dateTo);

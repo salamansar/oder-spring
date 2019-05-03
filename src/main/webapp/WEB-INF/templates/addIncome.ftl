@@ -9,7 +9,7 @@
 			<table>
 				<tr>
 					<td>Номер платежа</td>
-					<td><input type="text" name="documentNumber" <#if income?? && income.documentNumber??>value="${income.documentNumber}"</#if> /></td>
+					<td><input type="text" name="documentNumber" <#if income?? && income.documentNumber??>value="${income.documentNumber?string.computer}"</#if> /></td>
 				</tr>
 				<tr>
 					<td>Дата платежа</td>
@@ -17,7 +17,7 @@
 				</tr>
 				<tr>
 					<td>Сумма платежа</td>
-					<td><input name="amount" type="text" <#if income?? && income.amount??>value="${income.amount}"</#if> /></td>
+					<td><input name="amount" type="text" <#if income?? && income.amount??>value="${income.amount?string.computer}"</#if> /></td>
 				</tr>
 				<tr>
 					<td>Описание</td>

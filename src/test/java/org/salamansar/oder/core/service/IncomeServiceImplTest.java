@@ -5,6 +5,7 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.envbuild.generator.RandomGenerator;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -62,12 +63,13 @@ public class IncomeServiceImplTest {
 	@Test
 	public void testGetIncomeById() {
 		Income income = generator.generate(Income.class);
-		when(incomeDao.getIncomeById(income.getId())).thenReturn(income);
+		when(incomeDao.findById(income.getId())).thenReturn(Optional.of(income));
 		
-		Income result = service.getIncome(income.getId());
+		Optional<Income> result = service.getIncome(income.getId());
 		
 		assertNotNull(result);
-		assertSame(income, result);
+		assertTrue(result.isPresent());
+		assertSame(income, result.get());
 	}
 	
 
@@ -79,6 +81,16 @@ public class IncomeServiceImplTest {
 		service.addIncome(income);
 		
 		assertNull(income.getId());
+	}
+	
+	@Test
+	public void testUpdateIncome() {
+		Income income = generator.generate(Income.class);
+		when(incomeDao.save(same(income))).thenReturn(income);
+		
+		service.updateIncome(income);
+		
+		verify(incomeDao).save(same(income));
 	}
 
 	@Test

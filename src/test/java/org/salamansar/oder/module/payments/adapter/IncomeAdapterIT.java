@@ -79,6 +79,27 @@ public class IncomeAdapterIT extends AbstractPaymentModuleIntegrationTest {
 		assertNotNull(domain);
 		checkDomain(dto, domain);
 	}
+	
+	@Test
+	public void editIncome() {
+		transactionTemplate.execute(ts -> {
+			envBuilder.setParent(LocalDate.now())
+					.createObject(Income.class).alias("income");
+			return null;
+		});
+		Income domain = envBuilder.getEnvironment().getByAlias("income");
+		IncomeDto dto = envBuilder.getRandomGenerator().generate(IncomeDto.class);
+		dto.setId(domain.getId());
+		
+		adapter.editIncome(user, dto);
+		
+		Income updated = transactionTemplate.execute(ts -> {			
+			return entityManager.find(Income.class, domain.getId());
+		});
+		
+		assertNotNull(updated);
+		checkDomain(dto, updated);
+	}
 
 	private void checkDomain(IncomeDto dto, Income domain) {
 		assertNotNull(domain.getId());

@@ -3,6 +3,7 @@ package org.salamansar.oder.core.service;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.salamansar.oder.core.component.QuarterIncomeMapStartegyFactory;
 import org.salamansar.oder.core.component.QuarterIncomeMapStrategy;
@@ -33,8 +34,8 @@ public class IncomeServiceImpl implements IncomeService {
 	}
 
 	@Override
-	public Income getIncome(Long id) {
-		return incomeDao.getIncomeById(id);
+	public Optional<Income> getIncome(Long id) {
+		return incomeDao.findById(id);
 	}
 
 	@Override
@@ -43,6 +44,12 @@ public class IncomeServiceImpl implements IncomeService {
 		income.setId(null);
 		Income savedIncome = incomeDao.save(income);
 		return savedIncome.getId();
+	}
+
+	@Override
+	@Transactional
+	public void updateIncome(Income income) {
+		incomeDao.save(income);
 	}
 
 	@Override

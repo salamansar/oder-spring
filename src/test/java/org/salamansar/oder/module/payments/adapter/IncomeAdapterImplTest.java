@@ -2,6 +2,7 @@ package org.salamansar.oder.module.payments.adapter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import org.envbuild.generator.RandomGenerator;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -68,11 +69,23 @@ public class IncomeAdapterImplTest {
 	}
 	
 	@Test
+	public void updateIncome() {
+		IncomeDto dto = generator.generate(IncomeDto.class);
+		Income domain = generator.generate(Income.class, user);
+		when(incomeMapper.mapFromDto(eq(dto))).thenReturn(domain);
+
+		adapter.editIncome(user, dto);
+
+		verify(incomeService).updateIncome(same(domain));
+		assertSame(user, domain.getUser());
+	}
+	
+	@Test
 	public void getIncome() {
 		IncomeDto dto = generator.generate(IncomeDto.class);
 		Income domain = generator.generate(Income.class, user);
 		when(incomeMapper.mapToDto(eq(domain))).thenReturn(dto);
-		when(incomeService.getIncome(eq(domain.getId()))).thenReturn(domain);
+		when(incomeService.getIncome(eq(domain.getId()))).thenReturn(Optional.of(domain));
 		
 		IncomeDto result = adapter.getIncome(user, domain.getId());
 		
@@ -85,6 +98,7 @@ public class IncomeAdapterImplTest {
 		IncomeDto dto = generator.generate(IncomeDto.class);
 		Income domain = generator.generate(Income.class, user);
 		when(incomeMapper.mapToDto(eq(domain))).thenReturn(dto);
+		when(incomeService.getIncome(eq(domain.getId()))).thenReturn(Optional.empty());
 		
 		IncomeDto result = adapter.getIncome(user, domain.getId());
 		

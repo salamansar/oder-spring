@@ -1,6 +1,7 @@
 package org.salamansar.oder.module.payments.adapter;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.salamansar.oder.core.adapter.Adapter;
 import org.salamansar.oder.core.domain.Income;
@@ -37,14 +38,19 @@ public class IncomeAdapterImpl implements IncomeAdapter {
 	}
 
 	@Override
+	public void editIncome(User user, IncomeDto dto) {
+		Income domain = incomeMapper.mapFromDto(dto);
+		domain.setUser(user);
+		incomeService.updateIncome(domain);
+	}
+	
+	@Override
 	public IncomeDto getIncome(User user, Long id) {
-		Income storedIncome = incomeService.getIncome(id);
-		if(storedIncome != null && user.getId().equals(storedIncome.getUser().getId())) {
-			return incomeMapper.mapToDto(storedIncome);
-		} else {
-			//todo: throw illegal access exception
-			return null;
-		}
+		Optional<Income> storedIncome = incomeService.getIncome(id);
+		return storedIncome.map(income -> {
+				//todo: throw illegal access exception
+				return incomeMapper.mapToDto(income);
+		}).orElse(null);
 	}
 	
 }

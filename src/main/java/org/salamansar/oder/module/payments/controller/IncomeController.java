@@ -62,4 +62,16 @@ public class IncomeController {//todo: unit test
 		model.addAttribute("mode", "edit");
 		return "addIncome";
 	}
+	
+	@PostMapping("edit/{id}")
+	public String editIncome(@ModelAttribute IncomeDto income, @PathVariable("id") Long id) {
+		String json = jsonMarshaller.toJsonString(income);
+		income.setId(id);
+		log.info("Income editing received: " + json);
+		User user = new User(); //todo: receive user from auth context
+		user.setId(1L);
+		//todo: check data before saving
+		incomeAdapter.editIncome(user, income);
+		return "redirect:../list";
+	}
 }

@@ -27,19 +27,30 @@ table {
 	min-width: 600px;
 }
 
-.taxesList tr:hover td {
+.dataTable tr:hover td {
 	background: #F5F573;
 }
 
 .row-tooltip {
 	position: absolute;
-	margin-left: -100px;
-	display: none;
+	visibility: hidden;
 	width: 200px;
+	display: inline-block;
 }
 
-.taxesList tr:hover .row-tooltip {
-	display: inline;
+#taxesList .row-tooltip {
+	margin-left: -100px;
+}
+
+.dataTable tr:hover .row-tooltip {
+	transition: visibility 0s linear 0.8s;
+	-webkit-transition: visibility 0s linear 0.8s;
+	visibility: visible;
+}
+
+#incomesList tr:hover .row-tooltip {
+	margin-left: -120px;
+	margin-top: -15px;
 }
 
 .widgetsLine {

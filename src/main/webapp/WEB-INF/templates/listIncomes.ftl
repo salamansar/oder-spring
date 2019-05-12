@@ -10,7 +10,7 @@
 			</div>
 		</form>
 	</div>
-	<table>
+	<table id="incomesList" class="dataTable">
 		<tr>
 			<th>Номер платежа</th>
 			<th>Дата платежа</th>
@@ -19,7 +19,20 @@
 		</tr>      
 		<#list incomes as income>
 			<tr>
-				<td>${income.documentNumber}</td>
+				<td>${income.documentNumber}
+					<div class="row-tooltip">
+						<div>
+							<a href="/payments/incomes/edit/${income.id}">
+								Изменить
+							</a>
+						</div>
+						<div>
+							<a href="/payments/taxes/">
+								Удалить
+							</a>
+						</div>
+					</div>
+				</td>
 				<td>${income.incomeDate?date}</td>
 				<td>${income.amount}</td>
 				<td>

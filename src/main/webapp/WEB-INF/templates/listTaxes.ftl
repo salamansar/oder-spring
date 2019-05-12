@@ -31,7 +31,7 @@
 			</span>
 		</form>
 	</div>
-	<table class="taxesList">
+	<table id="taxesList" class="dataTable">
 		<tr>
 			<th>Квартал</th>
 			<th>Налоговая база</th>

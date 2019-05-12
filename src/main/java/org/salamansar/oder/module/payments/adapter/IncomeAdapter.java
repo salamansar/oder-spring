@@ -17,4 +17,6 @@ public interface IncomeAdapter {
 	void editIncome(User user, IncomeDto dto);
 	
 	IncomeDto getIncome(User user, Long id);
+	
+	void deleteIncome(User user, Long id);
 }

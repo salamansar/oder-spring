@@ -68,6 +68,31 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 	}
 	
 	@Test
+	public void deleteIncome() {
+		envBuilder.setParent(LocalDate.now())
+				.createObject(Income.class).alias("income");
+		Income income = envBuilder.getEnvironment().getByAlias("income");
+		
+		incomeService.deleteIncome(income);
+		
+		Income updated = entityManager.find(Income.class, income.getId());
+		assertNull(updated);
+	}
+	
+	@Test
+	public void deleteIncomeById() {
+		envBuilder.setParent(LocalDate.now())
+				.createObject(Income.class).alias("income");
+		Income income = envBuilder.getEnvironment().getByAlias("income");
+		
+		incomeService.deleteIncome(income.getId());
+		
+		Income updated = entityManager.find(Income.class, income.getId());
+		assertNull(updated);
+	}
+	
+	
+	@Test
 	public void getIncome() {
 		envBuilder.setParent(LocalDate.now())
 				.createObject(Income.class).alias("income");

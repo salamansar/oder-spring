@@ -39,6 +39,7 @@ public class IncomeAdapterImpl implements IncomeAdapter {
 
 	@Override
 	public void editIncome(User user, IncomeDto dto) {
+		//todo: check rights for updating
 		Income domain = incomeMapper.mapFromDto(dto);
 		domain.setUser(user);
 		incomeService.updateIncome(domain);
@@ -51,6 +52,12 @@ public class IncomeAdapterImpl implements IncomeAdapter {
 				//todo: throw illegal access exception
 				return incomeMapper.mapToDto(income);
 		}).orElse(null);
+	}
+
+	@Override
+	public void deleteIncome(User user, Long id) {
+		//todo: check rights for deletion
+		incomeService.deleteIncome(id);
 	}
 	
 }

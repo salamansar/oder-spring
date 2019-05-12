@@ -20,6 +20,10 @@ public interface IncomeService {
 	
 	void updateIncome(Income income);
 	
+	void deleteIncome(Long id);
+	
+	void deleteIncome(Income income);
+	
 	List<Income> findIncomes(User user, PaymentPeriod period);
 	
 	List<QuarterIncome> findQuarterIncomes(User user, PaymentPeriod period, boolean byQuants);

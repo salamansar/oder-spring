@@ -74,4 +74,14 @@ public class IncomeController {//todo: unit test
 		incomeAdapter.editIncome(user, income);
 		return "redirect:../list";
 	}
+	
+	@GetMapping("delete/{id}")
+	public String deleteIncome(@PathVariable("id") Long id) {
+		log.info("Delete income received: " + id);
+		User user = new User(); //todo: receive user from auth context
+		user.setId(1L);
+		incomeAdapter.deleteIncome(user, id);
+		return "redirect:../list";
+	}
+	
 }

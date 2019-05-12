@@ -92,6 +92,23 @@ public class IncomeServiceImplTest {
 		
 		verify(incomeDao).save(same(income));
 	}
+	
+	@Test
+	public void deleteIncomeById() {
+		service.deleteIncome(100L);
+		
+		verify(incomeDao).deleteById(eq(100L));
+	}
+	
+	@Test
+	public void deleteIncome() {
+		Income income = generator.generate(Income.class);
+		
+		service.deleteIncome(income);
+
+		verify(incomeDao).delete(same(income));
+	}
+	
 
 	@Test
 	public void testFindIncomes() {

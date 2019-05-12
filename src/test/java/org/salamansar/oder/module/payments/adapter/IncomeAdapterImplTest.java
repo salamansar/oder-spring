@@ -81,6 +81,14 @@ public class IncomeAdapterImplTest {
 	}
 	
 	@Test
+	public void deleteIncome() {
+		adapter.deleteIncome(user, 101L);
+		
+		verify(incomeService).deleteIncome(eq(101L));
+	}
+	
+	
+	@Test
 	public void getIncome() {
 		IncomeDto dto = generator.generate(IncomeDto.class);
 		Income domain = generator.generate(Income.class, user);

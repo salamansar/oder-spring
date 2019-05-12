@@ -53,6 +53,18 @@ public class IncomeServiceImpl implements IncomeService {
 	}
 
 	@Override
+	@Transactional
+	public void deleteIncome(Long id) {
+		incomeDao.deleteById(id);
+	}
+
+	@Override
+	@Transactional
+	public void deleteIncome(Income income) {
+		incomeDao.delete(income);
+	}
+
+	@Override
 	public List<Income> findIncomes(User user, PaymentPeriod period) {
 		LocalDate dateFrom = LocalDate.of(period.getYear(), period.getStartMonth(), 1);
 		Month monthTo = period.getEndMonth();

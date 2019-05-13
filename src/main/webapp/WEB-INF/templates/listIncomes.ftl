@@ -27,7 +27,8 @@
 							</a>
 						</div>
 						<div>
-							<a href="/payments/taxes/">
+							<a	href="/payments/incomes/delete/${income.id}" 
+								onclick="return confirm('Будет удалена запись №${income.documentNumber}. Подтвердить?')">
 								Удалить
 							</a>
 						</div>

@@ -12,6 +12,18 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-bom</artifactId>
+				<version>5.1.5.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
     
 	<dependencies>
 		<dependency>
@@ -34,6 +46,14 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>5.1.6.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>

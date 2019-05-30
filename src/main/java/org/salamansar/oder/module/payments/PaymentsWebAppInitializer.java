@@ -3,6 +3,7 @@ package org.salamansar.oder.module.payments;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.Filter;
 import org.salamansar.oder.RootAppConfig;
+import org.salamansar.oder.module.auth.SecurityConfig;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -14,7 +15,7 @@ public class PaymentsWebAppInitializer extends AbstractAnnotationConfigDispatche
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] {RootAppConfig.class};
+        return new Class<?>[] {SecurityConfig.class, RootAppConfig.class};
     }
 
     @Override

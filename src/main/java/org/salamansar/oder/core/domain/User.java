@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import lombok.Data;
 
 /**
@@ -17,6 +18,7 @@ import lombok.Data;
  */
 @Data
 @Entity
+@Table(name = "oder_user")
 public class User implements HasId, Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

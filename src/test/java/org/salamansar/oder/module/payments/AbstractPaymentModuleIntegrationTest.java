@@ -6,6 +6,7 @@ import org.envbuild.spring.config.PersistOrientedGeneratorConfig;
 import org.junit.runner.RunWith;
 import org.salamansar.oder.RootAppConfig;
 import org.salamansar.oder.core.domain.HasId;
+import org.salamansar.oder.module.auth.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {RootAppConfig.class, PersistOrientedGeneratorConfig.class, PaymentsWebAppConfig.class})
+@ContextConfiguration(classes = {RootAppConfig.class, PersistOrientedGeneratorConfig.class, SecurityConfig.class, PaymentsWebAppConfig.class})
 public abstract class AbstractPaymentModuleIntegrationTest {
 	
 	@Configuration	

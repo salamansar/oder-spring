@@ -3,6 +3,7 @@ package org.salamansar.oder.module.payments.controller;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.User;
+import org.salamansar.oder.module.auth.OderUserService;
 import org.salamansar.oder.module.payments.adapter.IncomeAdapter;
 import org.salamansar.oder.module.payments.dto.IncomeDto;
 import org.salamansar.oder.utils.JsonMarshaller;
@@ -27,6 +28,8 @@ public class IncomeController {//todo: unit test
     private JsonMarshaller jsonMarshaller;
 	@Autowired
 	private IncomeAdapter incomeAdapter;
+	@Autowired
+	private OderUserService userService;
     
     @GetMapping("add")
     public String addIncomeForm() {
@@ -37,8 +40,7 @@ public class IncomeController {//todo: unit test
     public String addIncome(@ModelAttribute IncomeDto income) {
         String json = jsonMarshaller.toJsonString(income);
         log.info("Income adding received: " + json);
-        User user = new User(); //todo: receive user from auth context
-        user.setId(1L);
+        User user = userService.getCurrentUser();
         //todo: check data before saving
         incomeAdapter.addIncome(user, income);
         return "redirect:list";
@@ -46,8 +48,7 @@ public class IncomeController {//todo: unit test
     
     @GetMapping("list")
     public String getIncomes(Model model) {
-        User user = new User(); //todo: replace with getting from auth context
-        user.setId(1L);
+        User user = userService.getCurrentUser();
 		List<IncomeDto> incomes = incomeAdapter.getAllIncomes(user);
         model.addAttribute("incomes", incomes);
         return "listIncomes";
@@ -55,8 +56,7 @@ public class IncomeController {//todo: unit test
     
 	@GetMapping("edit/{id}")
 	public String editIncomeForm(@PathVariable("id") Long id, Model model) {
-		User user = new User(); //todo: replace with getting from auth context
-		user.setId(1L);
+		User user = userService.getCurrentUser();
 		IncomeDto income = incomeAdapter.getIncome(user, id);
 		model.addAttribute("income", income);
 		model.addAttribute("mode", "edit");
@@ -68,8 +68,7 @@ public class IncomeController {//todo: unit test
 		String json = jsonMarshaller.toJsonString(income);
 		income.setId(id);
 		log.info("Income editing received: " + json);
-		User user = new User(); //todo: receive user from auth context
-		user.setId(1L);
+		User user = userService.getCurrentUser();
 		//todo: check data before saving
 		incomeAdapter.editIncome(user, income);
 		return "redirect:../list";
@@ -78,10 +77,8 @@ public class IncomeController {//todo: unit test
 	@GetMapping("delete/{id}")
 	public String deleteIncome(@PathVariable("id") Long id) {
 		log.info("Delete income received: " + id);
-		User user = new User(); //todo: receive user from auth context
-		user.setId(1L);
+		User user = userService.getCurrentUser();
 		incomeAdapter.deleteIncome(user, id);
 		return "redirect:../list";
 	}
-	
 }

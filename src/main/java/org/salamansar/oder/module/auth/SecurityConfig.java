@@ -17,7 +17,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 	
 	@Bean
 	@Override
-	public UserDetailsService userDetailsService() {
+	public OderUserService userDetailsService() {
 		return new UserDetailsService();
 	}
 	

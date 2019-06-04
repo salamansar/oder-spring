@@ -52,6 +52,9 @@ public class UserDetailsWrapper implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-	
+
+	public User getTargetUser() {
+		return targetUser;
+	}
 	
 }

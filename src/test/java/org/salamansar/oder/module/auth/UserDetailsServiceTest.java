@@ -12,6 +12,9 @@ import static org.mockito.Mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.core.service.UserService;
+import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -58,5 +61,27 @@ public class UserDetailsServiceTest {
 	public void notFoundUser() {
 		service.loadUserByUsername("otherLogin");
 	}
+	
+	@Test
+	public void gettingCurrentUser() {
+		Authentication auth = mock(Authentication.class);
+		when(auth.getPrincipal()).thenReturn(new UserDetailsWrapper(user));
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		
+		User result = service.getCurrentUser();
+		
+		assertNotNull(result);
+		assertSame(user, result);
+	}
+	
+	@Test(expected = AuthenticationServiceException.class)
+	public void gettingCurrentUserWithOtherUserObject() {
+		Authentication auth = mock(Authentication.class);
+		when(auth.getPrincipal()).thenReturn(user);
+		SecurityContextHolder.getContext().setAuthentication(auth);
+		
+		service.getCurrentUser();
+	}
+	
 	
 }

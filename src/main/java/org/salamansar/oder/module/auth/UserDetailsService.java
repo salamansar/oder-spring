@@ -27,7 +27,7 @@ public class UserDetailsService implements OderUserService {
 	}
 
 	@Override
-	public User getCurrentUser() { //todo: add unit test
+	public User getCurrentUser() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (principal instanceof UserDetailsWrapper) {
 			return ((UserDetailsWrapper) principal).getTargetUser();

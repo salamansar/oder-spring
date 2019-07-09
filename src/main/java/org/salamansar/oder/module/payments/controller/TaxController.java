@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.User;
-import org.salamansar.oder.module.auth.OderUserService;
+import org.salamansar.oder.module.auth.CurrentUser;
 import org.salamansar.oder.module.payments.adapter.TaxAdapter;
 import org.salamansar.oder.module.payments.dto.PaymentPeriodFormatter;
 import org.salamansar.oder.module.payments.dto.TaxRowDto;
@@ -28,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class TaxController {
 	@Autowired
 	private TaxAdapter adapter;
-	@Autowired
-	private OderUserService userService;
 	
 	@GetMapping
 	public String taxes() {
@@ -41,8 +39,8 @@ public class TaxController {
 	public String taxesForYear(
 			@PathVariable("year") Integer year, 
 			@RequestParam(name = "roundUp", required = false) Boolean roundUp, 
+			@CurrentUser User user,
 			Model model) {
-		User user = userService.getCurrentUser();
 		loadTaxes(user, year, model, roundUp);
 		loadYears(user, year, model);
 		return "listTaxes";
@@ -53,9 +51,9 @@ public class TaxController {
 			@PathVariable("year") Integer year, 
 			@PathVariable("quarter") Integer quarter, 
 			@RequestParam(name = "roundUp", required = false) Boolean roundUp, 
+			@CurrentUser User user,
 			Model model) {
 		//todo: check parameters
-		User user = userService.getCurrentUser();
 		PaymentPeriod period = new PaymentPeriod(year, Quarter.fromNumber(quarter));
 		loadSingleTax(user, period, roundUp, model);
 		setPaymentPeriod(period, model);

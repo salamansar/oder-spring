@@ -1,4 +1,4 @@
-package org.salamansar.oder.module.auth;
+package org.salamansar.oder.security;
 
 import org.salamansar.oder.core.domain.User;
 

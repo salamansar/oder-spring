@@ -12,7 +12,7 @@ import org.salamansar.oder.core.domain.Income;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.User;
-import org.salamansar.oder.module.payments.AbstractPaymentModuleIntegrationTest;
+import org.salamansar.oder.module.AbstractWebAppIntegrationTest;
 import org.salamansar.oder.module.payments.dto.TaxRowDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *
  * @author Salamansar
  */
-public class TaxAdapterImplIT extends AbstractPaymentModuleIntegrationTest {
+public class TaxAdapterImplIT extends AbstractWebAppIntegrationTest {
 	@Autowired
 	private TaxAdapter taxAdapter;
 	@Autowired

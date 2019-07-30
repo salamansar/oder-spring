@@ -4,17 +4,17 @@
     <head>
         <title>${title}</title>
         <meta charset="UTF-8">
-		<link rel="icon" type="image/x-icon" href="/img/favicon.ico" / >
-		<link rel="stylesheet" type="text/css" href="/style.css">
-		<script type="text/javascript" src="/lib/jquery-3.3.1.min.js"></script>
+		<link rel="icon" type="image/x-icon" href="/public/img/favicon.ico" / >
+		<link rel="stylesheet" type="text/css" href="/public/style.css">
+		<script type="text/javascript" src="/public/lib/jquery-3.3.1.min.js"></script>
 		<#include headSection ignore_missing=true/>
     </head>
     <body>
 		<div class="page">
 			<div class="header">
 				<div>
-					<a href="/index.html"> 
-						<img src="/img/logo.png" class="logo"/>
+					<a href="/static/index.html"> 
+						<img src="/public/img/logo.png" class="logo"/>
 					</a>
 				</div>
 				<div class='menu'>

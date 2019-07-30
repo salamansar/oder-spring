@@ -1,4 +1,4 @@
-package org.salamansar.oder.module.auth;
+package org.salamansar.oder.security;
 
 import java.util.Arrays;
 import java.util.Collection;

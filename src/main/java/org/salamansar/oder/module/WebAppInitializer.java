@@ -1,9 +1,9 @@
-package org.salamansar.oder.module.payments;
+package org.salamansar.oder.module;
 
 import java.nio.charset.StandardCharsets;
 import javax.servlet.Filter;
 import org.salamansar.oder.RootAppConfig;
-import org.salamansar.oder.module.auth.SecurityConfig;
+import org.salamansar.oder.security.SecurityConfig;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
  *
  * @author Salamansar
  */
-public class PaymentsWebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
@@ -20,18 +20,20 @@ public class PaymentsWebAppInitializer extends AbstractAnnotationConfigDispatche
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{PaymentsWebAppConfig.class};
+        return new Class<?>[]{WebAppConfig.class};
     }
 
     @Override
     protected String[] getServletMappings() {
-        return new String[]{"/payments/*"};
+        return new String[]{"/*"};
     }    
 
     @Override
     protected Filter[] getServletFilters() {        
         return new Filter[]{encodingFilter()};
     }
+	
+	
     
     private CharacterEncodingFilter encodingFilter() {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();

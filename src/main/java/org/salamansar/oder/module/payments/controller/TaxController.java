@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.User;
-import org.salamansar.oder.module.auth.CurrentUser;
+import org.salamansar.oder.security.CurrentUser;
 import org.salamansar.oder.module.payments.adapter.TaxAdapter;
 import org.salamansar.oder.module.payments.dto.PaymentPeriodFormatter;
 import org.salamansar.oder.module.payments.dto.TaxRowDto;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Salamansar
  */
 @Controller
-@RequestMapping("taxes")
+@RequestMapping("payments/taxes")
 @Slf4j
 public class TaxController {
 	@Autowired

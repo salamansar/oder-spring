@@ -3,7 +3,7 @@ package org.salamansar.oder.module.payments.controller;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.User;
-import org.salamansar.oder.module.auth.CurrentUser;
+import org.salamansar.oder.security.CurrentUser;
 import org.salamansar.oder.module.payments.adapter.IncomeAdapter;
 import org.salamansar.oder.module.payments.dto.IncomeDto;
 import org.salamansar.oder.utils.JsonMarshaller;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author Salamansar
  */
 @Controller
-@RequestMapping("incomes")
+@RequestMapping("payments/incomes")
 @Slf4j
 public class IncomeController {//todo: unit test
     @Autowired

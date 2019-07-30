@@ -1,4 +1,4 @@
-package org.salamansar.oder.module.auth;
+package org.salamansar.oder.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,13 +26,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 		http
 			.csrf().disable() //todo: enable when login page will be ready
 			.authorizeRequests()
+				.antMatchers("/auth/**").permitAll()
+				.antMatchers("/login").permitAll()
+				.antMatchers("/public/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
-			.httpBasic()
+			.formLogin()
+				.loginPage("/auth/login")
 				.and()
 			.logout()
-				.logoutSuccessUrl("/")
-//				.deleteCookies("JSESSIONID")
+				.logoutUrl("/auth/logout")
 				;
 			
 	}

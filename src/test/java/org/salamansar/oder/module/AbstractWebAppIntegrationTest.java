@@ -1,12 +1,13 @@
-package org.salamansar.oder.module.payments;
+package org.salamansar.oder.module;
 
+import org.salamansar.oder.module.WebAppConfig;
 import javax.persistence.EntityManager;
 import org.envbuild.generator.processor.DomainPersister;
 import org.envbuild.spring.config.PersistOrientedGeneratorConfig;
 import org.junit.runner.RunWith;
 import org.salamansar.oder.RootAppConfig;
 import org.salamansar.oder.core.domain.HasId;
-import org.salamansar.oder.module.auth.SecurityConfig;
+import org.salamansar.oder.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,8 +23,8 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {RootAppConfig.class, PersistOrientedGeneratorConfig.class, SecurityConfig.class, PaymentsWebAppConfig.class})
-public abstract class AbstractPaymentModuleIntegrationTest {
+@ContextConfiguration(classes = {RootAppConfig.class, PersistOrientedGeneratorConfig.class, SecurityConfig.class, WebAppConfig.class})
+public abstract class AbstractWebAppIntegrationTest {
 	
 	@Configuration	
 	static class ContextConfiguration {

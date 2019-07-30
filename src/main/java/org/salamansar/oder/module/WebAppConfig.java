@@ -1,4 +1,4 @@
-package org.salamansar.oder.module.payments;
+package org.salamansar.oder.module;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
@@ -16,8 +18,8 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan("org.salamansar.oder.module.payments")
-public class PaymentsWebAppConfig {
+@ComponentScan("org.salamansar.oder.module")
+public class WebAppConfig implements WebMvcConfigurer {
     
     @Bean
     public FreeMarkerConfigurer freeMarkerConfigurer() {
@@ -47,5 +49,13 @@ public class PaymentsWebAppConfig {
     public JsonMarshaller utilsJsonMarshaller() {
         return new JsonMarshaller(jsonMapper());
     }
+
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/public/**")
+				.addResourceLocations("/public/");
+		registry.addResourceHandler("/static/**")
+				.addResourceLocations("/");
+	}
     
 }

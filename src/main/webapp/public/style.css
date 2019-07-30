@@ -81,6 +81,11 @@ table {
 	vertical-align: middle;
 }
 
+.centerBlock {
+	margin: auto;
+	display: block;
+}
+
 .menu {
 	height: 64px;
 	line-height: 64px;
@@ -270,7 +275,7 @@ a:hover {
 	min-width: 400px;	
 }
 
-.inputForm input[type="text"], .inputForm input[type="date"] {
+.inputForm input[type="text"], .inputForm input[type="date"], .inputForm input[type="password"] {
 	width: 200px;
 	background-color: #F5F573;
 	border: 1px #D3D347 solid;

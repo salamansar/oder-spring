@@ -11,7 +11,7 @@
 		<div class="page">
 			<div class="authForm">
 				<div class="authHeader">
-					<img src="/public/img/logo.png" class="logo"/>
+					<img src="/public/img/logo.png" class="logo centerBlock"/>
 				</div>
 				<div class="inputForm">
 					<form action="" method="POST">
@@ -26,7 +26,9 @@
 							</tr>
 							<tr>
 								<td colspan="2">
-									<input type="submit" value="Войти"/>
+									<div class="button">
+										<input type="submit" value="Войти"/>
+									</div>
 								</td>
 						</table>
 					</form>

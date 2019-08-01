@@ -33,6 +33,12 @@
 						</table>
 					</form>
 				</div>
+			</div>
+			<div class="errorBlock">
+				<#if error?? && error>
+					Неверный логин или пароль!
+				</#if>
+			</div>
 		</div>
     </body>
 </html>

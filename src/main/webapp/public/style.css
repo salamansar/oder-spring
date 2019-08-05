@@ -64,10 +64,19 @@ table {
 	display: table;
 }
 
+.rightMenu {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	padding: 0 5px;
+}
+
 .header {
 	background-color: #FFFFA3;
 	border: 1px #D3D347 solid;
 	height: 74px;
+	position: relative;
 }
 
 .header div {

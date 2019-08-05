@@ -31,6 +31,11 @@
 						</div>
 					</a>
 				</div>
+				<div class='rightMenu'>
+					<div class="menu">
+						<a href="/auth/logout">Выход</a>
+					</div>
+				</div>
 			</div>
 			<div class="content"> 
 				<#nested/>

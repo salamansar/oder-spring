@@ -33,6 +33,13 @@
 				</div>
 				<div class='rightMenu'>
 					<div class="menu">
+						<a href="/profile">
+							<div class='linkWrapper <#if selectedTab="profile">selected</#if>'>
+								Профиль
+							</div>
+						</a>
+					</div>
+					<div class="menu">
 						<a href="/auth/logout">Выход</a>
 					</div>
 				</div>

@@ -1,4 +1,4 @@
-package org.salamansar.oder.module.payments.dto;
+package org.salamansar.oder.module.profile.dto;
 
 import java.util.stream.Stream;
 import lombok.Data;

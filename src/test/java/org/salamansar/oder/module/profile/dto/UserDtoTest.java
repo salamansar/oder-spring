@@ -1,5 +1,6 @@
-package org.salamansar.oder.module.payments.dto;
+package org.salamansar.oder.module.profile.dto;
 
+import org.salamansar.oder.module.profile.dto.UserDto;
 import org.envbuild.generator.RandomGenerator;
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -35,7 +35,10 @@
 					<div class="menu">
 						<a href="/profile">
 							<div class='linkWrapper <#if selectedTab="profile">selected</#if>'>
-								Профиль
+								<img src="/public/img/profile.png" class="profileIcon"/>
+								<span>
+									Профиль
+								</span>
 							</div>
 						</a>
 					</div>

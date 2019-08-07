@@ -90,6 +90,10 @@ table {
 	vertical-align: middle;
 }
 
+.profileIcon {
+	vertical-align: middle;
+}
+
 .centerBlock {
 	margin: auto;
 	display: block;

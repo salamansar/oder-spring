@@ -29,7 +29,7 @@ public class FillUserInfoAdvice implements AfterReturningAdvice  {
 	
 	private <T> Optional<T> findByClass(Object[] args, Class<T> clazz) {
 		for (Object arg : args) {
-			if (clazz.isAssignableFrom(arg.getClass())) {
+			if (arg != null && clazz.isAssignableFrom(arg.getClass())) {
 				return Optional.of((T) arg);
 			}
 		}

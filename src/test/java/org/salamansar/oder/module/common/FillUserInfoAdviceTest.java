@@ -60,4 +60,13 @@ public class FillUserInfoAdviceTest {
 
 		verify(model, never()).addAttribute(anyString(), any(UserDto.class));
 	}
+	
+	@Test
+	public void nullObjectInParams() throws Throwable {
+		Object[] args = new Object[]{null, model, new User()};
+
+		advice.afterReturning(20L, method, args, this);
+
+		verify(model).addAttribute(eq("user"), any(UserDto.class));
+	}
 }

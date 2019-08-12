@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.PaymentPeriod;
 import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.User;
+import org.salamansar.oder.module.common.FillUserInfo;
 import org.salamansar.oder.security.CurrentUser;
 import org.salamansar.oder.module.payments.adapter.TaxAdapter;
 import org.salamansar.oder.module.payments.dto.PaymentPeriodFormatter;
@@ -36,6 +37,7 @@ public class TaxController {
 	}
 
 	@GetMapping("/{year}")
+	@FillUserInfo
 	public String taxesForYear(
 			@PathVariable("year") Integer year, 
 			@RequestParam(name = "roundUp", required = false) Boolean roundUp, 
@@ -47,6 +49,7 @@ public class TaxController {
 	}
 	
 	@GetMapping("/{year}/{quarter}")
+	@FillUserInfo
 	public String taxesForQuarter(
 			@PathVariable("year") Integer year, 
 			@PathVariable("quarter") Integer quarter, 

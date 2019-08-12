@@ -37,7 +37,7 @@
 							<div class='linkWrapper <#if selectedTab="profile">selected</#if>'>
 								<img src="/public/img/profile.png" class="profileIcon"/>
 								<span>
-									Профиль
+									${user.login}
 								</span>
 							</div>
 						</a>

@@ -2,6 +2,7 @@ package org.salamansar.oder.module.profile.controller;
 
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.module.common.CommonFormAttribute;
+import org.salamansar.oder.module.common.FillUserInfo;
 import org.salamansar.oder.module.profile.dto.UserDto;
 import org.salamansar.oder.module.profile.mapper.UserMapper;
 import org.salamansar.oder.security.CurrentUser;
@@ -22,9 +23,8 @@ public class ProfileController {
 	private UserMapper mapper;
 
 	@GetMapping
+	@FillUserInfo
 	public String getProfilePage(Model model, @CurrentUser User user) {
-		UserDto userDto = mapper.mapToDto(user);
-		model.addAttribute(CommonFormAttribute.USER.attributeName(), userDto);
 		return "profile";
 	}
 	

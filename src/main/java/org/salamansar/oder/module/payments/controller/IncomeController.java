@@ -3,6 +3,7 @@ package org.salamansar.oder.module.payments.controller;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.salamansar.oder.core.domain.User;
+import org.salamansar.oder.module.common.FillUserInfo;
 import org.salamansar.oder.security.CurrentUser;
 import org.salamansar.oder.module.payments.adapter.IncomeAdapter;
 import org.salamansar.oder.module.payments.dto.IncomeDto;
@@ -30,7 +31,8 @@ public class IncomeController {//todo: unit test
 	private IncomeAdapter incomeAdapter;
     
     @GetMapping("add")
-    public String addIncomeForm() {
+	@FillUserInfo
+    public String addIncomeForm(@CurrentUser User user, Model model) {
         return "addIncome";
     }
     
@@ -44,6 +46,7 @@ public class IncomeController {//todo: unit test
     }   
     
     @GetMapping("list")
+	@FillUserInfo
     public String getIncomes(Model model, @CurrentUser User user) {
 		List<IncomeDto> incomes = incomeAdapter.getAllIncomes(user);
         model.addAttribute("incomes", incomes);
@@ -51,6 +54,7 @@ public class IncomeController {//todo: unit test
     }
     
 	@GetMapping("edit/{id}")
+	@FillUserInfo
 	public String editIncomeForm(@PathVariable("id") Long id, @CurrentUser User user, Model model) {
 		IncomeDto income = incomeAdapter.getIncome(user, id);
 		model.addAttribute("income", income);

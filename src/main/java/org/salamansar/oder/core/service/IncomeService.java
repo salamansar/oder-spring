@@ -28,6 +28,8 @@ public interface IncomeService {
 	
 	List<QuarterIncome> findQuarterIncomes(User user, PaymentPeriod period, boolean byQuants);
 	
+	List<QuarterIncome> findAllQuarterIncomes(User user, boolean byQuants);
+	
 	QuarterIncome findSingleIncome(User user, PaymentPeriod period);
 	
 	List<Integer> findYearsWithIncomes(User user);

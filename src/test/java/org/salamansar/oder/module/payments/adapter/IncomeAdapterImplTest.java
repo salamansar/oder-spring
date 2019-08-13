@@ -13,10 +13,13 @@ import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.salamansar.oder.core.domain.Income;
+import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.core.service.IncomeService;
 import org.salamansar.oder.module.payments.dto.IncomeDto;
+import org.salamansar.oder.module.payments.dto.QuarterIncomeDto;
 import org.salamansar.oder.module.payments.mapper.IncomeMapper;
+import org.salamansar.oder.module.payments.mapper.QuarterIncomeMapper;
 
 /**
  *
@@ -28,6 +31,8 @@ public class IncomeAdapterImplTest {
 	private IncomeService incomeService;
 	@Mock
 	private IncomeMapper incomeMapper;
+	@Mock
+	private QuarterIncomeMapper quarterIncomeMapper;
 	@InjectMocks
 	private IncomeAdapterImpl adapter;
 	private RandomGenerator generator = new RandomGenerator();
@@ -48,6 +53,21 @@ public class IncomeAdapterImplTest {
 		
 		List<IncomeDto> result = adapter.getAllIncomes(user);
 		
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertSame(dto, result.get(0));
+	}
+	
+	@Test
+	public void getAllYearQuarterIncomes() {
+		QuarterIncome domain = new QuarterIncome();
+		when(incomeService.findAllQuarterIncomes(eq(user), eq(false)))
+				.thenReturn(Arrays.asList(domain));
+		QuarterIncomeDto dto = new QuarterIncomeDto();
+		when(quarterIncomeMapper.mapToDto(same(domain))).thenReturn(dto);
+
+		List<QuarterIncomeDto> result = adapter.getAllYearIncomes(user);
+
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertSame(dto, result.get(0));

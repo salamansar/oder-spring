@@ -1,6 +1,7 @@
 package org.salamansar.oder.module.payments.adapter;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 import org.envbuild.environment.DbEnvironmentBuilder;
@@ -8,9 +9,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.salamansar.oder.core.domain.Income;
+import org.salamansar.oder.core.domain.PaymentPeriod;
+import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.module.AbstractWebAppIntegrationTest;
 import org.salamansar.oder.module.payments.dto.IncomeDto;
+import org.salamansar.oder.module.payments.dto.QuarterIncomeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -63,6 +67,33 @@ public class IncomeAdapterIT extends AbstractWebAppIntegrationTest {
 		assertEquals(income1.getDocumentNumber(), income1Dto.getDocumentNumber());
 		assertTrue(income1.getAmount().compareTo(income1Dto.getAmount()) == 0);
 		assertNotNull(income1Dto.getIncomeDate());
+	}
+	
+	@Test
+	public void getAllYearIncomes() {
+		transactionTemplate.execute(ts -> {
+			envBuilder.setParent(LocalDate.of(2018, Month.MARCH, 5))
+						.createObject(Income.class).alias("income1")
+					.setParent(LocalDate.of(2018, Month.OCTOBER, 16))
+						.createObject(Income.class).alias("income2")
+					.setParent(LocalDate.of(2019, Month.JANUARY, 16))
+						.createObject(Income.class).alias("income3");
+			return null;
+		});
+		Income income1 = envBuilder.getEnvironment().getByAlias("income1");
+		Income income2 = envBuilder.getEnvironment().getByAlias("income2");
+		Income income3 = envBuilder.getEnvironment().getByAlias("income3");
+
+		List<QuarterIncomeDto> result = adapter.getAllYearIncomes(user);
+
+		assertNotNull(result);
+		assertEquals(2, result.size());
+		Optional<QuarterIncomeDto> income1Dto = result.stream().filter(i -> i.getPeriod().equals(new PaymentPeriod(2018, Quarter.YEAR))).findAny();
+		assertTrue(income1Dto.isPresent());
+		assertTrue(income1.getAmount().add(income2.getAmount()).compareTo(income1Dto.get().getIncomeAmount()) == 0);
+		Optional<QuarterIncomeDto> income2Dto = result.stream().filter(i -> i.getPeriod().equals(new PaymentPeriod(2019, Quarter.YEAR))).findAny();
+		assertTrue(income2Dto.isPresent());
+		assertTrue(income3.getAmount().compareTo(income2Dto.get().getIncomeAmount()) == 0);
 	}
 	
 	@Test

@@ -3,7 +3,7 @@
 	title="Профиль пользователя"
 	selectedTab="profile">
 
-	<h2>Пользователь: ${user.fullName}</h2>
-	<h2>Login: ${user.login}</h2>
+	<div>Пользователь: <strong>${user.fullName}</strong></div>
+	<div>Login: <strong>${user.login}</strong></div>
 	              
 </@layout.mainLayout>

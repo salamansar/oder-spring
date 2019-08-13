@@ -232,6 +232,46 @@ public class IncomeServiceImplIT extends AbstractCoreIntegrationTest {
 	}
 	
 	@Test
+	public void getSummarizedAllQuarterIncomes() {
+		envBuilder.setParent(LocalDate.of(2018, Month.MAY, 5))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.SEPTEMBER, 1))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2019, Month.APRIL, 1))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2019, Month.DECEMBER, 30))
+					.createObject(Income.class);
+
+		List<QuarterIncome> result = incomeService.findAllQuarterIncomes(user, false);
+
+		assertNotNull(result);
+		assertEquals(2, result.size());
+		assertTrue(result.stream().anyMatch(inc -> inc.getPeriod().equals(new PaymentPeriod(2018, Quarter.YEAR))));
+		assertTrue(result.stream().anyMatch(inc -> inc.getPeriod().equals(new PaymentPeriod(2019, Quarter.YEAR))));
+	}
+	
+	@Test
+	public void getQuantizedAllQuarterIncomes() {
+		envBuilder.setParent(LocalDate.of(2018, Month.MAY, 5))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2018, Month.SEPTEMBER, 1))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2019, Month.APRIL, 1))
+					.createObject(Income.class)
+				.setParent(LocalDate.of(2019, Month.DECEMBER, 30))
+					.createObject(Income.class);
+
+		List<QuarterIncome> result = incomeService.findAllQuarterIncomes(user, true);
+
+		assertNotNull(result);
+		assertEquals(4, result.size());
+		assertTrue(result.stream().anyMatch(inc -> inc.getPeriod().equals(new PaymentPeriod(2018, Quarter.II))));
+		assertTrue(result.stream().anyMatch(inc -> inc.getPeriod().equals(new PaymentPeriod(2018, Quarter.III))));
+		assertTrue(result.stream().anyMatch(inc -> inc.getPeriod().equals(new PaymentPeriod(2019, Quarter.II))));
+		assertTrue(result.stream().anyMatch(inc -> inc.getPeriod().equals(new PaymentPeriod(2019, Quarter.IV))));
+	}
+	
+	@Test
 	public void findYearsWithIncomes() {
 		envBuilder.setParent(LocalDate.of(2018, Month.FEBRUARY, 5))
 					.createObject(Income.class)

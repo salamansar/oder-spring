@@ -133,12 +133,29 @@ public class IncomeServiceImplTest {
 				eq(LocalDate.of(2018, Month.JULY, 1)), 
 				eq(LocalDate.of(2018, Month.SEPTEMBER, 30))))
 				.thenReturn(Arrays.asList(income));
-		when(quarterInocomeMapFactory.getStrategy(eq(new PaymentPeriod(2018, Quarter.III)), eq(true)))
+		when(quarterInocomeMapFactory.getStrategy(eq(true)))
 				.thenReturn(mapSrategy);
 		when(mapSrategy.map(eq(Arrays.asList(income)))).thenReturn(Arrays.asList(quarterIncome));
 		
 		List<QuarterIncome> result = service.findQuarterIncomes(user, new PaymentPeriod(2018, Quarter.III), true);
 		
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertSame(quarterIncome, result.get(0));
+	}
+	
+	@Test
+	public void testFindAllQuarterIncomes() {
+		Income income = generator.generate(Income.class);
+		QuarterIncome quarterIncome = generator.generate(QuarterIncome.class);
+		when(incomeDao.findIncomeByUserOrderByIncomeDateDesc(same(user)))
+				.thenReturn(Arrays.asList(income));
+		when(quarterInocomeMapFactory.getStrategy(eq(true)))
+				.thenReturn(mapSrategy);
+		when(mapSrategy.map(eq(Arrays.asList(income)))).thenReturn(Arrays.asList(quarterIncome));
+
+		List<QuarterIncome> result = service.findAllQuarterIncomes(user, true);
+
 		assertNotNull(result);
 		assertEquals(1, result.size());
 		assertSame(quarterIncome, result.get(0));
@@ -156,9 +173,7 @@ public class IncomeServiceImplTest {
 				eq(LocalDate.of(2019, Month.JANUARY, 1)),
 				eq(LocalDate.of(2019, Month.DECEMBER, 31))))
 				.thenReturn(Collections.emptyList());
-		when(quarterInocomeMapFactory.getStrategy(eq(new PaymentPeriod(2018, Quarter.YEAR)), eq(false)))
-				.thenReturn(mapSrategy);
-		when(quarterInocomeMapFactory.getStrategy(eq(new PaymentPeriod(2019, Quarter.YEAR)), eq(false)))
+		when(quarterInocomeMapFactory.getStrategy(eq(false)))
 				.thenReturn(mapSrategy);
 		when(mapSrategy.map(eq(Collections.emptyList()))).thenReturn(Collections.emptyList());
 		when(mapSrategy.map(eq(Arrays.asList(income)))).thenReturn(Arrays.asList(quarterIncome));

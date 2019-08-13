@@ -1,10 +1,8 @@
 package org.salamansar.oder.module.profile.controller;
 
 import org.salamansar.oder.core.domain.User;
-import org.salamansar.oder.module.common.CommonFormAttribute;
 import org.salamansar.oder.module.common.FillUserInfo;
-import org.salamansar.oder.module.profile.dto.UserDto;
-import org.salamansar.oder.module.profile.mapper.UserMapper;
+import org.salamansar.oder.module.payments.adapter.IncomeAdapter;
 import org.salamansar.oder.security.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("profile")
 public class ProfileController {
 	@Autowired
-	private UserMapper mapper;
+	private IncomeAdapter incomeAdapter;
 
 	@GetMapping
 	@FillUserInfo
 	public String getProfilePage(Model model, @CurrentUser User user) {
+		model.addAttribute(ProfilePageAttribute.YEARS_INCOME.getAttributeName(), incomeAdapter.getAllYearIncomes(user));
 		return "profile";
 	}
 	

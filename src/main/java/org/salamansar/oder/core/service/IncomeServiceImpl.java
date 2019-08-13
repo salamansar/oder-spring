@@ -75,7 +75,17 @@ public class IncomeServiceImpl implements IncomeService {
 	@Override
 	public List<QuarterIncome> findQuarterIncomes(User user, PaymentPeriod period, boolean byQuants) {
 		List<Income> inocmes = findIncomes(user, period);
-		QuarterIncomeMapStrategy mapStartegy = quarterInocomeMapFactory.getStrategy(period, byQuants);
+		return groupIncomes(inocmes, byQuants);
+	}
+
+	@Override
+	public List<QuarterIncome> findAllQuarterIncomes(User user, boolean byQuants) {
+		List<Income> inocmes = getAllIncomes(user);
+		return groupIncomes(inocmes, byQuants);
+	}
+	
+	private List<QuarterIncome> groupIncomes(List<Income> inocmes, boolean byQuants) {
+		QuarterIncomeMapStrategy mapStartegy = quarterInocomeMapFactory.getStrategy(byQuants);
 		return mapStartegy.map(inocmes);
 	}
 

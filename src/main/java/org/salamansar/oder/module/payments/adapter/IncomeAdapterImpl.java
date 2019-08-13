@@ -5,10 +5,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.salamansar.oder.core.adapter.Adapter;
 import org.salamansar.oder.core.domain.Income;
+import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.core.service.IncomeService;
 import org.salamansar.oder.module.payments.dto.IncomeDto;
+import org.salamansar.oder.module.payments.dto.QuarterIncomeDto;
 import org.salamansar.oder.module.payments.mapper.IncomeMapper;
+import org.salamansar.oder.module.payments.mapper.QuarterIncomeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -21,6 +24,8 @@ public class IncomeAdapterImpl implements IncomeAdapter {
 	private IncomeService incomeService;
 	@Autowired
 	private IncomeMapper incomeMapper;
+	@Autowired
+	private QuarterIncomeMapper quarterIncomeMapper;
 
 	@Override
 	public List<IncomeDto> getAllIncomes(User user) {
@@ -30,6 +35,14 @@ public class IncomeAdapterImpl implements IncomeAdapter {
 				.collect(Collectors.toList());
 	}
 
+	@Override
+	public List<QuarterIncomeDto> getAllYearIncomes(User user) {
+		List<QuarterIncome> domains = incomeService.findAllQuarterIncomes(user, false);
+		return domains.stream()
+				.map(quarterIncomeMapper::mapToDto)
+				.collect(Collectors.toList());
+	}
+	
 	@Override
 	public Long addIncome(User user, IncomeDto dto) {
 		Income domain = incomeMapper.mapFromDto(dto);

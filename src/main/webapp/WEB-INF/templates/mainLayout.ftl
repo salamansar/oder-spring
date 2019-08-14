@@ -13,7 +13,7 @@
 		<div class="page">
 			<div class="header">
 				<div>
-					<a href="/static/index.html"> 
+					<a href="/profile"> 
 						<img src="/public/img/logo.png" class="logo"/>
 					</a>
 				</div>

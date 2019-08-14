@@ -61,7 +61,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addRedirectViewController("/", "/static/index.html");
+		registry.addRedirectViewController("/", "/profile");
 	}
 	
 	    

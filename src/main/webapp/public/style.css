@@ -53,6 +53,10 @@ table {
 	margin-top: -15px;
 }
 
+#incomesSummary {
+	padding-top: 20px;
+}
+
 .widgetsLine {
 	margin: 10px 10px 10px 0;
 	vertical-align: middle;

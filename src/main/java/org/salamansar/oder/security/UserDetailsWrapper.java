@@ -24,8 +24,7 @@ public class UserDetailsWrapper implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		//todo: use some cipher
-		return "{noop}" + targetUser.getPasswordHash();
+		return "{bcrypt}" + targetUser.getPasswordHash();
 	}
 
 	@Override

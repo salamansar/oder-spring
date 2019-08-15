@@ -49,7 +49,7 @@ public class UserDetailsServiceTest {
 		assertTrue(result instanceof UserDetailsWrapper);
 		UserDetailsWrapper wrapper = (UserDetailsWrapper) result;
 		assertEquals(user.getLogin(), wrapper.getUsername());
-		assertEquals("{noop}" + user.getPasswordHash(), wrapper.getPassword());
+		assertEquals("{bcrypt}" + user.getPasswordHash(), wrapper.getPassword());
 		assertEquals(1, wrapper.getAuthorities().size());
 		assertTrue(wrapper.isAccountNonExpired());
 		assertTrue(wrapper.isAccountNonLocked());

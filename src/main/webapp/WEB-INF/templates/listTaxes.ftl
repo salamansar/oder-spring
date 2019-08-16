@@ -47,7 +47,7 @@
 				<td>
 					<#if tax.paymentPeriod??> 
 						<span class="row-tooltip">
-							<a href="/payments/taxes/${tax.paymentPeriod.year?string.computer}/${tax.paymentPeriod.quarter.numberValue}">
+							<a href="/oder/payments/taxes/${tax.paymentPeriod.year?string.computer}/${tax.paymentPeriod.quarter.numberValue}">
 								Подробнее
 							</a>
 						</span>

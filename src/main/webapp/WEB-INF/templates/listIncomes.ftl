@@ -22,12 +22,12 @@
 				<td>${income.documentNumber}
 					<div class="row-tooltip">
 						<div>
-							<a href="/payments/incomes/edit/${income.id}">
+							<a href="/oder/payments/incomes/edit/${income.id}">
 								Изменить
 							</a>
 						</div>
 						<div>
-							<a	href="/payments/incomes/delete/${income.id}" 
+							<a	href="/oder/payments/incomes/delete/${income.id}" 
 								onclick="return confirm('Будет удалена запись №${income.documentNumber}. Подтвердить?')">
 								Удалить
 							</a>

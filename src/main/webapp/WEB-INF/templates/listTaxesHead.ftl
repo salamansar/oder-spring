@@ -2,7 +2,7 @@
 	function forwardWithParameters() {
 		year = $("#yearsSelector").val();
 		roundUp = $("#roundUpCheckBox").is(":checked");
-		url = "/payments/taxes";
+		url = "/oder/payments/taxes";
 		if(year != undefined) {
 			url += "/" + year;
 		}

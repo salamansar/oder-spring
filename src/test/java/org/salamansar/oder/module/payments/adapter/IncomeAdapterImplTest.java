@@ -1,5 +1,6 @@
 package org.salamansar.oder.module.payments.adapter;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,8 @@ import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.salamansar.oder.core.domain.Income;
+import org.salamansar.oder.core.domain.PaymentPeriod;
+import org.salamansar.oder.core.domain.Quarter;
 import org.salamansar.oder.core.domain.QuarterIncome;
 import org.salamansar.oder.core.domain.User;
 import org.salamansar.oder.core.service.IncomeService;
@@ -60,17 +63,21 @@ public class IncomeAdapterImplTest {
 	
 	@Test
 	public void getAllYearQuarterIncomes() {
-		QuarterIncome domain = new QuarterIncome();
+		QuarterIncome domain1 = new QuarterIncome();
+		QuarterIncome domain2 = new QuarterIncome();
 		when(incomeService.findAllQuarterIncomes(eq(user), eq(false)))
-				.thenReturn(Arrays.asList(domain));
-		QuarterIncomeDto dto = new QuarterIncomeDto();
-		when(quarterIncomeMapper.mapToDto(same(domain))).thenReturn(dto);
+				.thenReturn(Arrays.asList(domain1, domain2));
+		QuarterIncomeDto dto1 = new QuarterIncomeDto(new PaymentPeriod(2018, Quarter.II), BigDecimal.valueOf(20000));
+		QuarterIncomeDto dto2 = new QuarterIncomeDto(new PaymentPeriod(2018, Quarter.IV), BigDecimal.valueOf(40000));
+		when(quarterIncomeMapper.mapToDto(same(domain1))).thenReturn(dto1);
+		when(quarterIncomeMapper.mapToDto(same(domain2))).thenReturn(dto2);
 
 		List<QuarterIncomeDto> result = adapter.getAllYearIncomes(user);
 
 		assertNotNull(result);
-		assertEquals(1, result.size());
-		assertSame(dto, result.get(0));
+		assertEquals(2, result.size());
+		assertSame(dto2, result.get(0));
+		assertSame(dto1, result.get(1));
 	}
 	
 	@Test

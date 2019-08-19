@@ -40,6 +40,7 @@ public class IncomeAdapterImpl implements IncomeAdapter {
 		List<QuarterIncome> domains = incomeService.findAllQuarterIncomes(user, false);
 		return domains.stream()
 				.map(quarterIncomeMapper::mapToDto)
+				.sorted((a,b) -> b.getPeriod().compareTo(a.getPeriod()))
 				.collect(Collectors.toList());
 	}
 	

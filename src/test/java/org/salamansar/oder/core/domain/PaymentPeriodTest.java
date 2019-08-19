@@ -110,4 +110,55 @@ public class PaymentPeriodTest {
 		assertEquals(Quarter.YEAR, period.getQuarter());
 	}
 	
+	
+	@Test
+	public void compareToTest() {
+		assertTrue(PP(2018, Quarter.I).compareTo(PP(2019, Quarter.I)) < 0);
+		assertTrue(PP(2018, Quarter.II).compareTo(PP(2019, Quarter.I)) < 0);
+		assertTrue(PP(2018, Quarter.III).compareTo(PP(2019, Quarter.I)) < 0);
+		assertTrue(PP(2018, Quarter.IV).compareTo(PP(2019, Quarter.I)) < 0);
+		assertTrue(PP(2018, Quarter.YEAR).compareTo(PP(2019, Quarter.I)) < 0);
+		
+		assertTrue(PP(2018, Quarter.I).compareTo(PP(2017, Quarter.IV)) > 0);
+		assertTrue(PP(2018, Quarter.II).compareTo(PP(2017, Quarter.IV)) > 0);
+		assertTrue(PP(2018, Quarter.III).compareTo(PP(2017, Quarter.IV)) > 0);
+		assertTrue(PP(2018, Quarter.IV).compareTo(PP(2017, Quarter.IV)) > 0);
+		assertTrue(PP(2018, Quarter.YEAR).compareTo(PP(2017, Quarter.IV)) > 0);
+		
+		assertTrue(PP(2018, Quarter.I).compareTo(PP(2018, Quarter.I)) == 0);
+		assertTrue(PP(2018, Quarter.II).compareTo(PP(2018, Quarter.I)) > 0);
+		assertTrue(PP(2018, Quarter.III).compareTo(PP(2018, Quarter.I)) > 0);
+		assertTrue(PP(2018, Quarter.IV).compareTo(PP(2018, Quarter.I)) > 0);
+		assertTrue(PP(2018, Quarter.YEAR).compareTo(PP(2018, Quarter.I)) > 0);
+		
+		assertTrue(PP(2018, Quarter.I).compareTo(PP(2018, Quarter.II)) < 0);
+		assertTrue(PP(2018, Quarter.II).compareTo(PP(2018, Quarter.II)) == 0);
+		assertTrue(PP(2018, Quarter.III).compareTo(PP(2018, Quarter.II)) > 0);
+		assertTrue(PP(2018, Quarter.IV).compareTo(PP(2018, Quarter.II)) > 0);
+		assertTrue(PP(2018, Quarter.YEAR).compareTo(PP(2018, Quarter.II)) > 0);
+		
+		assertTrue(PP(2018, Quarter.I).compareTo(PP(2018, Quarter.III)) < 0);
+		assertTrue(PP(2018, Quarter.II).compareTo(PP(2018, Quarter.III)) < 0);
+		assertTrue(PP(2018, Quarter.III).compareTo(PP(2018, Quarter.III)) == 0);
+		assertTrue(PP(2018, Quarter.IV).compareTo(PP(2018, Quarter.III)) > 0);
+		assertTrue(PP(2018, Quarter.YEAR).compareTo(PP(2018, Quarter.III)) > 0);
+		
+		assertTrue(PP(2018, Quarter.I).compareTo(PP(2018, Quarter.IV)) < 0);
+		assertTrue(PP(2018, Quarter.II).compareTo(PP(2018, Quarter.IV)) < 0);
+		assertTrue(PP(2018, Quarter.III).compareTo(PP(2018, Quarter.IV)) < 0);
+		assertTrue(PP(2018, Quarter.IV).compareTo(PP(2018, Quarter.IV)) == 0);
+		assertTrue(PP(2018, Quarter.YEAR).compareTo(PP(2018, Quarter.IV)) > 0);
+		
+		assertTrue(PP(2018, Quarter.I).compareTo(PP(2018, Quarter.YEAR)) < 0);
+		assertTrue(PP(2018, Quarter.II).compareTo(PP(2018, Quarter.YEAR)) < 0);
+		assertTrue(PP(2018, Quarter.III).compareTo(PP(2018, Quarter.YEAR)) < 0);
+		assertTrue(PP(2018, Quarter.IV).compareTo(PP(2018, Quarter.YEAR)) < 0);
+		assertTrue(PP(2018, Quarter.YEAR).compareTo(PP(2018, Quarter.YEAR)) == 0);
+	}
+	
+	private PaymentPeriod PP(int year, Quarter quarter) {
+		return new PaymentPeriod(year, quarter);
+	}
+	
+	
 }

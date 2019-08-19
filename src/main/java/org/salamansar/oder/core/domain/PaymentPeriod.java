@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class PaymentPeriod {
+public class PaymentPeriod implements Comparable<PaymentPeriod> {
 
 	private Integer year;
 	private Quarter quarter;
@@ -65,6 +65,16 @@ public class PaymentPeriod {
 	
 	public PaymentPeriod nextYear() {
 		return new PaymentPeriod(year + 1, quarter);
+	}
+
+	@Override
+	public int compareTo(PaymentPeriod o) {
+		int yearCompare = year.compareTo(o.year);
+		if(yearCompare == 0) {
+			return Integer.compare(quarter.ordinal(), o.quarter.ordinal());
+		} else {
+			return yearCompare;
+		}
 	}
 	
 }

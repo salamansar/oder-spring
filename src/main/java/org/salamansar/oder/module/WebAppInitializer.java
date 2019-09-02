@@ -2,6 +2,7 @@ package org.salamansar.oder.module;
 
 import java.nio.charset.StandardCharsets;
 import javax.servlet.Filter;
+import org.salamansar.oder.DatasourceConfig;
 import org.salamansar.oder.RootAppConfig;
 import org.salamansar.oder.security.SecurityConfig;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -15,7 +16,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[] {SecurityConfig.class, RootAppConfig.class};
+        return new Class<?>[] {SecurityConfig.class, RootAppConfig.class, DatasourceConfig.class};
     }
 
     @Override

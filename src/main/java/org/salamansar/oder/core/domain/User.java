@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -21,7 +22,8 @@ import lombok.Data;
 @Table(name = "oder_user")
 public class User implements HasId, Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_user")
+	@SequenceGenerator(name = "gen_user", sequenceName = "seq_user_id", allocationSize = 1)
     private Long id;
     @Column(nullable = false)
     private String login;
@@ -34,6 +36,5 @@ public class User implements HasId, Serializable {
     @Column(name = "middle_name")
     private String middleName;
     @OneToMany
-    @JoinColumn(name = "user_id")
     private List<Income> incomes;
 }

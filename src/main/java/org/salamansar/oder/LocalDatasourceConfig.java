@@ -12,7 +12,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
  * @author Salamansar
  */
 @Configuration
-public class TestDatasourceConfig {
+public class LocalDatasourceConfig {
 	
 	@Bean
 	public DataSource embeddedDB() {
@@ -23,14 +23,17 @@ public class TestDatasourceConfig {
 	@Bean
 	public LocalContainerEntityManagerFactoryBean emFactory() {
 		HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
-		adapter.setGenerateDdl(true);
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setDataSource(embeddedDB());
 		factory.setJpaVendorAdapter(adapter);
-		factory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "create");
 		factory.setPackagesToScan("org.salamansar.oder.core.domain");
 		return factory;
+	}
+	
+	@Bean
+	public FlywayMigrator flywayMigrator() {
+		return new FlywayMigrator();
 	}
 
 }

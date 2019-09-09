@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import org.salamansar.oder.core.domain.Quarter;
 import org.springframework.test.util.ReflectionTestUtils;
 
 /**
@@ -26,12 +27,16 @@ public class QuarterIncomeMapStrategyFactoryImplTest {
 
 	@Test
 	public void getStrategy() {
-		QuarterIncomeMapStrategy strategy = factory.getStrategy(true);
-		
+		QuarterIncomeMapStrategy strategy = factory.getStrategy(Quarter.III, false);
+
 		assertSame(quantizedStrategy, strategy);
-		
-		strategy = factory.getStrategy(false);
-		
+
+		strategy = factory.getStrategy(Quarter.YEAR, true);
+
+		assertSame(quantizedStrategy, strategy);
+
+		strategy = factory.getStrategy(Quarter.YEAR, false);
+
 		assertSame(summarizedStrategy, strategy);
 	}
 	

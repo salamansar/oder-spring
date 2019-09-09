@@ -133,7 +133,7 @@ public class IncomeServiceImplTest {
 				eq(LocalDate.of(2018, Month.JULY, 1)), 
 				eq(LocalDate.of(2018, Month.SEPTEMBER, 30))))
 				.thenReturn(Arrays.asList(income));
-		when(quarterInocomeMapFactory.getStrategy(eq(true)))
+		when(quarterInocomeMapFactory.getStrategy(eq(Quarter.III), eq(true)))
 				.thenReturn(mapSrategy);
 		when(mapSrategy.map(eq(Arrays.asList(income)))).thenReturn(Arrays.asList(quarterIncome));
 		
@@ -150,7 +150,7 @@ public class IncomeServiceImplTest {
 		QuarterIncome quarterIncome = generator.generate(QuarterIncome.class);
 		when(incomeDao.findIncomeByUserOrderByIncomeDateDesc(same(user)))
 				.thenReturn(Arrays.asList(income));
-		when(quarterInocomeMapFactory.getStrategy(eq(true)))
+		when(quarterInocomeMapFactory.getStrategy(eq(Quarter.YEAR), eq(true)))
 				.thenReturn(mapSrategy);
 		when(mapSrategy.map(eq(Arrays.asList(income)))).thenReturn(Arrays.asList(quarterIncome));
 
@@ -173,7 +173,7 @@ public class IncomeServiceImplTest {
 				eq(LocalDate.of(2019, Month.JANUARY, 1)),
 				eq(LocalDate.of(2019, Month.DECEMBER, 31))))
 				.thenReturn(Collections.emptyList());
-		when(quarterInocomeMapFactory.getStrategy(eq(false)))
+		when(quarterInocomeMapFactory.getStrategy(eq(Quarter.YEAR), eq(false)))
 				.thenReturn(mapSrategy);
 		when(mapSrategy.map(eq(Collections.emptyList()))).thenReturn(Collections.emptyList());
 		when(mapSrategy.map(eq(Arrays.asList(income)))).thenReturn(Arrays.asList(quarterIncome));

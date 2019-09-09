@@ -4,8 +4,8 @@ import javax.persistence.EntityManager;
 import org.envbuild.generator.processor.DomainPersister;
 import org.envbuild.spring.config.PersistOrientedGeneratorConfig;
 import org.junit.runner.RunWith;
+import org.salamansar.oder.LocalDatasourceConfig;
 import org.salamansar.oder.RootAppConfig;
-import org.salamansar.oder.TestDatasourceConfig;
 import org.salamansar.oder.core.domain.HasId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +24,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 public abstract class AbstractCoreIntegrationTest {
 	
 	@Configuration
-	@Import({RootAppConfig.class, PersistOrientedGeneratorConfig.class, TestDatasourceConfig.class})
+	@Import({RootAppConfig.class, PersistOrientedGeneratorConfig.class, LocalDatasourceConfig.class})
 	static class ContextConfiguration {
 		
 		@Bean

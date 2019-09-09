@@ -8,7 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import lombok.Data;
 
 /**
@@ -20,7 +22,8 @@ import lombok.Data;
 public class Income implements HasId, Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_income")
+	@SequenceGenerator(name = "gen_income", sequenceName = "seq_income_id", allocationSize = 1)
 	private Long id;
 	@Column(nullable = false, name = "income_date")
 	private LocalDate incomeDate;
@@ -29,7 +32,8 @@ public class Income implements HasId, Serializable {
 	private String description;
 	@Column(name = "document_number")
 	private Integer documentNumber;
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "id_user", nullable = false)
 	private User user;
 
 }

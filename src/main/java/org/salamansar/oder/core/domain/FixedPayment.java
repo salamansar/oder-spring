@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.Data;
@@ -24,7 +25,8 @@ import org.salamansar.oder.core.domain.converter.TaxCategoryConverter;
 )
 public class FixedPayment implements HasId, Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen_fixed_payment")
+	@SequenceGenerator(name = "gen_fixed_payment", sequenceName = "seq_fixed_payment_id", allocationSize = 1)
 	private Long id;
 	@Column(name = "payment_year", nullable = false)
 	private Integer year;

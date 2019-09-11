@@ -11,6 +11,7 @@ import org.salamansar.oder.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -23,7 +24,13 @@ import org.springframework.transaction.support.TransactionTemplate;
  */
 @RunWith(SpringRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {RootAppConfig.class, PersistOrientedGeneratorConfig.class, SecurityConfig.class, WebAppConfig.class})
+@ContextConfiguration(classes = {
+	RootAppConfig.class, 
+	PersistOrientedGeneratorConfig.class, 
+	SecurityConfig.class, 
+	WebAppConfig.class
+})
+@ActiveProfiles("local")
 public abstract class AbstractWebAppIntegrationTest {
 	
 	@Configuration	

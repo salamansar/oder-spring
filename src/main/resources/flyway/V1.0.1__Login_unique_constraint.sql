@@ -1,0 +1,2 @@
+ALTER TABLE oder_user ADD CONSTRAINT UC_LOGIN UNIQUE (login);
+

@@ -2,20 +2,38 @@ Configuration:
     appenders:
         Console:
             -
-                name: APP
+                name: Console
                 PatternLayout:
                     charset: UTF-8
-                    pattern: "%d - %m%n"                
+                    pattern: "%d - %m%n"
+        RollingFile:
+                name: File
+                fileName: "logs/oder.log"
+                filePattern: "logs/oder-%d{yyyy-MM-dd}-%i.log"
+                PatternLayout:
+                    charset: UTF-8
+                    pattern: "%d %-7p [%t] [%c]\t-- %m%n"
+                Policies:
+                        SizeBasedTriggeringPolicy:
+                            size: "10 MB" 
+                        OnStartupTriggeringPolicy: {}
+                DefaultRolloverStrategy:                    
+                    Delete:
+                            basePath: "logs"
+                            IfFileName:
+                                glob: "oder-*.log"                        
+                            IfLastModified:
+                                age: "14d"
     Loggers:
-        logger:
-            -
-                name: org.hibernate.SQL
-                level: debug
-                additivity: false
-                AppenderRef:
-                    ref: APP
+#        logger:
+#            -
+#                name: org.hibernate.SQL
+#                level: debug
+#                additivity: false
+#                AppenderRef:
+#                    ref: File
         Root:
             level: info
             AppenderRef:
-                ref: APP
+                ref: File
                 

@@ -1,0 +1,21 @@
+Configuration:
+    appenders:
+        Console:
+            -
+                name: Console
+                PatternLayout:
+                    charset: UTF-8
+                    pattern: "%d - %m%n"
+    Loggers:
+        logger:
+            -
+                name: org.hibernate.SQL
+                level: debug
+                additivity: false
+                AppenderRef:
+                    ref: Console
+        Root:
+            level: info
+            AppenderRef:
+                ref: Console
+                
